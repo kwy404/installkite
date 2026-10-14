@@ -80,7 +80,7 @@ export function createAsker(input: NodeJS.ReadableStream, output: NodeJS.Writabl
         const hit = choices.find((x) => x.toLowerCase() === a.toLowerCase() || x.toLowerCase().startsWith(a.toLowerCase()));
         if (hit) return hit;
         output.write(`  ${c.yellow(`choose one of: ${choices.join(', ')}`)}\n`);
-        if (closed) return def;
+        if (closed && !lines.length) return def;
       }
     },
     close() {
