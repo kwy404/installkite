@@ -95,7 +95,8 @@
     "docs:check": "node scripts/build-docs.mjs --check",
     "images": "bash scripts/render-images.sh",
     "prepublishOnly": "npm run build && npm test",
-    "pretest": "node scripts/ensure-build.mjs"
+    "pretest": "node scripts/ensure-build.mjs",
+    "art": "node scripts/build-art.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
