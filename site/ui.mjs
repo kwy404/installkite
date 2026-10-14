@@ -54,7 +54,7 @@ export function icon(name, cls = 'ic') {
 /** An art set icon (light and dark variants, switched by CSS). */
 export function artTile(name, cls = 'art-ic') {
   const strip = (s) => s.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
-  return `<span class="${cls}" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light">${strip(artIcon(name))}</svg><svg viewBox="0 0 48 48" class="ai-dark">${strip(artIcon(name, { dark: true }))}</svg></span>`;
+  return `<span class="${cls}" aria-hidden="true"><svg viewBox="0 0 48 48" class="art-light">${strip(artIcon(name))}</svg><svg viewBox="0 0 48 48" class="art-dark">${strip(artIcon(name, { dark: true }))}</svg></span>`;
 }
 
 export { COLORS };
