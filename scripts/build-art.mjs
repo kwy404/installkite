@@ -1,9 +1,11 @@
-// Writes every SVG in assets/ from scripts/art.mjs.
+// Writes every SVG in assets/ from scripts/art.mjs: the mascot, the favicon,
+// the README banner, the folded paper icon set and the workshop scenes, each
+// in a light (dawn) and a dark (dusk) variant.
 // Usage: node scripts/build-art.mjs
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ICON_NAMES, banner, favicon, icon, mascot, mascotHead } from './art.mjs';
+import { ICON_NAMES, SCENE_NAMES, banner, favicon, icon, mascot, mascotHead, scene } from './art.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const out = (path, content) => {
@@ -12,6 +14,8 @@ const out = (path, content) => {
   writeFileSync(abs, content);
 };
 
+rmSync(join(root, 'assets', 'icons'), { recursive: true, force: true });
+rmSync(join(root, 'assets', 'art'), { recursive: true, force: true });
 out('assets/mascot.svg', mascot());
 out('assets/mascot-dark.svg', mascot({ rim: true }));
 out('assets/mascot-head.svg', mascotHead());
@@ -22,4 +26,8 @@ for (const name of ICON_NAMES) {
   out(`assets/icons/light/${name}.svg`, icon(name));
   out(`assets/icons/dark/${name}.svg`, icon(name, { dark: true }));
 }
-console.log(`wrote ${6 + ICON_NAMES.length * 2} SVG files to assets/`);
+for (const name of SCENE_NAMES) {
+  out(`assets/art/light/${name}.svg`, scene(name));
+  out(`assets/art/dark/${name}.svg`, scene(name, { dark: true }));
+}
+console.log(`wrote ${6 + ICON_NAMES.length * 2 + SCENE_NAMES.length * 2} SVG files to assets/`);

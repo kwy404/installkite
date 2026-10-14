@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Skye takes off from a paper hill, the string tied to a spool in the grass"><title>Skye takes off from a paper hill, the string tied to a spool in the grass</title><defs><linearGradient id="sc97sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbd2bd"/><stop offset=".6" stop-color="#fde5cf"/><stop offset="1" stop-color="#f9efe2"/></linearGradient><radialGradient id="sc97glow"><stop offset="0" stop-color="#ffb36b" stop-opacity="0.4"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></radialGradient><filter id="sc97s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="2.4" stdDeviation="2" flood-color="#6b4426" flood-opacity="0.24"/></filter><filter id="sc97t" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-color="#6b4426" flood-opacity="0.19"/></filter><filter id="sc97l" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#6b4426" flood-opacity="0.22"/></filter></defs><rect width="480" height="320" rx="22" fill="url(#sc97sky)"/>
+      
+      <circle cx="92" cy="92" r="43.5" fill="#ffd29a" fill-opacity=".55"/><circle cx="92" cy="92" r="30" fill="#ffb36b" filter="url(#sc97t)"/>
+      <path transform="translate(260 54) scale(1.2)" d="M6 30 a11 11 0 0 1 4 -21 a15 15 0 0 1 27 -3 a12 12 0 0 1 18 11 a9 9 0 0 1 -1 13 Z" fill="#fffaf1" fill-opacity="0.95" filter="url(#sc97t)"/>
+      <path transform="translate(20 150) scale(0.8)" d="M6 30 a11 11 0 0 1 4 -21 a15 15 0 0 1 27 -3 a12 12 0 0 1 18 11 a9 9 0 0 1 -1 13 Z" fill="#fffaf1" fill-opacity="0.85" filter="url(#sc97t)"/>
+      <path d="M0 236 Q90 190 190 220 T390 200 T480 214 V320 H0 Z" fill="#c5dcc0" filter="url(#sc97s)"/>
+      <path d="M0 270 Q120 230 250 262 T480 248 V320 H0 Z" fill="#8db897" filter="url(#sc97s)"/>
+      <path d="M0 296 Q160 276 300 294 T480 290 V320 H0 Z" fill="#679a76" filter="url(#sc97s)"/>
+      <path d="M150 258 C220 200 300 160 352 96" fill="none" stroke="#2b2420" stroke-width="1.6" stroke-linecap="round"/>
+      <g transform="translate(150 262) scale(0.9)"><rect x="-14" y="-12" width="28" height="24" rx="3" fill="#f6ecdc"/><path d="M-14 -6 H14 M-14 -1 H14 M-14 4 H14" stroke="#c9a979" stroke-width="1.6"/><rect x="-18" y="-16" width="36" height="6" rx="3" fill="#b38c5c"/><rect x="-18" y="10" width="36" height="6" rx="3" fill="#b38c5c"/></g>
+      <g transform="translate(297.6 23) scale(0.62)"><defs>
+    <linearGradient id="kb98" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks99" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb98)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks99)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/></g></svg>

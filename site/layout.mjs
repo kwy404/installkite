@@ -1,10 +1,12 @@
-// Shared page chrome for the installkite site: head, top bar, search
-// dialog and footer. Used by scripts/build-docs.mjs.
+// Shared page chrome for the installkite site, the paper kite workshop: the
+// head, the pinked paper top bar, the search dialog, Skye on her scroll
+// string and the paper hills footer. Used by scripts/build-docs.mjs.
 import { icon, sprite } from './ui.mjs';
 
 export const SITE = 'https://kwy404.github.io/installkite/';
 export const MONSOON_CSS = 'https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css';
 export const VOODOO_JS = 'https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js';
+export const FONTS = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Kalam:wght@400;700&display=swap';
 export const GITHUB = 'https://github.com/kwy404/installkite';
 export const NPM = 'https://www.npmjs.com/package/installkite';
 export const AUTHOR_GH = 'https://github.com/kwy404';
@@ -12,16 +14,16 @@ export const AUTHOR_IN = 'https://www.linkedin.com/in/alexandre-silva-173687256/
 
 export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** The guides, in reading order. `icon` names an icon from the art set. */
+/** The guides, in reading order. `icon` names an icon from the art set, `art` a workshop scene. */
 export const GUIDES = [
-  { slug: 'make-website-installable', short: 'Make a website installable', icon: 'install', topic: 'install' },
-  { slug: 'convert-website-to-app', short: 'Convert a website to an app', icon: 'kite', topic: 'install' },
-  { slug: 'pwa-tutorial', short: 'PWA tutorial', icon: 'cli', topic: 'basics' },
-  { slug: 'service-worker-offline-page', short: 'Offline page with a service worker', icon: 'offline', topic: 'offline' },
-  { slug: 'add-to-home-screen-ios', short: 'Add to Home Screen on iOS', icon: 'ios-share', topic: 'install' },
-  { slug: 'pwa-manifest-generator', short: 'PWA manifest generator', icon: 'manifest', topic: 'basics' },
-  { slug: 'pwa-icon-sizes', short: 'PWA icon sizes', icon: 'icons', topic: 'basics' },
-  { slug: 'github-pages-pwa', short: 'GitHub Pages PWA', icon: 'github-pages', topic: 'hosting' },
+  { slug: 'make-website-installable', short: 'Make a website installable', icon: 'install', art: 'meadow', topic: 'install' },
+  { slug: 'convert-website-to-app', short: 'Convert a website to an app', icon: 'kite', art: 'fold', topic: 'install' },
+  { slug: 'pwa-tutorial', short: 'PWA tutorial', icon: 'cli', art: 'workbench', topic: 'basics' },
+  { slug: 'service-worker-offline-page', short: 'Offline page with a service worker', icon: 'offline', art: 'cut-string', topic: 'offline' },
+  { slug: 'add-to-home-screen-ios', short: 'Add to Home Screen on iOS', icon: 'ios-share', art: 'meadow', topic: 'install' },
+  { slug: 'pwa-manifest-generator', short: 'PWA manifest generator', icon: 'manifest', art: 'pattern-envelope', topic: 'basics' },
+  { slug: 'pwa-icon-sizes', short: 'PWA icon sizes', icon: 'icons', art: 'cutting-mat', topic: 'basics' },
+  { slug: 'github-pages-pwa', short: 'GitHub Pages PWA', icon: 'github-pages', art: 'takeoff', topic: 'hosting' },
 ];
 
 export const MORE = [
@@ -32,11 +34,13 @@ export const MORE = [
   ['graphemely', 'https://kwy404.github.io/graphemely/', 'Grapheme aware string utilities'],
   ['numberparrot', 'https://kwy404.github.io/numberparrot/', 'Parse localized numbers'],
   ['edgegoat', 'https://kwy404.github.io/edgegoat/', 'Edge case inputs for testing'],
+  ['cookieowl', 'https://kwy404.github.io/cookieowl/', 'Cookie consent that blocks trackers'],
+  ['a11ymedic', 'https://kwy404.github.io/a11ymedic/', 'WCAG checks with exact HTML fixes'],
 ];
 
 const THEME_SNIPPET = `<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>`;
 
-/** The document head. `pwa` is the installkite block (the site installs itself). */
+/** The document head. The installkite block is injected later (the site installs itself). */
 export function head(p) {
   const url = SITE + (p.path || '');
   const ld = p.jsonld ? `\n<script type="application/ld+json">\n${JSON.stringify(p.jsonld, null, 2)}\n</script>` : '';
@@ -55,6 +59,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" 
 <meta name="author" content="Alexandre Kohler">
 <meta property="og:type" content="${p.ogType || 'website'}">
 <meta property="og:site_name" content="installkite">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="${esc(p.title)}">
 <meta property="og:description" content="${esc(p.description)}">
 <meta property="og:url" content="${url}">
@@ -67,7 +72,10 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" 
 <meta name="twitter:description" content="${esc(p.description)}">
 <meta name="twitter:image" content="${SITE}og.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${MONSOON_CSS}">
+<link rel="stylesheet" href="${FONTS}">
 <link rel="stylesheet" href="site.css">
 <script src="${VOODOO_JS}" data-manual defer></script>
 <script type="module" src="site.js"></script>${extra}${ld}
@@ -81,7 +89,7 @@ const NAV = [
   ['guides', 'Guides', 'guides.html'],
 ];
 
-/** The sticky top bar. `current` marks the active nav item. */
+/** The sticky top bar: a strip of paper with a pinked bottom edge. */
 export function topbar(current = '') {
   const links = NAV.map(([key, label, href]) => `<a href="${href}" class="top-link"${key === current ? ' aria-current="page"' : ''}>${label}</a>`).join('');
   return `<a href="#main" class="skip-link">Skip to content</a>
@@ -116,29 +124,44 @@ export function searchDialog() {
 </dialog>`;
 }
 
-/** The footer: a sunset horizon, the same on every page. */
+/** Layered paper hills, themed by CSS (classes h1 to h3). */
+export function hills(cls = 'hills') {
+  const h2 = 'M0 92 C200 62 360 70 540 88 S880 64 1080 80 S1340 70 1440 82 V140 H0 Z';
+  const h3 = 'M0 112 C240 94 420 100 640 112 S1040 96 1240 108 S1400 104 1440 106 V140 H0 Z';
+  // Each layer casts a soft shadow on the one behind it: a darker copy, nudged up.
+  return `<svg class="${cls}" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="h1" d="M0 70 C160 30 300 40 460 62 S760 30 940 48 S1260 28 1440 50 V140 H0 Z"/><path class="hs" d="${h2}" transform="translate(0 -5)"/><path class="h2" d="${h2}"/><path class="hs" d="${h3}" transform="translate(0 -5)"/><path class="h3" d="${h3}"/></svg>`;
+}
+
+/** Skye on her string: a fixed layer that site.js flies as the page scrolls. */
+function skyeLayer() {
+  return `<div class="skye-fly" aria-hidden="true"><svg class="skye-string" width="100%" height="100%" focusable="false"><path d="M0 0"/></svg><img class="skye-kite" src="assets/mascot-head.svg" width="60" height="60" alt=""></div>`;
+}
+
+/** The footer: paper hills, then the workshop ground, the same on every page. */
 export function footer() {
   const guides = GUIDES.map((g) => `<li><a href="${g.slug}.html">${g.short}</a></li>`).join('');
   const more = MORE.map(([n, u, d]) => `<li><a href="${u}">${n}</a><small>${d}</small></li>`).join('');
   return `<footer class="site-foot">
-  <div class="horizon" aria-hidden="true"></div>
+  ${hills('hills foot-hills')}
+  <div class="foot-ground">
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-about">
         <a href="./" class="brand"><img src="assets/mascot-head.svg" width="40" height="40" alt="" loading="lazy"><span class="brand-name">install<b>kite</b></span></a>
-        <p>One command makes any website installable and offline capable: manifest, every icon size, a service worker, an offline page and the head tags. Free and open source.</p>
+        <p>One command folds any website into an installable, offline capable app: manifest, every icon size, a service worker, an offline page and the head tags. Free and open source.</p>
         <p class="foot-links"><a href="${GITHUB}">${icon('github')}GitHub</a><a href="${NPM}">${icon('npm')}npm</a><a href="${GITHUB}/blob/main/CHANGELOG.md">${icon('book')}Changelog</a></p>
       </div>
       <nav aria-labelledby="f-tool"><h2 id="f-tool" class="foot-title">installkite</h2><ul>
-        <li><a href="./#demo">Live demo</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
+        <li><a href="./#demo">Live demo</a></li><li><a href="./#what">What it writes</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
       </ul></nav>
       <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul>${guides}</ul></nav>
       <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more">${more}</ul></nav>
     </div>
     <div class="foot-bottom">
-      <p>Made by <a href="${AUTHOR_GH}" rel="me noopener">Alexandre Kohler</a><a href="${AUTHOR_GH}" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub">${icon('github')}</a><a href="${AUTHOR_IN}" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn">${icon('linkedin')}</a></p>
+      <p class="foot-made">Made by <a href="${AUTHOR_GH}" rel="me noopener">Alexandre Kohler</a><a href="${AUTHOR_GH}" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub">${icon('github')}</a><a href="${AUTHOR_IN}" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn">${icon('linkedin')}</a></p>
       <p>Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>. This site installs itself with installkite. MIT licensed.</p>
     </div>
+  </div>
   </div>
 </footer>`;
 }
@@ -146,9 +169,10 @@ export function footer() {
 /** Wraps a page body with the shared chrome. */
 export function page(p, body) {
   return `${head(p)}
-<body class="antialiased bg-background text-foreground page-${p.kind}">
+<body class="antialiased page-${p.kind}">
 ${sprite()}
 ${topbar(p.nav)}
+${skyeLayer()}
 <main id="main">
 ${body}
 </main>

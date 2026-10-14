@@ -1,22 +1,29 @@
-// The online generator page: drop a logo, type a name, preview the icon on
-// every home screen and under every mask, download a zip with the manifest
-// and all icons. Everything runs in the browser (generator.js).
+// The online generator page, a paper cutting mat: drop a logo, type a name,
+// preview the icon on every home screen and under every mask, download a zip
+// with the manifest and all icons. Everything runs in the browser
+// (generator.js).
 import { SITE } from './layout.mjs';
-import { icon } from './ui.mjs';
+import { icon, scene } from './ui.mjs';
 
 export function generatorBody(ctx) {
-  return `<section class="gen-hero">
-  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="stars"></span></div>
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">installkite</a></li><li><span aria-current="page">Generator</span></li></ol></nav>
-    <h1>PWA manifest and icon generator</h1>
-    <p class="lead">Drop your logo, name your app and download a zip with <code>manifest.webmanifest</code>, every icon size, maskable icons, <code>apple-touch-icon.png</code>, <code>favicon.ico</code> and the head tags. It all happens in your browser: the image never leaves your device.</p>
+  return `<div class="page-head">
+  <div class="wrap page-head-in">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">installkite</a></li><li><span aria-current="page">Generator</span></li></ol></nav>
+      <p class="tag-kicker"><span class="tag-hole"></span>The cutting mat</p>
+      <h1>PWA manifest and icon generator</h1>
+      <p class="lead">Drop your logo, name your app and download a zip with <code>manifest.webmanifest</code>, every icon size, maskable icons, <code>apple-touch-icon.png</code>, <code>favicon.ico</code> and the head tags. It all happens in your browser: the image never leaves your device.</p>
+    </div>
+    ${scene('cutting-mat', { cls: 'scene head-art', eager: true })}
   </div>
-</section>
+</div>
 
 <section class="gen" v-data>
+  <div class="mat">
   <div class="wrap gen-grid">
-    <form class="gen-form" @submit.prevent aria-label="App details">
+    <form class="gen-form paper-card" @submit.prevent aria-label="App details">
+      <span class="tape tape-l" aria-hidden="true"></span><span class="tape tape-r" aria-hidden="true"></span>
+      <p class="card-title hand">1. Your logo and details</p>
       <div class="drop" id="gen-drop" :class="{ 'is-over': G.over, 'has-image': G.ready }">
         <input type="file" id="gen-file" accept="image/png,image/svg+xml,image/jpeg,image/webp" class="sr-only">
         <label for="gen-file" class="drop-in">
@@ -57,7 +64,7 @@ export function generatorBody(ctx) {
     </form>
 
     <div class="gen-previews">
-      <section class="pv" aria-labelledby="pv-home">
+      <section class="pv paper-card" aria-labelledby="pv-home">
         <h2 id="pv-home">On the home screen</h2>
         <div class="pv-screens">
           <figure class="pv-phone pv-android"><div class="pv-wall"><div class="pv-row"><span class="pv-ghost"></span><span class="pv-app"><canvas id="pv-android" width="144" height="144"></canvas><small v-text="G.shortName || 'App'"></small></span><span class="pv-ghost"></span><span class="pv-ghost"></span></div></div><figcaption>Android, maskable icon in a circle</figcaption></figure>
@@ -66,7 +73,7 @@ export function generatorBody(ctx) {
         </div>
       </section>
 
-      <section class="pv" aria-labelledby="pv-mask">
+      <section class="pv paper-card" aria-labelledby="pv-mask">
         <div class="pv-head"><h2 id="pv-mask">Maskable icon</h2><label class="air-switch"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="G.zone"><span>Show safe zone</span></label></div>
         <div class="mask-row">
           <figure><span class="mask-box m-circle"><canvas class="mask-cv" width="160" height="160"></canvas><i class="zone" v-show="G.zone"></i></span><figcaption>Circle</figcaption></figure>
@@ -78,7 +85,7 @@ export function generatorBody(ctx) {
         <p class="hint">The dashed circle is the safe zone: 80% of the icon. installkite measures your artwork and scales it so its farthest visible pixel stays inside.</p>
       </section>
 
-      <section class="pv" aria-labelledby="pv-splash">
+      <section class="pv paper-card" aria-labelledby="pv-splash">
         <h2 id="pv-splash">Splash screen</h2>
         <div class="splash-row">
           <div class="splash" :style="{ background: G.bg }"><canvas id="pv-splash-ic" width="192" height="192"></canvas><b :style="{ color: G.splashInk }" v-text="G.name || 'App'"></b></div>
@@ -86,7 +93,7 @@ export function generatorBody(ctx) {
         </div>
       </section>
 
-      <section class="pv" aria-labelledby="pv-files">
+      <section class="pv paper-card" aria-labelledby="pv-files">
         <h2 id="pv-files">What is in the zip</h2>
         <div class="tabs tabs-boxed tabs-sm out-tabs" role="tablist">
           <input type="radio" name="out-tabs" class="tab" aria-label="manifest.webmanifest" checked>
@@ -99,9 +106,10 @@ export function generatorBody(ctx) {
       </section>
     </div>
   </div>
+  </div>
 </section>
 
-<section class="band band-alt">
+<section class="band band-kraft">
   <div class="wrap two">
     <div>
       <p class="kicker">${icon('terminal')}Prefer the command line?</p>

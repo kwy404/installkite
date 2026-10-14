@@ -1,7 +1,7 @@
-// The docs page: the flight manual. CLI, config, runtime, service worker,
-// doctor rules, Node API and framework recipes.
+// The docs page: the flight manual, laid out like a pattern envelope. CLI,
+// config, runtime, service worker, doctor rules, Node API and recipes.
 import { SITE } from './layout.mjs';
-import { icon } from './ui.mjs';
+import { icon, scene } from './ui.mjs';
 
 const table = (head, rows) =>
   `<div class="table-wrap"><table class="table"><thead><tr>${head.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows
@@ -28,20 +28,23 @@ export const DOC_SECTIONS = [
 
 export function docsBody(ctx) {
   const f = ctx.frame;
-  const side = DOC_SECTIONS.map(([id, t]) => `<li><a href="#${id}">${t}</a></li>`).join('');
+  const side = DOC_SECTIONS.map(([id, t], i) => `<li><a href="#${id}"><span class="side-no">${String(i + 1).padStart(2, '0')}</span><span>${t}</span></a></li>`).join('');
   const recipes = RECIPES.map(
     (r) => `<section class="recipe" id="recipe-${r.id}"><h3><a href="#recipe-${r.id}" class="anchor" aria-hidden="true" tabindex="-1">#</a>${r.name}</h3>${r.body(f)}</section>`,
   ).join('');
-  return `<div class="docs-top">
-  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="stars"></span></div>
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">installkite</a></li><li><span aria-current="page">Docs</span></li></ol></nav>
-    <h1>installkite docs</h1>
-    <p class="lead">The flight manual: every command and flag, the config file, the runtime script, the service worker, the doctor rules, the Node API and recipes for each framework and host.</p>
+  return `<div class="page-head">
+  <div class="wrap page-head-in">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">installkite</a></li><li><span aria-current="page">Docs</span></li></ol></nav>
+      <p class="tag-kicker"><span class="tag-hole"></span>Pattern no. 2, the flight manual</p>
+      <h1>installkite docs</h1>
+      <p class="lead">Every command and flag, the config file, the runtime script, the service worker, the doctor rules, the Node API and recipes for each framework and host.</p>
+    </div>
+    ${scene('pattern-envelope', { cls: 'scene head-art', eager: true })}
   </div>
 </div>
 <div class="wrap docs">
-  <aside class="docs-side" aria-label="On this page"><p class="side-title">Flight manual</p><ol>${side}</ol></aside>
+  <aside class="docs-side pattern-side" aria-label="On this page"><p class="side-title">${icon('scissors')}Contents of this envelope</p><ol>${side}</ol></aside>
   <article class="docs-main prose-ik">
 <section id="install"><h2><a href="#install" class="anchor" aria-hidden="true" tabindex="-1">#</a>Install</h2>
 <p>Nothing to install for a one off run: <code>npx</code> downloads the CLI. For CI and repeat builds add it as a dev dependency. Node 18 or newer.</p>
@@ -58,6 +61,7 @@ ${f('<script src="https://cdn.jsdelivr.net/npm/installkite@0.1.0/dist/installkit
 <li><b>After each site build</b> run <code>npx installkite build</code> (frameworks get it added to the build script) so the service worker precaches the new files.</li>
 </ol>
 ${f('npx installkite init --dry-run   # preview every change as a diff\nnpx installkite init --yes       # write it\nnpx installkite doctor           # audit', { kind: 'terminal', lang: 'bash' })}
+<aside class="note"><p class="note-title">${icon('fold')}Workshop note</p><p>Commit before the first run, or start with <code>--dry-run</code>. init only adds files and one marked block per page, and <code>installkite remove</code> takes the block out again.</p></aside>
 </section>
 
 <section id="init"><h2><a href="#init" class="anchor" aria-hidden="true" tabindex="-1">#</a>installkite init</h2>
@@ -214,7 +218,7 @@ ${f(ctx.swSample, { lang: 'js', title: 'sw.js (first lines)' })}
 
 <section id="base-paths"><h2><a href="#base-paths" class="anchor" aria-hidden="true" tabindex="-1">#</a>Base paths and scope</h2>
 <p>The manifest uses relative URLs (<code>"start_url": "./"</code>, <code>"scope": "./"</code>), so it works wherever it is served. The head tags need a base: <code>/</code> for a domain root, <code>/repo/</code> for a GitHub Pages project site. init detects it from <code>package.json</code> homepage, a Vite or Astro <code>base</code>, a Next.js <code>basePath</code>, or a GitHub remote with Pages evidence (a Pages workflow, a <code>docs/</code> site or the gh-pages package); a <code>CNAME</code> file means a custom domain at <code>/</code>. With <code>--relative</code> every page gets its own prefix such as <code>../</code>.</p>
-<p>The worker controls the folder it is served from and everything below it. Keep <code>sw.js</code> at the site root (installkite writes it there) so its scope covers start_url; doctor fails when it does not.</p>
+<aside class="note"><p class="note-title">${icon('fold')}Workshop note</p><p>The worker controls the folder it is served from and everything below it. Keep <code>sw.js</code> at the site root (installkite writes it there) so its scope covers start_url; doctor fails when it does not.</p></aside>
 </section>
 
 <section id="recipes"><h2><a href="#recipes" class="anchor" aria-hidden="true" tabindex="-1">#</a>Recipes</h2>

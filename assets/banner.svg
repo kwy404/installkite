@@ -1,44 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" role="img" aria-label="installkite: make any website installable and offline capable with one line">
-  <title>installkite: make any website installable and offline capable with one line</title>
-  <defs>
-    <linearGradient id="sky13" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe6ff"/><stop offset=".62" stop-color="#e3f4ff"/><stop offset="1" stop-color="#ffe2c8"/></linearGradient>
-    <radialGradient id="sun14" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff8a3d" stop-opacity="0.45"/><stop offset="1" stop-color="#ff8a3d" stop-opacity="0"/></radialGradient>
-  </defs>
-  <rect width="1280" height="400" rx="28" fill="url(#sky13)"/>
-  <circle cx="1080" cy="430" r="260" fill="url(#sun14)"/>
-  
-  <g transform="translate(150 300) scale(1.6)" fill="#fff" fill-opacity="0.9"><path d="M10 40 C0 40 -4 26 8 22 C8 8 26 2 34 14 C40 4 60 6 60 22 C72 22 74 40 62 40 Z"/></g>
-  <g transform="translate(560 40) scale(1.1)" fill="#fff" fill-opacity="0.75"><path d="M10 40 C0 40 -4 26 8 22 C8 8 26 2 34 14 C40 4 60 6 60 22 C72 22 74 40 62 40 Z"/></g>
-  <g transform="translate(1150 260) scale(1.3)" fill="#fff" fill-opacity="0.85"><path d="M10 40 C0 40 -4 26 8 22 C8 8 26 2 34 14 C40 4 60 6 60 22 C72 22 74 40 62 40 Z"/></g>
-  <g transform="translate(36 60) scale(1.18)">
-  
-  <path d="M22 70 Q40 62 56 70 M14 98 Q30 92 44 98 M28 126 Q42 120 54 126" fill="none" stroke="#8cc8ff" stroke-width="3" stroke-linecap="round"/>
-  <path d="M141 116 Q190 168 236 236" fill="none" stroke="#3b5579" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
-  <path d="M120 154 C112 170 134 180 120 198 C108 213 92 214 82 230" fill="none" stroke="#3b5579" stroke-width="2.6" stroke-linecap="round"/>
-  <g transform="translate(124 172) rotate(-12)">
-    <defs><linearGradient id="ab15" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
-    <rect x="-9.5" y="-9.5" width="19" height="19" rx="5.32" fill="url(#ab15)"/>
-    <path d="M0 -4.855555555555555 V3.588888888888889 M-3.8000000000000003 0.21111111111111114 L0 4.011111111111111 L3.8000000000000003 0.21111111111111114" fill="none" stroke="#fff" stroke-width="2.216666666666667" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
-  <g transform="translate(110 205) rotate(14)">
-    <defs><linearGradient id="ab16" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
-    <rect x="-8" y="-8" width="16" height="16" rx="4.48" fill="url(#ab16)"/>
-    <path d="M0 -4.088888888888889 V3.022222222222222 M-3.1999999999999997 0.17777777777777778 L0 3.3777777777777773 L3.1999999999999997 0.17777777777777778" fill="none" stroke="#fff" stroke-width="1.8666666666666667" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
-  <g transform="translate(84 228) rotate(-8)">
-    <defs><linearGradient id="ab17" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
-    <rect x="-6.5" y="-6.5" width="13" height="13" rx="3.6400000000000006" fill="url(#ab17)"/>
-    <path d="M0 -3.322222222222222 V2.4555555555555553 M-2.6 0.14444444444444446 L0 2.7444444444444445 L2.6 0.14444444444444446" fill="none" stroke="#fff" stroke-width="1.5166666666666666" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
-  <defs>
-    <linearGradient id="kb18" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
-    <linearGradient id="ks19" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" role="img" aria-label="installkite: make any website installable and offline capable with one line"><title>installkite: make any website installable and offline capable with one line</title><defs><linearGradient id="sc13sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbd2bd"/><stop offset=".6" stop-color="#fde5cf"/><stop offset="1" stop-color="#f9efe2"/></linearGradient><radialGradient id="sc13glow"><stop offset="0" stop-color="#ffb36b" stop-opacity="0.4"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></radialGradient><filter id="sc13s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="2.4" stdDeviation="2" flood-color="#6b4426" flood-opacity="0.24"/></filter><filter id="sc13t" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-color="#6b4426" flood-opacity="0.19"/></filter><filter id="sc13l" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#6b4426" flood-opacity="0.22"/></filter></defs><rect width="1280" height="400" rx="22" fill="url(#sc13sky)"/>
+    
+    <circle cx="1150" cy="110" r="66.7" fill="#ffd29a" fill-opacity=".55"/><circle cx="1150" cy="110" r="46" fill="#ffb36b" filter="url(#sc13t)"/>
+    <path transform="translate(560 30) scale(1.6)" d="M6 30 a11 11 0 0 1 4 -21 a15 15 0 0 1 27 -3 a12 12 0 0 1 18 11 a9 9 0 0 1 -1 13 Z" fill="#fffaf1" fill-opacity="0.9" filter="url(#sc13t)"/>
+    <path transform="translate(960 160) scale(1.2)" d="M6 30 a11 11 0 0 1 4 -21 a15 15 0 0 1 27 -3 a12 12 0 0 1 18 11 a9 9 0 0 1 -1 13 Z" fill="#fffaf1" fill-opacity="0.85" filter="url(#sc13t)"/>
+    <path d="M0 8 Q640 68 1280 8" fill="none" stroke="#6b5a4e" stroke-opacity=".7" stroke-width="1.2"/><path transform="translate(51.2 12.6)" d="M-9 0 H9 L0 16 Z" fill="#efbb45" filter="url(#sc13t)"/><path transform="translate(102.4 16.8)" d="M-9 0 H9 L0 16 Z" fill="#3b86e6" filter="url(#sc13t)"/><path transform="translate(153.6 20.7)" d="M-9 0 H9 L0 16 Z" fill="#8db897" filter="url(#sc13t)"/><path transform="translate(204.8 24.1)" d="M-9 0 H9 L0 16 Z" fill="#f2a3a8" filter="url(#sc13t)"/><path transform="translate(256 27.2)" d="M-9 0 H9 L0 16 Z" fill="#ec6a42" filter="url(#sc13t)"/><path transform="translate(307.2 29.9)" d="M-9 0 H9 L0 16 Z" fill="#efbb45" filter="url(#sc13t)"/><path transform="translate(358.4 32.2)" d="M-9 0 H9 L0 16 Z" fill="#3b86e6" filter="url(#sc13t)"/><path transform="translate(409.6 34.1)" d="M-9 0 H9 L0 16 Z" fill="#8db897" filter="url(#sc13t)"/><path transform="translate(460.8 35.6)" d="M-9 0 H9 L0 16 Z" fill="#f2a3a8" filter="url(#sc13t)"/><path transform="translate(512 36.8)" d="M-9 0 H9 L0 16 Z" fill="#ec6a42" filter="url(#sc13t)"/><path transform="translate(563.2 37.6)" d="M-9 0 H9 L0 16 Z" fill="#efbb45" filter="url(#sc13t)"/><path transform="translate(614.4 38)" d="M-9 0 H9 L0 16 Z" fill="#3b86e6" filter="url(#sc13t)"/><path transform="translate(665.6 38)" d="M-9 0 H9 L0 16 Z" fill="#8db897" filter="url(#sc13t)"/><path transform="translate(716.8 37.6)" d="M-9 0 H9 L0 16 Z" fill="#f2a3a8" filter="url(#sc13t)"/><path transform="translate(768 36.8)" d="M-9 0 H9 L0 16 Z" fill="#ec6a42" filter="url(#sc13t)"/><path transform="translate(819.2 35.6)" d="M-9 0 H9 L0 16 Z" fill="#efbb45" filter="url(#sc13t)"/><path transform="translate(870.4 34.1)" d="M-9 0 H9 L0 16 Z" fill="#3b86e6" filter="url(#sc13t)"/><path transform="translate(921.6 32.2)" d="M-9 0 H9 L0 16 Z" fill="#8db897" filter="url(#sc13t)"/><path transform="translate(972.8 29.9)" d="M-9 0 H9 L0 16 Z" fill="#f2a3a8" filter="url(#sc13t)"/><path transform="translate(1024 27.2)" d="M-9 0 H9 L0 16 Z" fill="#ec6a42" filter="url(#sc13t)"/><path transform="translate(1075.2 24.1)" d="M-9 0 H9 L0 16 Z" fill="#efbb45" filter="url(#sc13t)"/><path transform="translate(1126.4 20.7)" d="M-9 0 H9 L0 16 Z" fill="#3b86e6" filter="url(#sc13t)"/><path transform="translate(1177.6 16.8)" d="M-9 0 H9 L0 16 Z" fill="#8db897" filter="url(#sc13t)"/><path transform="translate(1228.8 12.6)" d="M-9 0 H9 L0 16 Z" fill="#f2a3a8" filter="url(#sc13t)"/>
+    <path d="M0 300 Q200 250 420 290 T860 280 T1280 270 V400 H0 Z" fill="#c5dcc0" filter="url(#sc13s)"/>
+    <path d="M0 350 Q260 320 520 346 T1280 330 V400 H0 Z" fill="#8db897" filter="url(#sc13s)"/>
+    <path d="M60 380 C120 300 170 250 200 190" fill="none" stroke="#2b2420" stroke-width="2" stroke-linecap="round"/>
+    <g transform="translate(82 62.6) scale(0.95)"><defs>
+    <linearGradient id="kb14" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks15" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
   </defs>
   
-  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb18)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb14)"/>
   <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
   <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
-  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks19)"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks15)"/>
   <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
   <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
   <circle cx="104.5" cy="88" r="3" fill="#fff"/>
@@ -47,32 +24,9 @@
   <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
   <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
   <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
-  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/>
-
-</g>
-  <text x="352" y="170" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="78" font-weight="800" letter-spacing="-2" fill="#12233f">install<tspan fill="#2b8ff0">kite</tspan></text>
-  <text x="356" y="222" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="27" font-weight="500" fill="#3b5579">Make any website installable and offline capable.</text>
-  <g transform="translate(356 258)">
-    <rect width="356" height="54" rx="14" fill="#12233f"/>
-    <text x="22" y="35" font-family="Cascadia Code, Consolas, monospace" font-size="21" fill="#9fd0ff">$</text>
-    <text x="44" y="35" font-family="Cascadia Code, Consolas, monospace" font-size="21" fill="#fff">npx installkite init</text>
-  </g>
-  <g transform="translate(736 254)"><g transform="translate(0 0)"><rect width="95" height="28" rx="14" fill="#ffffff" fill-opacity="0.75" stroke="#2b8ff0" stroke-opacity="0.35"/><text x="47.5" y="19" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#3b5579">manifest</text></g><g transform="translate(103 0)"><rect width="69" height="28" rx="14" fill="#ffffff" fill-opacity="0.75" stroke="#2b8ff0" stroke-opacity="0.35"/><text x="34.5" y="19" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#3b5579">icons</text></g><g transform="translate(0 36)"><rect width="146" height="28" rx="14" fill="#ffffff" fill-opacity="0.75" stroke="#2b8ff0" stroke-opacity="0.35"/><text x="73" y="19" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#3b5579">service worker</text></g><g transform="translate(154 36)"><rect width="129" height="28" rx="14" fill="#ffffff" fill-opacity="0.75" stroke="#2b8ff0" stroke-opacity="0.35"/><text x="64.5" y="19" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#3b5579">offline page</text></g><g transform="translate(0 72)"><rect width="146" height="28" rx="14" fill="#ffffff" fill-opacity="0.75" stroke="#2b8ff0" stroke-opacity="0.35"/><text x="73" y="19" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#3b5579">install button</text></g></g>
-  <g transform="translate(1062 70) scale(1.12)">
-    <defs><linearGradient id="ph20" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3ff"/><stop offset="1" stop-color="#ffd8bd"/></linearGradient></defs>
-    <rect width="112" height="200" rx="20" fill="#13223d"/>
-    <rect x="6" y="6" width="100" height="188" rx="15" fill="url(#ph20)"/>
-    <rect x="40" y="12" width="32" height="8" rx="4" fill="#13223d"/>
-    <text x="56" y="34" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#12233f">9:41</text>
-    <rect x="14" y="44" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="42" y="44" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="70" y="44" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="14" y="76" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <g transform="translate(42 76)"><rect width="22" height="22" rx="6" fill="#2b8ff0"/><path d="M11 4.5 V14.5 M6.8 10.6 L11 14.8 L15.2 10.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="-3" y="-3" width="28" height="28" rx="8" fill="none" stroke="#ff8a3d" stroke-width="2"/></g>
-    <rect x="70" y="76" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="14" y="108" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="42" y="108" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="70" y="108" width="22" height="22" rx="6" fill="#ffffff" fill-opacity="0.85"/>
-    <rect x="16" y="160" width="80" height="22" rx="11" fill="#ffffff" fill-opacity="0.6"/>
-  </g>
-</svg>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/></g>
+    <text x="352" y="170" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="80" font-weight="800" letter-spacing="-2" fill="#2b2420">install<tspan fill="#ec6a42">kite</tspan></text>
+    <text x="356" y="220" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="27" font-weight="500" fill="#6b5a4e">Make any website installable and offline capable.</text>
+    <g transform="translate(356 252)" filter="url(#sc13s)"><path d="M0 4 a4 4 0 0 1 4 -4 H336 a4 4 0 0 1 4 4 V14 a10 10 0 0 0 0 20 V44 a4 4 0 0 1 -4 4 H4 a4 4 0 0 1 -4 -4 V34 a10 10 0 0 0 0 -20 Z" fill="#fffaf1"/><path d="M300 6 V42" stroke="#6b5a4e" stroke-opacity=".5" stroke-width="1.6" stroke-dasharray="4 4"/><text x="24" y="31" font-family="Cascadia Code, Consolas, monospace" font-size="20" fill="#ec6a42">$</text><text x="44" y="31" font-family="Cascadia Code, Consolas, monospace" font-size="20" fill="#2b2420">npx installkite init</text><circle cx="320" cy="24" r="5" fill="#ec6a42"/></g>
+    <g transform="translate(700 262) rotate(-3)" filter="url(#sc13t)"><path d="M0 0 L12 -16 H115 V16 H12 Z" fill="#efbb45"/><circle cx="12" cy="0" r="3.2" fill="#fffaf1"/><text x="66.5" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#2b2420">manifest</text></g><g transform="translate(829 268) rotate(3)" filter="url(#sc13t)"><path d="M0 0 L12 -16 H87 V16 H12 Z" fill="#3b86e6"/><circle cx="12" cy="0" r="3.2" fill="#fffaf1"/><text x="52.5" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">icons</text></g><g transform="translate(930 262) rotate(-3)" filter="url(#sc13t)"><path d="M0 0 L12 -16 H172 V16 H12 Z" fill="#ec6a42"/><circle cx="12" cy="0" r="3.2" fill="#fffaf1"/><text x="95" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#2b2420">service worker</text></g><g transform="translate(740 324) rotate(3)" filter="url(#sc13t)"><path d="M0 0 L12 -16 H153 V16 H12 Z" fill="#8db897"/><circle cx="12" cy="0" r="3.2" fill="#fffaf1"/><text x="85.5" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#2b2420">offline page</text></g><g transform="translate(907 318) rotate(-3)" filter="url(#sc13t)"><path d="M0 0 L12 -16 H172 V16 H12 Z" fill="#f2a3a8"/><circle cx="12" cy="0" r="3.2" fill="#fffaf1"/><text x="95" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#2b2420">install button</text></g>
+    <g transform="translate(1150 196) rotate(8) scale(0.95)" filter="url(#sc13l)"><rect width="92" height="150" rx="16" fill="#2b2420"/><rect x="5" y="5" width="82" height="140" rx="12" fill="#f6ecdc"/><rect x="34" y="10" width="24" height="6" rx="3" fill="#2b2420"/><rect x="12" y="30" width="18" height="18" rx="5" fill="#c5dcc0"/><rect x="36" y="30" width="18" height="18" rx="5" fill="#d9c9ea"/><rect x="60" y="30" width="18" height="18" rx="5" fill="#a9cff7"/><rect x="12" y="56" width="18" height="18" rx="5" fill="#f2a3a8"/><g transform="translate(36 56)"><rect width="18" height="18" rx="5" fill="#ec6a42"/><path d="M4 12 C4 6 14 6 14 12 Z" fill="#fffaf1"/><rect x="-3" y="-3" width="24" height="24" rx="7" fill="none" stroke="#efbb45" stroke-width="1.6" stroke-dasharray="3 2"/></g><rect x="60" y="56" width="18" height="18" rx="5" fill="#e8d3b0"/><rect x="12" y="82" width="18" height="18" rx="5" fill="#c5dcc0"/><rect x="36" y="82" width="18" height="18" rx="5" fill="#d9c9ea"/><rect x="60" y="82" width="18" height="18" rx="5" fill="#e8d3b0"/><rect x="14" y="118" width="64" height="16" rx="8" fill="#fffaf1" fill-opacity=".6"/></g></svg>

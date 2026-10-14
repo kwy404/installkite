@@ -17,7 +17,7 @@ const G = V.reactive({
   name: 'My App',
   shortName: 'My App',
   description: '',
-  theme: '#2b8ff0',
+  theme: '#e0552f',
   bg: '#ffffff',
   display: 'standalone',
   startUrl: './',
@@ -201,7 +201,7 @@ function manifest() {
   if (source?.svgText) icons.push({ src: p('icon.svg'), sizes: 'any', type: 'image/svg+xml', purpose: 'any' });
   const m = { id: G.startUrl || './', name: G.name || 'My App', short_name: G.shortName || G.name || 'App' };
   if (G.description) m.description = G.description;
-  Object.assign(m, { start_url: G.startUrl || './', scope: './', display: G.display, theme_color: hex(G.theme, '#2b8ff0'), background_color: hex(G.bg, '#ffffff'), icons });
+  Object.assign(m, { start_url: G.startUrl || './', scope: './', display: G.display, theme_color: hex(G.theme, '#e0552f'), background_color: hex(G.bg, '#ffffff'), icons });
   return m;
 }
 
@@ -210,7 +210,7 @@ function headTags() {
   const p = (f) => `/${dir ? `${dir}/` : ''}${f}`;
   return [
     '<link rel="manifest" href="/manifest.webmanifest">',
-    `<meta name="theme-color" content="${hex(G.theme, '#2b8ff0')}">`,
+    `<meta name="theme-color" content="${hex(G.theme, '#e0552f')}">`,
     '<link rel="icon" href="/favicon.ico" sizes="48x48">',
     source?.svgText ? `<link rel="icon" href="${p('icon.svg')}" type="image/svg+xml">` : '<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">',
     '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
@@ -251,7 +251,7 @@ function render() {
 function renderNow() {
   if (G.autoPad && source) G.pad = Math.round(maskScale() * 100) / 100;
   G.splashInk = ink(hex(G.bg, '#ffffff'));
-  G.themeInk = ink(hex(G.theme, '#2b8ff0'));
+  G.themeInk = ink(hex(G.theme, '#e0552f'));
   const json = JSON.stringify(manifest(), null, 2);
   $('#gen-manifest').innerHTML = highlightJson(json);
   $('#gen-head').innerHTML = highlightHtml(headTags());
@@ -406,8 +406,8 @@ async function sample() {
   G.name = 'Skye Weather';
   G.shortName = 'Skye';
   G.description = 'Kite friendly forecasts';
-  G.theme = '#2b8ff0';
-  G.bg = '#e6f5ff';
+  G.theme = '#e0552f';
+  G.bg = '#fde5cf';
   await useSvg(await res.text(), 'skye.svg');
 }
 

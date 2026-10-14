@@ -7,8 +7,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "theme_color": "#2b8ff0",
-  "background_color": "#ffffff",
+  "theme_color": "#fffaf1",
+  "background_color": "#f7efe2",
   "categories": [
     "developer",
     "productivity"

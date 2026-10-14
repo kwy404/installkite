@@ -3,47 +3,57 @@
 <head>
 <meta charset="utf-8">
 <title>installkite card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Kalam:wght@700&display=swap">
 <style>
+  /* The social card, in the paper kite workshop style of the docs site. */
   * { box-sizing: border-box; margin: 0; }
   html, body { width: 100vw; height: 100vh; overflow: hidden; }
   body {
     font-family: "Segoe UI", Inter, Arial, sans-serif;
-    color: #12233f;
-    background:
-      radial-gradient(60vw 40vw at 92% 108%, rgba(255, 138, 61, .55), transparent 70%),
-      radial-gradient(40vw 30vw at 0% 0%, rgba(255, 255, 255, .7), transparent 70%),
-      linear-gradient(180deg, #bfe6ff 0%, #e3f4ff 58%, #ffe2c8 100%);
+    color: #2b2420;
+    background: linear-gradient(180deg, #fbd2bd 0%, #fde5cf 55%, #f7efe2 100%);
     display: grid;
-    grid-template-columns: 34vw 1fr;
+    grid-template-columns: 31vw 1fr;
     align-items: center;
-    padding: 0 6vw 0 4vw;
+    padding: 0 5vw 6vw 4vw;
     position: relative;
   }
-  .cloud { position: absolute; fill: #fff; }
-  .kite { width: 33vw; height: 33vw; margin-top: -2vw; }
-  h1 { font-size: 8.2vw; font-weight: 800; letter-spacing: -.25vw; line-height: 1; }
-  h1 span { color: #2b8ff0; }
-  p { font-size: 2.55vw; color: #3b5579; margin-top: 1.6vw; font-weight: 500; line-height: 1.3; max-width: 52vw; }
-  .cmd {
-    display: inline-flex; gap: 1.2vw; margin-top: 3vw; padding: 1.5vw 2.2vw; border-radius: 1.4vw;
-    background: #12233f; color: #fff; font: 2.1vw "Cascadia Code", Consolas, monospace;
-    box-shadow: 0 1.5vw 3vw -1.5vw rgba(18, 35, 63, .55);
-  }
-  .cmd b { color: #9fd0ff; font-weight: 400; }
-  .chips { display: flex; flex-wrap: wrap; gap: .8vw; margin-top: 2.2vw; max-width: 56vw; }
-  .chips span { padding: .6vw 1.4vw; border-radius: 99vw; background: rgba(255, 255, 255, .78); border: .12vw solid rgba(43, 143, 240, .35); font-size: 1.55vw; font-weight: 600; color: #3b5579; }
-  .url { position: absolute; right: 4vw; bottom: 3vw; font-size: 1.6vw; font-weight: 600; color: #12233f; opacity: .7; }
+  .garland { position: absolute; left: 0; top: 0; width: 100vw; height: 7vw; }
+  .sun { position: absolute; right: 5vw; top: 5vw; width: 8vw; height: 8vw; border-radius: 50%; background: #ffb36b; box-shadow: 0 0 0 1.4vw rgb(255 179 107 / .3), 0 0 0 3vw rgb(255 179 107 / .14); }
+  .hills { position: absolute; left: 0; bottom: 0; width: 100vw; height: 11vw; }
+  .kite { width: 30vw; height: 30vw; position: relative; z-index: 1; filter: drop-shadow(0 1.2vw 1.2vw rgb(107 68 38 / .25)); }
+  main { position: relative; z-index: 1; }
+  h1 { font: 800 8.4vw/1 "Bricolage Grotesque", "Segoe UI", sans-serif; letter-spacing: -.35vw; }
+  h1 span { color: #b8461f; }
+  p { font-size: 2.5vw; color: #6b5a4e; margin-top: 1.4vw; font-weight: 500; line-height: 1.3; max-width: 52vw; }
+  .ticket { display: inline-flex; align-items: center; gap: 1.2vw; margin-top: 2.6vw; padding: 1.3vw 2.4vw; border-radius: 1vw; background: #fffaf1; font: 2.2vw "Cascadia Code", Consolas, monospace; box-shadow: 0 .2vw .2vw rgb(107 68 38 / .12), 0 1.4vw 2.6vw -1.4vw rgb(107 68 38 / .5); }
+  .ticket b { color: #b8461f; }
+  .tags { display: flex; flex-wrap: wrap; gap: 1vw 1.2vw; margin-top: 2.2vw; max-width: 58vw; }
+  .tags span { position: relative; padding: .55vw 1.3vw .55vw 2.3vw; font-size: 1.55vw; font-weight: 700; clip-path: polygon(1.1vw 0, 100% 0, 100% 100%, 1.1vw 100%, 0 50%); }
+  .tags span::before { content: ""; position: absolute; left: 1.1vw; top: 50%; width: .55vw; height: .55vw; margin-top: -.27vw; border-radius: 50%; background: #fffaf1; }
+  .url { position: absolute; right: 4vw; bottom: 2.6vw; z-index: 1; font: 700 1.9vw Kalam, "Segoe Print", cursive; color: #2b2420; }
 </style>
 </head>
 <body>
-  <svg class="cloud" style="left:44vw;top:3vw;width:9vw" viewBox="-4 0 80 42"><path d="M10 40 C0 40 -4 26 8 22 C8 8 26 2 34 14 C40 4 60 6 60 22 C72 22 74 40 62 40 Z"/></svg>
-  <svg class="cloud" style="left:6vw;bottom:5vw;width:13vw;opacity:.9" viewBox="-4 0 80 42"><path d="M10 40 C0 40 -4 26 8 22 C8 8 26 2 34 14 C40 4 60 6 60 22 C72 22 74 40 62 40 Z"/></svg>
+  <svg class="garland" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-10 4 Q600 70 1210 4" fill="none" stroke="#6b5a4e" stroke-opacity=".6" stroke-width="1.5"/>
+    <g fill="#ec6a42"><path d="M90 16 h20 l-10 18z"/><path d="M490 34 h20 l-10 18z"/><path d="M890 26 h20 l-10 18z"/></g>
+    <g fill="#2f78d8"><path d="M190 22 h20 l-10 18z"/><path d="M590 36 h20 l-10 18z"/><path d="M990 21 h20 l-10 18z"/></g>
+    <g fill="#efbb45"><path d="M290 28 h20 l-10 18z"/><path d="M690 34 h20 l-10 18z"/><path d="M1090 14 h20 l-10 18z"/></g>
+    <g fill="#8db897"><path d="M390 32 h20 l-10 18z"/><path d="M790 31 h20 l-10 18z"/></g>
+  </svg>
+  <span class="sun"></span>
+  <svg class="hills" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#c5dcc0" d="M0 70 C160 30 300 40 460 62 S760 30 940 48 S1260 28 1440 50 V140 H0 Z"/>
+    <path fill="rgb(60 80 50 / .16)" transform="translate(0 -5)" d="M0 92 C200 62 360 70 540 88 S880 64 1080 80 S1340 70 1440 82 V140 H0 Z"/>
+    <path fill="#a6c9a8" d="M0 92 C200 62 360 70 540 88 S880 64 1080 80 S1340 70 1440 82 V140 H0 Z"/>
+  </svg>
   <img class="kite" src="../../assets/mascot.svg" alt="">
   <main>
     <h1>install<span>kite</span></h1>
-    <p>Make any website installable and offline capable with one line.</p>
-    <div class="cmd"><b>$</b>npx installkite init</div>
-    <div class="chips"><span>web app manifest</span><span>every icon size</span><span>service worker</span><span>offline page</span><span>install button</span><span>iOS sheet</span></div>
+    <p>Fold any website into an installable, offline capable app with one line.</p>
+    <div class="ticket"><b>$</b>npx installkite init</div>
+    <div class="tags"><span style="background:#efbb45">web app manifest</span><span style="background:#a9cff7">every icon size</span><span style="background:#f8c9b8">service worker</span><span style="background:#d3e8d6">offline page</span><span style="background:#f6d0d4">install button</span></div>
   </main>
   <div class="url">kwy404.github.io/installkite</div>
 </body>

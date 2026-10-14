@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Skye tangled in a paper tree after drifting off course"><title>Skye tangled in a paper tree after drifting off course</title><defs><linearGradient id="sc113sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbd2bd"/><stop offset=".6" stop-color="#fde5cf"/><stop offset="1" stop-color="#f9efe2"/></linearGradient><radialGradient id="sc113glow"><stop offset="0" stop-color="#ffb36b" stop-opacity="0.4"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></radialGradient><filter id="sc113s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="2.4" stdDeviation="2" flood-color="#6b4426" flood-opacity="0.24"/></filter><filter id="sc113t" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-color="#6b4426" flood-opacity="0.19"/></filter><filter id="sc113l" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#6b4426" flood-opacity="0.22"/></filter></defs><rect width="480" height="320" rx="22" fill="url(#sc113sky)"/>
+      
+      <circle cx="400" cy="70" r="37.699999999999996" fill="#ffd29a" fill-opacity=".55"/><circle cx="400" cy="70" r="26" fill="#ffb36b" filter="url(#sc113t)"/>
+      <path transform="translate(40 40) scale(1.1)" d="M6 30 a11 11 0 0 1 4 -21 a15 15 0 0 1 27 -3 a12 12 0 0 1 18 11 a9 9 0 0 1 -1 13 Z" fill="#fffaf1" fill-opacity="0.95" filter="url(#sc113t)"/>
+      <path d="M0 260 Q140 230 260 252 T480 242 V320 H0 Z" fill="#c5dcc0"/>
+      <g filter="url(#sc113s)"><path d="M224 300 C226 250 220 220 210 190 L232 190 C238 220 244 250 246 300 Z" fill="#b38c5c"/><path d="M226 222 C200 210 186 196 178 180 M238 214 C262 200 280 186 288 170" stroke="#b38c5c" stroke-width="9" stroke-linecap="round" fill="none"/></g>
+      <g filter="url(#sc113s)"><circle cx="170" cy="150" r="54" fill="#679a76"/><circle cx="288" cy="138" r="60" fill="#679a76"/><circle cx="228" cy="104" r="66" fill="#8db897"/><circle cx="196" cy="128" r="30" fill="#8db897"/></g>
+      <path d="M250 168 C280 190 260 210 300 214 C330 216 320 250 350 262 C370 270 380 290 400 300" fill="none" stroke="#2b2420" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M262 176 c-12 -10 6 -22 12 -8 c4 10 -14 14 -12 2" fill="none" stroke="#2b2420" stroke-width="1.4"/>
+      <g transform="translate(207.6 85.4) scale(0.42)"><defs>
+    <linearGradient id="kb114" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks115" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb114)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks115)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/></g>
+      <g transform="translate(372 224) rotate(8)" filter="url(#sc113t)"><path d="M-30 0 L-20 -14 H34 V14 H-20 Z" fill="#efbb45"/><circle cx="-20" cy="0" r="3" fill="#fffaf1"/><text x="8" y="6" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#2b2420">404</text></g>
+      <path d="M0 300 l4 -14 l4 14 Z M9 300 l4 -11 l4 11 Z M18 300 l4 -14 l4 14 Z M27 300 l4 -11 l4 11 Z M36 300 l4 -14 l4 14 Z M45 300 l4 -11 l4 11 Z M54 300 l4 -14 l4 14 Z M63 300 l4 -11 l4 11 Z M72 300 l4 -14 l4 14 Z M81 300 l4 -11 l4 11 Z M90 300 l4 -14 l4 14 Z M99 300 l4 -11 l4 11 Z M108 300 l4 -14 l4 14 Z M117 300 l4 -11 l4 11 Z M126 300 l4 -14 l4 14 Z M135 300 l4 -11 l4 11 Z M144 300 l4 -14 l4 14 Z M153 300 l4 -11 l4 11 Z M162 300 l4 -14 l4 14 Z M171 300 l4 -11 l4 11 Z M180 300 l4 -14 l4 14 Z M189 300 l4 -11 l4 11 Z M198 300 l4 -14 l4 14 Z M207 300 l4 -11 l4 11 Z M216 300 l4 -14 l4 14 Z M225 300 l4 -11 l4 11 Z M234 300 l4 -14 l4 14 Z M243 300 l4 -11 l4 11 Z M252 300 l4 -14 l4 14 Z M261 300 l4 -11 l4 11 Z M270 300 l4 -14 l4 14 Z M279 300 l4 -11 l4 11 Z M288 300 l4 -14 l4 14 Z M297 300 l4 -11 l4 11 Z M306 300 l4 -14 l4 14 Z M315 300 l4 -11 l4 11 Z M324 300 l4 -14 l4 14 Z M333 300 l4 -11 l4 11 Z M342 300 l4 -14 l4 14 Z M351 300 l4 -11 l4 11 Z M360 300 l4 -14 l4 14 Z M369 300 l4 -11 l4 11 Z M378 300 l4 -14 l4 14 Z M387 300 l4 -11 l4 11 Z M396 300 l4 -14 l4 14 Z M405 300 l4 -11 l4 11 Z M414 300 l4 -14 l4 14 Z M423 300 l4 -11 l4 11 Z M432 300 l4 -14 l4 14 Z M441 300 l4 -11 l4 11 Z M450 300 l4 -14 l4 14 Z M459 300 l4 -11 l4 11 Z M468 300 l4 -14 l4 14 Z M477 300 l4 -11 l4 11 Z" fill="#679a76"/><rect y="298" width="480" height="22" fill="#8db897"/></svg>

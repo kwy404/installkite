@@ -1,5 +1,6 @@
 // Builds the docs site in docs/ from the sources in site/.
 //   site/*.mjs          layout, home, generator, docs, guide templates, UI icons
+//   assets/art/         workshop scenes from scripts/build-art.mjs (npm run art)
 //   site/guides/*.html  guide sources: a meta comment, then prose sections
 //   site/static/*       site.css, site.js and generator.js, copied as is
 // Terminal output on the pages is real: the build runs the installkite CLI
@@ -191,6 +192,20 @@ function ansiStrip(s) {
 const initFiles = [...initPlain.matchAll(/^\s+(create|update|same)\s+(\S+)\s+([\d.]+ (?:B|kB|MB))\s+(.*)$/gm)].map((m) => ({ path: m[2], size: m[3], note: m[4].trim() }));
 if (initFiles.length < 20) throw new Error(`could not read the init file list:\n${initPlain}`);
 const configSample = readFileSync(join(site, 'installkite.config.json'), 'utf8').trim();
+// The real parts of the kit, for the assembly manual on the home page.
+const manifestText = readFileSync(join(site, 'manifest.webmanifest'), 'utf8').trim();
+const indexHtml = readFileSync(join(site, 'index.html'), 'utf8');
+const headBlock = /^([ \t]*)<!-- installkite:start -->[\s\S]*?<!-- installkite:end -->/m.exec(indexHtml);
+if (!headBlock) throw new Error('no installkite block in the fixture index.html');
+const headTags = headBlock[0]
+  .split('\n')
+  .map((l) => (l.startsWith(headBlock[1]) ? l.slice(headBlock[1].length) : l))
+  .join('\n');
+const offlineHtml = readFileSync(join(site, 'offline.html'), 'utf8');
+const offlineBody = `${/<body>[\s\S]*?<\/main>/.exec(offlineHtml)[0].replace(/(data:image\/png;base64,)[A-Za-z0-9+/=]{24,}/, '$1iVBORw0KGgo...')}\n<script>\n  /* retry, then list the pages saved on this device */\n</script>\n</body>`;
+// A rebuild after a content change, as CI runs it.
+writeFileSync(join(site, 'index.html'), indexHtml.replace('out of the oven at 7', 'out of the oven at 6'));
+const buildOut = cli(site, ['build']);
 const swLines = readFileSync(join(site, 'sw.js'), 'utf8').split('\n');
 const settings = JSON.parse(/self\.__INSTALLKITE__ = (\{.*\});/.exec(swLines[2])[1]);
 const swSample = [
@@ -289,6 +304,19 @@ const frames = {
   sw: frame(swSample, { lang: 'js', title: 'sw.js' }),
   runtime: frame('<script src="/installkite.js" data-sw="/sw.js" data-install="auto" data-offline="badge" defer></script>\n\n<button data-installkite-install hidden>Install the app</button>', { lang: 'html', title: 'index.html' }),
   icons: termFrame(`$ npx installkite icons logo.svg --out public\n${iconsOut}`, 'npx installkite icons'),
+  manifest: frame(manifestText, { lang: 'json', title: 'manifest.webmanifest' }),
+  head: frame(headTags, { lang: 'html', title: 'index.html (the marked block)' }),
+  offline: frame(offlineBody, { lang: 'html', title: 'offline.html (the page body)' }),
+  installHtml: frame(
+    '<!-- One tag: the worker, the install button, the iOS sheet -->\n<script src="/installkite.js" data-sw="/sw.js" data-install="auto" defer></script>\n\n<!-- Any element becomes an install button -->\n<button id="install" data-installkite-install hidden>Install the app</button>',
+    { lang: 'html', title: 'index.html' },
+  ),
+  installJs: frame(
+    "// Or build your own install flow with the runtime events.\nconst button = document.querySelector('#install');\n\ninstallkite.on('installable', () => (button.hidden = false));\nbutton.addEventListener('click', async () => {\n  const outcome = await installkite.install(); // accepted, dismissed or instructions (iOS)\n});\ninstallkite.on('installed', () => console.log('On the home screen'));",
+    { lang: 'js', title: 'app.js' },
+  ),
+  build: termFrame(`$ npx installkite build\n${buildOut}`, 'npx installkite build'),
+  updateJs: frame("// The default toast says \"Refresh to update\". Or show your own:\ninstallkite.on('update', ({ apply }) => showMyBanner('A new version is ready', apply));", { lang: 'js', title: 'app.js' }),
 };
 
 codeId = 0;
@@ -301,7 +329,22 @@ out['index.html'] = page(
     description: 'Make any website installable and offline capable with one command: web app manifest, every PWA icon size, service worker, offline page and an install button.',
     jsonld: homeJsonLd(),
   },
-  homeBody({ guides, frames, initFiles, sizes, tests: testCount }),
+  homeBody({
+    guides,
+    frames,
+    initFiles,
+    sizes,
+    tests: testCount,
+    partFrames: {
+      manifest: frames.manifest,
+      icons: frames.icons,
+      sw: frames.sw,
+      offline: frames.offline,
+      head: frames.head,
+      install: frames.installHtml + frames.installJs,
+      update: frames.build + frames.updateJs,
+    },
+  }),
 );
 
 codeId = 100;
@@ -365,7 +408,7 @@ out['404.html'] = rootLinks(
 
 const files = {};
 const source = ik.loadIconSource(readFileSync(join(root, 'assets', 'mascot-head.svg')), 'mascot-head.svg');
-const iconSet = ik.generateIcons(source, { background: '#e6f5ff', themeColor: '#2b8ff0' });
+const iconSet = ik.generateIcons(source, { background: '#fde5cf', themeColor: '#e0552f' });
 for (const f of iconSet.files) files[f.path] = f.bytes;
 const shots = ['screenshot-wide.png', 'screenshot-narrow.png'].filter((f) => existsSync(join(docs, 'assets', f)));
 const manifest = ik.generateManifest({
@@ -373,8 +416,8 @@ const manifest = ik.generateManifest({
   shortName: 'installkite',
   description: 'Make any website installable and offline capable with one line.',
   lang: 'en',
-  themeColor: '#2b8ff0',
-  backgroundColor: '#ffffff',
+  themeColor: '#fffaf1',
+  backgroundColor: '#f7efe2',
   icons: iconSet.files,
   categories: ['developer', 'productivity'],
   shortcuts: [
@@ -386,9 +429,9 @@ const manifest = ik.generateManifest({
 });
 files['manifest.webmanifest'] = ik.stringifyManifest(manifest);
 const icon96 = iconSet.files.find((f) => f.path === 'icons/icon-96.png');
-files['offline.html'] = ik.generateOfflinePage({ name: 'installkite', themeColor: '#2b8ff0', backgroundColor: '#ffffff', icon: `data:image/png;base64,${Buffer.from(icon96.bytes).toString('base64')}` });
+files['offline.html'] = ik.generateOfflinePage({ name: 'installkite', themeColor: '#e0552f', backgroundColor: '#f7efe2', icon: `data:image/png;base64,${Buffer.from(icon96.bytes).toString('base64')}` });
 files['installkite.js'] = readFileSync(join(root, 'dist', 'installkite.min.js'), 'utf8');
-const headOpts = (base) => ({ base, appName: 'installkite', themeColor: '#2b8ff0', themeColorDark: '#0b1426', svgIcon: 'icons/icon.svg', runtime: 'installkite.js', sw: 'sw.js', runtimeAttrs: { offline: 'badge' } });
+const headOpts = (base) => ({ base, appName: 'installkite', themeColor: '#fffaf1', themeColorDark: '#1d1a2b', svgIcon: 'icons/icon.svg', runtime: 'installkite.js', sw: 'sw.js', runtimeAttrs: { offline: 'badge' } });
 for (const [name, html] of Object.entries(out)) files[name] = ik.injectHead(html, headOpts(name === '404.html' ? '/installkite/' : './')).html;
 
 // ---------- Search index, sitemap, schema ----------
@@ -494,6 +537,10 @@ Object.assign(files, {
   'assets/mascot-dark.svg': readFileSync(join(root, 'assets', 'mascot-dark.svg'), 'utf8'),
   'assets/mascot-head.svg': readFileSync(join(root, 'assets', 'mascot-head.svg'), 'utf8'),
 });
+// The workshop scenes, light and dark (written by npm run art).
+for (const mode of ['light', 'dark']) {
+  for (const f of readdirSync(join(root, 'assets', 'art', mode))) files[`assets/art/${mode}/${f}`] = readFileSync(join(root, 'assets', 'art', mode, f), 'utf8');
+}
 
 // The service worker, over the final files.
 const PRECACHE = /\.(html|css|js|webmanifest|svg)$|^icons\/icon-(192|512)\.png$|^favicon|^apple-touch-icon|^search\.json$/;

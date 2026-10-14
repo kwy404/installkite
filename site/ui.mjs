@@ -1,6 +1,7 @@
 // UI icons for the site, as one inline SVG sprite, plus helpers that
-// inline the art set (scripts/art.mjs).
-import { COLORS, icon as artIcon } from '../scripts/art.mjs';
+// inline the folded paper icon set and place the workshop scenes
+// (scripts/art.mjs, written to docs/assets/art/ by the docs build).
+import { COLORS, SCENE_TITLES, icon as artIcon } from '../scripts/art.mjs';
 
 const P = {
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
@@ -34,6 +35,9 @@ const P = {
   signal: '<path d="M4 18v-2M9 18v-5M14 18v-8M19 18V7"/>',
   reset: '<path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 3v6h6"/>',
   shield: '<path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6z"/>',
+  scissors: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>',
+  fold: '<path d="M4 4h10l6 6v10H4z"/><path d="M14 4v6h6"/>',
+  ruler: '<path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2M10 10l2 2M13 7l2 2"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 };
 
@@ -55,6 +59,16 @@ export function icon(name, cls = 'ic') {
 export function artTile(name, cls = 'art-ic') {
   const strip = (s) => s.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
   return `<span class="${cls}" aria-hidden="true"><svg viewBox="0 0 48 48" class="art-light">${strip(artIcon(name))}</svg><svg viewBox="0 0 48 48" class="art-dark">${strip(artIcon(name, { dark: true }))}</svg></span>`;
+}
+
+/**
+ * A workshop scene, light (dawn) and dark (dusk) files, swapped by CSS.
+ * Both are lazy, so the hidden one is never fetched.
+ */
+export function scene(name, { cls = 'scene', eager = false, alt = SCENE_TITLES[name] } = {}) {
+  if (!SCENE_TITLES[name]) throw new Error(`unknown scene ${name}`);
+  const load = eager ? 'fetchpriority="high"' : 'loading="lazy"';
+  return `<span class="${cls}"><img class="art-light" src="assets/art/light/${name}.svg" width="480" height="320" alt="${alt}" ${load} decoding="async"><img class="art-dark" src="assets/art/dark/${name}.svg" width="480" height="320" alt="${alt}" loading="lazy" decoding="async"></span>`;
 }
 
 export { COLORS };

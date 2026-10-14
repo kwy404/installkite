@@ -1,6 +1,7 @@
-// Guide pages, the guides index and the 404 page.
+// Guide pages, the guides index and the 404 page, in the workshop language:
+// booklets on a shelf, a pattern sheet table of contents and folded notes.
 import { GUIDES, SITE, esc } from './layout.mjs';
-import { artTile, icon } from './ui.mjs';
+import { artTile, icon, scene } from './ui.mjs';
 
 export const UPDATED = '2026-10-13';
 const UPDATED_LABEL = 'October 13, 2026';
@@ -20,42 +21,42 @@ export function guideBody(guide, all) {
   const body = guide.body.replace(/<section id="([^"]+)"><h2>([\s\S]*?)<\/h2>/g, (_, id, h) => `<section id="${id}" class="chapter"><h2><a href="#${id}" class="anchor" aria-hidden="true" tabindex="-1">#</a>${h}</h2>`);
   const toc = [...sections, ['faq', 'Questions'], ['related', 'Keep reading']].map(([id, h]) => `<li><a href="#${id}">${h.replace(/<[^>]+>/g, '')}</a></li>`).join('');
   const faq = meta.faq
-    .map((f, i) => `<details class="collapse" name="gfaq"${i === 0 ? ' open' : ''}><summary class="collapse-title">${f.q}</summary><div class="collapse-content"><p>${f.a}</p></div></details>`)
+    .map((f, i) => `<details class="collapse note-fold" name="gfaq"${i === 0 ? ' open' : ''}><summary class="collapse-title">${f.q}</summary><div class="collapse-content"><p>${f.a}</p></div></details>`)
     .join('');
   const related = meta.related
     .map((slug) => {
       const r = all.find((x) => x.meta.slug === slug);
       const rg = GUIDES.find((x) => x.slug === slug);
-      return `<a href="${slug}.html" class="guide-tile">${artTile(rg.icon, 'art-ic guide-tile-ic')}<span><b>${esc(r.meta.h1)}</b><small>${esc(r.meta.description)}</small></span></a>`;
+      return `<a href="${slug}.html" class="booklet">${artTile(rg.icon, 'art-ic booklet-ic')}<span><b>${esc(r.meta.h1)}</b><small>${esc(r.meta.description)}</small><em class="hand">${esc(r.meta.readTime)}</em></span></a>`;
     })
     .join('');
+  const n = GUIDES.findIndex((x) => x.slug === meta.slug) + 1;
   return `<div class="read-progress" aria-hidden="true"></div>
-<div class="guide-top">
-  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c3"></span><span class="stars"></span></div>
+<div class="page-head guide-top">
   <div class="wrap">
     ${crumbs([['installkite', './'], ['Guides', 'guides.html'], [meta.crumb, '']])}
     <header class="guide-head">
       <div>
-        <p class="kicker">${icon('book')}${TOPICS[g.topic]} guide</p>
+        <p class="tag-kicker"><span class="tag-hole"></span>${TOPICS[g.topic]} guide, booklet ${n} of ${GUIDES.length}</p>
         <h1>${esc(meta.h1)}</h1>
         <p class="lead">${meta.lead}</p>
         <p class="byline"><span>By <a href="https://github.com/kwy404" rel="author">Alexandre Kohler</a></span><span>Updated <time datetime="${UPDATED}">${UPDATED_LABEL}</time></span><span>${meta.readTime}</span></p>
       </div>
-      ${artTile(g.icon, 'art-ic guide-hero-ic')}
+      ${scene(g.art, { cls: 'scene guide-art', eager: true })}
     </header>
   </div>
 </div>
 <div class="wrap read">
-  <aside class="read-toc" aria-labelledby="toc-title"><p class="side-title" id="toc-title">In this guide</p><ol>${toc}</ol></aside>
+  <aside class="read-toc pattern-side" aria-labelledby="toc-title"><p class="side-title" id="toc-title">${artTile(g.icon, 'art-ic side-ic')}In this booklet</p><ol>${toc}</ol></aside>
   <article class="read-main prose-ik">
 ${body}
-    <section id="faq" class="chapter"><h2><a href="#faq" class="anchor" aria-hidden="true" tabindex="-1">#</a>Questions</h2><div class="accordion collapse-plus">${faq}</div></section>
-    <aside class="guide-cta" aria-label="Get started">
+    <section id="faq" class="chapter"><h2><a href="#faq" class="anchor" aria-hidden="true" tabindex="-1">#</a>Questions</h2><div class="accordion notes collapse-plus">${faq}</div></section>
+    <aside class="note guide-cta" aria-label="Get started">
       <img src="assets/mascot.svg" width="104" height="104" alt="" loading="lazy">
       <div><h2>Let Skye do the setup</h2><p>Manifest, every icon size, service worker, offline page and head tags, in one command. Free and open source.</p>
-      <div class="cmd-box"><code id="cta-cmd">npx installkite init</code><button type="button" class="copy-btn" v-copy-from="#cta-cmd" aria-label="Copy the command">${icon('copy')}Copy</button></div></div>
+      <div class="ticket"><span class="ticket-dollar" aria-hidden="true">$</span><code id="cta-cmd">npx installkite init</code><button type="button" class="ticket-copy" v-copy-from="#cta-cmd" aria-label="Copy the command">${icon('copy')}<span>Copy</span></button></div></div>
     </aside>
-    <section id="related" class="chapter"><h2><a href="#related" class="anchor" aria-hidden="true" tabindex="-1">#</a>Keep reading</h2><div class="guide-grid two-col">${related}</div></section>
+    <section id="related" class="chapter"><h2><a href="#related" class="anchor" aria-hidden="true" tabindex="-1">#</a>Keep reading</h2><div class="booklets two-col">${related}</div></section>
   </article>
 </div>`;
 }
@@ -104,18 +105,21 @@ export function indexBody(guides) {
       const items = GUIDES.filter((g) => g.topic === key)
         .map((g) => {
           const m = guides.find((x) => x.meta.slug === g.slug).meta;
-          return `<a href="${g.slug}.html" class="guide-tile">${artTile(g.icon, 'art-ic guide-tile-ic')}<span><b>${esc(m.h1)}</b><small>${esc(m.description)}</small><em>${m.readTime}</em></span></a>`;
+          return `<a href="${g.slug}.html" class="booklet">${artTile(g.icon, 'art-ic booklet-ic')}<span><b>${esc(m.h1)}</b><small>${esc(m.description)}</small><em class="hand">${esc(m.readTime)}</em></span></a>`;
         })
         .join('');
-      return items ? `<section class="guide-group" aria-labelledby="t-${key}"><h2 id="t-${key}">${label}</h2><div class="guide-grid">${items}</div></section>` : '';
+      return items ? `<section class="shelf-row" aria-labelledby="t-${key}"><h2 id="t-${key}"><span class="shelf-label">${label}</span></h2><div class="booklets">${items}</div></section>` : '';
     })
     .join('');
-  return `<div class="guide-top">
-  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="stars"></span></div>
-  <div class="wrap">
-    ${crumbs([['installkite', './'], ['Guides', '']])}
-    <h1>Guides to installable, offline websites</h1>
-    <p class="lead">From the manifest and icon sizes to service workers, iOS and GitHub Pages. Each guide explains the rule, shows the code, and how installkite handles it.</p>
+  return `<div class="page-head">
+  <div class="wrap page-head-in">
+    <div>
+      ${crumbs([['installkite', './'], ['Guides', '']])}
+      <p class="tag-kicker"><span class="tag-hole"></span>The workshop shelf</p>
+      <h1>Guides to installable, offline websites</h1>
+      <p class="lead">From the manifest and icon sizes to service workers, iOS and GitHub Pages. Each booklet explains the rule, shows the code, and how installkite handles it.</p>
+    </div>
+    ${scene('shelf', { cls: 'scene head-art', eager: true })}
   </div>
 </div>
 <div class="wrap guides-page">${groups}</div>`;
@@ -144,13 +148,12 @@ export function indexJsonLd(guides) {
 
 export function notFoundBody() {
   return `<section class="nf">
-  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span><span class="stars"></span></div>
   <div class="wrap nf-in">
-    <img src="assets/mascot.svg" width="220" height="220" alt="Skye the kite, drifting" class="nf-kite">
+    ${scene('lost-kite', { cls: 'scene nf-art', eager: true, alt: 'Skye the kite, tangled in a paper tree after drifting off course' })}
     <div>
-      <p class="kicker">${icon('wifi-off')}Error 404</p>
+      <p class="tag-kicker"><span class="tag-hole"></span>Error 404</p>
       <h1>Skye drifted off course</h1>
-      <p class="lead">This page is not on the map. The wind may have moved it, or the link has a typo.</p>
+      <p class="lead">This page is not on the pattern. The wind may have moved it, or the link has a typo.</p>
       <div class="hero-cta"><a href="./" class="btn btn-primary">${icon('arrow')}Back home</a><a href="guides.html" class="btn btn-outline">${icon('book')}Browse the guides</a><button type="button" class="btn btn-ghost" data-search-open>${icon('search')}Search</button></div>
     </div>
   </div>

@@ -3,8 +3,9 @@
 // this module publishes reactive stores and helpers on V.config.globals,
 // then starts Voodoo. Pages declare behavior in HTML (v-data, @click,
 // v-model, v-show, v-copy-from, v-theme-toggle, v-hotkey). Plain JavaScript
-// is used where Voodoo cannot help: the flight of the app icon in the demo,
-// the search index, the reading progress bar and the docs scroll spy.
+// is used where Voodoo cannot help: the origami fold (one CSS variable per
+// frame), the search index, Skye on her scroll string, the reading progress
+// bar and the docs scroll spy.
 
 const V = window.V;
 const $ = (s, el = document) => el.querySelector(s);
@@ -69,100 +70,172 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ---------- The demo: install, home screen, airplane mode ----------
+// ---------- The home page state ----------
 
-const H = V.reactive({ step: 'site', installed: false, air: false, open: false, splash: false, page: 'home', done: 0, say: '' });
-const SAY = {
-  dialog: 'The browser asks: install Acme Bakery? installkite.js caught the install prompt and opened it from its button.',
-  flying: 'Installing. The app icon flies to the home screen.',
-  installed: 'Installed. Acme is on the home screen with its own icon and window. Now turn on airplane mode.',
-  air: 'Airplane mode is on. The app opened from the precache: no network needed. Tap Specials, a page you never opened.',
-  airBefore: 'Airplane mode is on. Install the site first to see it open offline.',
-  offline: 'A page that was never cached shows the offline page, with the pages saved on this device.',
-  online: 'Back online. Pages load fresh from the network again.',
-};
+const H = V.reactive({ stage: 0, part: 0, cut: false, page: 'home', say: '' });
+const SAY = [
+  'Folding. The manifest and the icons turn the page into an app with a name, colors and a square icon.',
+  'Flying. installkite.js caught the install prompt and the app takes off.',
+  '',
+  'Landed. Acme Bakery is on the home screen with its own icon. Now cut the string further down the page.',
+];
 
-function askInstall() {
-  if (H.installed || H.step === 'flying') return;
-  H.step = 'dialog';
-  H.say = SAY.dialog;
+// ---------- The origami fold: one variable, --f, from 0 to 1 ----------
+
+const stage = $('#fold-stage');
+const range = $('#fold-range');
+let f = 0;
+let anim = 0;
+function measure() {
+  if (!stage) return;
+  const home = $('#fold-home');
+  const slot = $('#fold-slot');
+  const s = stage.getBoundingClientRect();
+  const h = home.getBoundingClientRect();
+  const t = slot.getBoundingClientRect();
+  const hx = h.left + h.width / 2 - s.left;
+  const hy = h.top + h.height / 2 - s.top;
+  const sx = t.left + t.width / 2 - s.left;
+  const sy = t.top + t.height / 2 - s.top;
+  stage.style.setProperty('--dx', `${(sx - hx).toFixed(1)}px`);
+  stage.style.setProperty('--dy', `${(sy - hy).toFixed(1)}px`);
+  stage.style.setProperty('--k', (slot.offsetWidth / home.offsetWidth).toFixed(3));
+  stage.style.setProperty('--pr', getComputedStyle($('.paper-phone')).rotate || '0deg');
+  stage.style.setProperty('--sx', `${sx.toFixed(1)}px`);
+  stage.style.setProperty('--sy', `${sy.toFixed(1)}px`);
+  // The arc of the flight: its peak matches the 110px lift in site.css.
+  $('#fold-path').setAttribute('d', `M${hx.toFixed(1)} ${hy.toFixed(1)} Q${((hx + sx) / 2).toFixed(1)} ${((hy + sy) / 2 - 220).toFixed(1)} ${sx.toFixed(1)} ${sy.toFixed(1)}`);
 }
-function cancelInstall() {
-  H.step = 'site';
-  H.say = 'Install cancelled. The button stays available.';
+function setF(v) {
+  f = Math.min(1, Math.max(0, v));
+  stage.style.setProperty('--f', f.toFixed(4));
+  if (range) range.value = String(Math.round(f * 100));
+  const st = f >= 1 ? 3 : f >= 0.55 ? 1 : 0;
+  if (st !== H.stage) {
+    H.stage = st;
+    if (f > 0) H.say = SAY[st];
+  }
+  stage.classList.toggle('is-landed', f >= 1);
 }
-function confirmInstall() {
-  const from = $('#dlg-icon')?.getBoundingClientRect();
-  const slot = $('#ph-slot .app-ic');
-  H.step = 'flying';
-  H.say = SAY.flying;
-  const land = () => {
-    H.installed = true;
-    H.step = 'installed';
-    H.done = Math.max(H.done, 2);
-    H.say = SAY.installed;
-  };
-  if (!from || !slot || reduced || !Element.prototype.animate) {
-    land();
+function stop() {
+  cancelAnimationFrame(anim);
+  anim = 0;
+}
+function foldGo() {
+  if (!stage || f >= 1) return;
+  stop();
+  measure();
+  if (reduced) {
+    setF(1);
     return;
   }
-  const to = slot.getBoundingClientRect();
-  const kite = document.createElement('span');
-  kite.className = 'acme-ic flying-icon';
-  Object.assign(kite.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px` });
-  document.body.appendChild(kite);
-  const dx = to.left - from.left;
-  const dy = to.top - from.top;
-  const s = to.width / from.width;
-  // A kite like arc: up and over, with a little sway.
-  const anim = kite.animate(
-    [
-      { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
-      { transform: `translate(${dx * 0.35}px, ${Math.min(dy, 0) - 70}px) rotate(-14deg) scale(1.25)`, offset: 0.4 },
-      { transform: `translate(${dx * 0.75}px, ${dy * 0.55 - 30}px) rotate(10deg) scale(1.1)`, offset: 0.72 },
-      { transform: `translate(${dx}px, ${dy}px) rotate(0deg) scale(${s})` },
-    ],
-    { duration: 1150, easing: 'cubic-bezier(.45,.05,.3,1)' },
-  );
-  anim.onfinish = () => {
-    kite.remove();
-    land();
+  const from = f;
+  const dur = 2800 * (1 - from);
+  const t0 = window.performance.now();
+  const ease = (x) => (x < 0.5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2);
+  const tick = (now) => {
+    const x = Math.min(1, (now - t0) / dur);
+    setF(from + (1 - from) * ease(x));
+    anim = x < 1 ? requestAnimationFrame(tick) : 0;
   };
+  anim = requestAnimationFrame(tick);
 }
-function openApp() {
-  if (!H.installed) return;
-  H.open = true;
-  H.page = 'home';
-  H.splash = !reduced;
-  setTimeout(() => (H.splash = false), 1400);
-  if (H.air) {
-    H.done = Math.max(H.done, 3);
-    H.say = SAY.air;
+function foldTo(v) {
+  stop();
+  setF(Number(v));
+}
+function foldReset() {
+  stop();
+  setF(0);
+  H.say = 'The page is flat again.';
+}
+if (stage) {
+  measure();
+  if ('ResizeObserver' in window) new window.ResizeObserver(measure).observe(stage);
+  addEventListener('resize', measure, { passive: true });
+  document.fonts?.ready.then(measure);
+}
+
+// ---------- The assembly manual and cutting the string ----------
+
+function pick(i) {
+  H.part = i;
+  const panel = $('#part-panel');
+  if (panel && window.innerWidth < 1100) {
+    const r = panel.getBoundingClientRect();
+    if (r.top > innerHeight * 0.7 || r.bottom < 80) panel.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }
 }
-function closeApp() {
-  H.open = false;
-}
-function airChanged() {
-  if (H.air) {
-    if (!H.installed) {
-      H.say = SAY.airBefore;
-      return;
-    }
-    openApp();
-  } else {
-    H.say = SAY.online;
-  }
-}
-function resetDemo() {
-  Object.assign(H, { step: 'site', installed: false, air: false, open: false, splash: false, page: 'home', done: 0, say: 'The demo is back at the start.' });
+function cutChanged() {
+  H.say = H.cut
+    ? 'String cut, no network. The app still opens from the precache. Open Specials, a page this phone never visited.'
+    : 'String tied again. Pages load fresh from the network.';
 }
 V.effect(() => {
-  if (H.air && H.open && H.page === 'specials' && H.done < 4) {
-    H.done = 4;
-    H.say = SAY.offline;
-  }
+  if (H.cut && H.page === 'specials') H.say = 'A page that was never cached shows the offline page, with the pages saved on this device.';
 });
+
+// ---------- Skye on her string, in the margin of wide screens ----------
+
+const fly = $('.skye-fly');
+if (fly && !reduced) {
+  const kite = $('.skye-kite', fly);
+  const path = $('.skye-string path', fly);
+  const head = $('.hero, .page-head, .nf');
+  const foot = $('.site-foot');
+  const pos = { x: 0, y: 0, r: 0 };
+  let target = { x: 0, y: 0, r: 0 };
+  let lastY = window.scrollY;
+  let raf = 0;
+  const wide = matchMedia('(min-width: 1380px)');
+  const aim = () => {
+    const vw = document.documentElement.clientWidth;
+    const vh = innerHeight;
+    const gutter = Math.max(0, (vw - 1216) / 2);
+    const p = window.scrollY / Math.max(1, document.documentElement.scrollHeight - vh);
+    const v = Math.max(-30, Math.min(30, (window.scrollY - lastY) * 0.6));
+    lastY = window.scrollY;
+    target = { x: vw - gutter / 2 - 30 + Math.sin(p * 13) * Math.min(18, gutter / 5), y: vh * 0.26 + Math.sin(p * 8) * vh * 0.07 + v * 1.5, r: Math.sin(p * 17) * 8 - v * 0.5 };
+    const show = wide.matches && (!head || head.getBoundingClientRect().bottom < vh * 0.35) && (!foot || foot.getBoundingClientRect().top > vh * 0.6);
+    fly.classList.toggle('is-on', show);
+  };
+  const step = () => {
+    pos.x += (target.x - pos.x) * 0.08;
+    pos.y += (target.y - pos.y) * 0.08;
+    pos.r += (target.r - pos.r) * 0.08;
+    kite.style.transform = `translate(${pos.x.toFixed(1)}px, ${pos.y.toFixed(1)}px) rotate(${pos.r.toFixed(2)}deg)`;
+    const vw = document.documentElement.clientWidth;
+    const ax = vw - 8;
+    const ay = innerHeight + 12;
+    const kx = pos.x + 30;
+    const ky = pos.y + 52;
+    path.setAttribute('d', `M${kx.toFixed(1)} ${ky.toFixed(1)} Q${((kx + ax) / 2 - 26).toFixed(1)} ${((ky + ay) / 2 + 60).toFixed(1)} ${ax} ${ay}`);
+    const moving = Math.abs(target.x - pos.x) + Math.abs(target.y - pos.y) + Math.abs(target.r - pos.r) > 0.3;
+    raf = moving ? requestAnimationFrame(step) : 0;
+  };
+  let settle = 0;
+  const kick = () => {
+    if (!wide.matches) {
+      fly.classList.remove('is-on');
+      return;
+    }
+    aim();
+    if (!raf) raf = requestAnimationFrame(step);
+    // Settle back to the resting sway once scrolling stops.
+    window.clearTimeout(settle);
+    settle = setTimeout(() => {
+      aim();
+      if (!raf) raf = requestAnimationFrame(step);
+    }, 180);
+  };
+  if (wide.matches) {
+    aim();
+    Object.assign(pos, target);
+    step();
+  }
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', kick, { passive: true });
+}
 
 // ---------- Reading progress and the docs scroll spy ----------
 
@@ -209,13 +282,11 @@ Object.assign(V.config.globals, {
     dialog?.close();
     location.href = link(r.url);
   },
-  askInstall,
-  cancelInstall,
-  confirmInstall,
-  openApp,
-  closeApp,
-  airChanged,
-  resetDemo,
+  foldGo,
+  foldTo,
+  foldReset,
+  pick,
+  cutChanged,
 });
 
 setTimeout(loadSearch, 2500);

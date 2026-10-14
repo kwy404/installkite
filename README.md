@@ -453,10 +453,14 @@ No. It works on a folder of HTML files. With a framework, it plugs into the buil
 - [graphemely](https://kwy404.github.io/graphemely/): grapheme aware string utilities
 - [numberparrot](https://kwy404.github.io/numberparrot/): parse localized numbers
 - [edgegoat](https://kwy404.github.io/edgegoat/): edge case inputs for JavaScript testing
+- [cookieowl](https://kwy404.github.io/cookieowl/): cookie consent that really blocks trackers before consent
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): WCAG checks with plain language explanations and exact HTML fixes
 
 ## Author
 
 Created by **Alexandre Kohler** ([GitHub](https://github.com/kwy404) and [LinkedIn](https://www.linkedin.com/in/alexandre-silva-173687256/)).
+
+Built with [Monsoon](https://kwy404.github.io/monsoon/): the [docs site](https://kwy404.github.io/installkite/) is styled with Monsoon, and its interactive parts are built with [Voodoo.js](https://kwy404.github.io/Voodoo.js/).
 
 ## License
 

@@ -228,6 +228,8 @@ Sim, código aberto sob licença MIT, sem conta e sem rastreamento.
 - [graphemely](https://kwy404.github.io/graphemely/): utilitários de string que respeitam grafemas
 - [numberparrot](https://kwy404.github.io/numberparrot/): converte números localizados
 - [edgegoat](https://kwy404.github.io/edgegoat/): entradas de casos extremos para testes
+- [cookieowl](https://kwy404.github.io/cookieowl/): consentimento de cookies que bloqueia rastreadores de verdade
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): checagem WCAG com explicações simples e correções exatas no HTML
 
 ## Autor
 
