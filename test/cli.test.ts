@@ -119,7 +119,7 @@ describe('init', () => {
     const dir = plainSite();
     const r = cli(dir, ['init', '-y', '--no-inject']);
     expect(read(dir, 'index.html')).not.toContain('installkite');
-    expect(r.out).not.toContain('Paste these tags');
+    expect(r.out).toContain('Paste these tags');
     const next = tempSite({ 'package.json': JSON.stringify({ dependencies: { next: '15' }, scripts: { build: 'next build' } }), 'public/logo.svg': LOGO_SVG });
     const n = cli(next, ['init', '-y']);
     expect(n.code, n.err).toBe(0);

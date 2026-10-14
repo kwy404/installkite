@@ -144,7 +144,7 @@ export function resolveConfig(scan: ScanResult, a: InitAnswers, source: IconSour
     base: a.base ?? previous?.base ?? scan.base,
     icon: toPosix(a.icon ?? previous?.icon ?? scan.iconCandidates[0] ?? 'monogram'),
     iconsDir: previous?.iconsDir ?? 'icons',
-    html: previous?.html ?? defaultHtml(scan),
+    html: a.inject === false ? [] : previous?.html?.length ? previous.html : defaultHtml(scan),
     app: {
       name,
       shortName: (a.shortName ?? prevApp?.shortName ?? '').trim() || '',
@@ -340,7 +340,8 @@ export function planInit(cwd: string, answers: InitAnswers = {}, opts: { scan?: 
       if (res.kept.length) notes.push(`${html}: kept the page's own ${res.kept.join(', ')}`);
       files.push(planFile(cwd, html, res.html, 'head tags'));
     }
-  } else if (answers.inject !== false) {
+  } else {
+    // Nothing to inject into (or --no-inject): print the tags to paste instead.
     const block = injectHead('<head>\n</head>', headOptionsFor(cfg, null, svgIcon, shortName)).html;
     snippet = block
       .replace(/^<head>\n|<\/head>$/g, '')
