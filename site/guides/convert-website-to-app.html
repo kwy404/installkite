@@ -1,0 +1,69 @@
+<!--meta
+{
+  "slug": "convert-website-to-app",
+  "title": "Convert a website to an app without rewriting it",
+  "description": "Turn an existing website into an installable app with its own icon, window and offline mode, without a rewrite, an app store account or a native wrapper.",
+  "h1": "Convert a website to an app without rewriting it",
+  "crumb": "Convert a website to an app",
+  "lead": "You do not need a native rewrite or a wrapper to put your website on a home screen. A progressive web app is your existing site plus a few files, and visitors install it straight from the browser.",
+  "readTime": "7 min read",
+  "faq": [
+    {"q": "Is a progressive web app a real app?", "a": "Once installed it has an icon, its own window, a place in the app switcher and an uninstall entry, and it works offline. It runs on the browser engine, so it reaches device features the web supports, such as notifications, camera, file pickers and sharing."},
+    {"q": "Can I publish my website in the Play Store or Microsoft Store?", "a": "Yes. Both stores accept progressive web apps: the Play Store through a Trusted Web Activity wrapper and the Microsoft Store directly. The site must be installable first, which is what installkite sets up."},
+    {"q": "Will converting my site to an app break it as a website?", "a": "No. Visitors who never install it see the same site. The manifest and icons are only read by browsers, and the service worker only changes how pages load when the network is slow or missing."},
+    {"q": "How much does it cost to convert a website to an app?", "a": "Nothing beyond your hosting. installkite is free and open source, and installing a web app needs no store account or review."}
+  ],
+  "related": ["make-website-installable", "pwa-tutorial", "service-worker-offline-page"]
+}
+-->
+<section id="three-routes"><h2>Three ways to turn a site into an app</h2>
+<p>When people say they want to convert a website to an app, they usually mean one of three things, and they differ a lot in cost:</p>
+<ul>
+<li><b>A native rewrite.</b> Two codebases, Swift and Kotlin, store reviews for every update. Right for apps that need deep platform features; heavy for a content site, a shop or a dashboard.</li>
+<li><b>A wrapper app</b> that loads your site in a web view inside a store package. It looks native in the store, but you still maintain the package, sign builds and wait for reviews.</li>
+<li><b>A progressive web app.</b> Your website, plus a manifest, icons and a service worker. Visitors install it from the browser in two taps, updates ship the moment you deploy, and the same files work on Android, iPhone, Windows, macOS and ChromeOS.</li>
+</ul>
+<p>For most websites the third route gets the result people actually want, an icon on the home screen that opens the site fast and full screen, with a fraction of the work.</p>
+</section>
+
+<section id="what-users-get"><h2>What your visitors get</h2>
+<p>An installed web app launches from the home screen or dock in its own window, without tabs or an address bar when <code>display</code> is <code>standalone</code>. The title bar takes your <code>theme_color</code>, the splash screen uses your <code>background_color</code> and largest icon, and long pressing the icon on Android shows the <code>shortcuts</code> from your manifest, such as Order or Contact. With a service worker the app opens instantly from the cache and still works in airplane mode, showing a friendly offline page for pages it never saw.</p>
+</section>
+
+<section id="steps"><h2>The conversion, step by step</h2>
+<ol>
+<li><b>Pick the app name and icon.</b> A square logo of 512 pixels or more, ideally SVG, and a short name of 12 characters or fewer for the home screen label.</li>
+<li><b>Write the manifest</b> with the name, colors, display mode, start URL, scope and icons. The <a href="pwa-manifest-generator.html">manifest guide</a> explains every field.</li>
+<li><b>Generate the icon set</b>: ten sizes for Android and desktop, maskable icons that survive circular masks, a 180 pixel apple-touch-icon for iOS and favicons. See <a href="pwa-icon-sizes.html">PWA icon sizes</a>.</li>
+<li><b>Add a service worker</b> that precaches your pages and assets and serves an offline page.</li>
+<li><b>Link everything</b> from the head of every page and register the worker.</li>
+<li><b>Deploy over HTTPS</b> and check the result.</li>
+</ol>
+<p>installkite does steps two to five in one command and audits step six:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite init --name "Acme Bakery" --short-name Acme --icon logo.svg
+npx installkite doctor
+</pre>
+</section>
+
+<section id="app-touches"><h2>Touches that make it feel like an app</h2>
+<p><b>A custom install button.</b> Browsers hide their install entry in a menu. The installkite runtime listens for <code>beforeinstallprompt</code> and shows a small button, or turns any element with <code>data-installkite-install</code> into one, so you can put Install the app in your header:</p>
+<pre data-kind="editor" data-lang="html" data-title="header.html">
+&lt;button class="btn" data-installkite-install hidden&gt;Install the app&lt;/button&gt;
+</pre>
+<p><b>iPhone instructions.</b> Safari has no prompt, so the runtime shows the three Add to Home Screen steps when the visitor taps your button on iOS. The <a href="add-to-home-screen-ios.html">iOS guide</a> covers the details.</p>
+<p><b>Shortcuts and screenshots.</b> installkite turns the links in your navigation into manifest shortcuts and writes placeholder screenshots, which unlock the richer install dialog in Chrome on Android and desktop. Replace the placeholders with real captures; <code>installkite doctor</code> reminds you until you do.</p>
+<p><b>Updates people notice.</b> When you deploy, the worker downloads the new files in the background and the runtime shows Refresh to update, so nobody runs a stale version for days.</p>
+<pre data-kind="editor" data-lang="js" data-title="app.js">
+installkite.on('installed', () =&gt; analytics.track('app_installed'));
+installkite.on('update', ({ apply }) =&gt; showBanner('New version ready', apply));
+</pre>
+</section>
+
+<section id="stores"><h2>Going further: the app stores</h2>
+<p>Once your site is installable you can also list it in stores without changing the site. The Microsoft Store accepts web apps directly. The Play Store accepts them packaged as a Trusted Web Activity, a thin Android shell that opens your site full screen and proves ownership with a <code>.well-known/assetlinks.json</code> file. The App Store does not accept plain web apps, so on iPhone the browser install is the way.</p>
+</section>
+
+<section id="when-not"><h2>When a web app is not enough</h2>
+<p>Some features are still native only on some platforms: background location tracking, Bluetooth on iOS, deep integration with the lock screen or widgets. If your product depends on those, plan a native app. For a content site, a store, a booking tool, a dashboard or a documentation site, an installable website covers what users expect from an app icon on their phone, and you keep a single codebase that deploys in seconds.</p>
+</section>

@@ -1,0 +1,89 @@
+<!--meta
+{
+  "slug": "add-to-home-screen-ios",
+  "title": "Add to Home Screen on iOS: install a website on iPhone",
+  "description": "How Add to Home Screen works on iPhone and iPad: the Safari share flow, apple-touch-icon and meta tags, detecting standalone mode and showing install instructions.",
+  "h1": "Add to Home Screen on iOS: how iPhone and iPad install websites",
+  "crumb": "Add to Home Screen on iOS",
+  "lead": "iPhone and iPad install websites too, but differently: there is no install prompt and no install event. Here is what iOS reads from your site, and how to guide visitors through the three taps.",
+  "readTime": "7 min read",
+  "faq": [
+    {"q": "Why is there no install button on iPhone?", "a": "Safari on iOS does not support the <code>beforeinstallprompt</code> event, so no page can trigger an install. The visitor must tap Share, then Add to Home Screen. A page can only explain the steps, which the installkite runtime does."},
+    {"q": "What size should the apple-touch-icon be?", "a": "180 by 180 pixels, PNG, with no transparency. iOS rounds the corners itself and fills transparent pixels with black."},
+    {"q": "Can Chrome on iPhone add a website to the home screen?", "a": "Since iOS 16.4, Chrome, Edge and Firefox on iPhone can add sites to the home screen from their share menu, and the result behaves like a Safari install."},
+    {"q": "How do I know my site is running from the home screen on iOS?", "a": "Check <code>navigator.standalone</code>, which is true in an installed app on iOS, or the CSS media query <code>(display-mode: standalone)</code>, which works on every platform."}
+  ],
+  "related": ["make-website-installable", "pwa-icon-sizes", "convert-website-to-app"]
+}
+-->
+<section id="the-flow"><h2>The iOS install flow</h2>
+<p>On iPhone and iPad a visitor installs a website in three taps: the Share button in the toolbar, Add to Home Screen in the sheet, then Add. Safari has offered this since the first iPhone. Since iOS 16.4, Chrome, Edge and Firefox on iOS offer it from their own share menus too. The result is an icon on the home screen that opens the site in its own window, with the same service worker and storage support as Safari.</p>
+<p>What iOS does not have is the prompt. Android and desktop browsers fire <code>beforeinstallprompt</code>, which lets a page show its own install button. iOS fires nothing, and no page can open the Add to Home Screen sheet. The best a site can do is detect iOS and explain the steps.</p>
+</section>
+
+<section id="what-ios-reads"><h2>What iOS reads from your site</h2>
+<p>iOS reads the web app manifest for <code>name</code>, <code>start_url</code>, <code>display</code> and <code>scope</code>, but for the icon and a few details it still prefers its own tags:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html (head)">
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;
+&lt;meta name="apple-mobile-web-app-title" content="Acme"&gt;
+&lt;meta name="apple-mobile-web-app-status-bar-style" content="default"&gt;
+&lt;meta name="mobile-web-app-capable" content="yes"&gt;
+</pre>
+<ul>
+<li><b>apple-touch-icon</b>: a 180 by 180 PNG. iOS ignores the manifest icons when this tag exists and falls back to a screenshot of the page when there is no usable icon at all. Transparent pixels turn black, so give the icon its own background.</li>
+<li><b>apple-mobile-web-app-title</b>: the label under the icon. Keep it short; around 12 characters fit.</li>
+<li><b>apple-mobile-web-app-status-bar-style</b>: <code>default</code>, <code>black</code> or <code>black-translucent</code>, which lets the page draw under the status bar.</li>
+</ul>
+<p><code>npx installkite init</code> writes all four tags and generates the apple-touch-icon from your logo: opaque, 180 pixels, with padding for transparent artwork and edge to edge for logos that already have a background tile.</p>
+</section>
+
+<section id="detect"><h2>Detecting iOS and standalone mode</h2>
+<p>To decide whether to show instructions, check two things: is this iOS, and is the site already installed?</p>
+<pre data-kind="editor" data-lang="js" data-title="ios.js">
+const isIOS =
+  /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' &amp;&amp; navigator.maxTouchPoints &gt; 1); // iPadOS reports a Mac
+
+const installed =
+  matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+if (isIOS &amp;&amp; !installed) showInstallHelp();
+</pre>
+<p>The iPad check matters: since iPadOS 13 Safari on iPad identifies itself as a Mac, and the only clue is the touch screen.</p>
+</section>
+
+<section id="instructions"><h2>Showing the instructions</h2>
+<p>A good instruction sheet is short, uses the same words and icons as Safari, and appears when the visitor asks, not on every page load. The installkite runtime shows one when an element with <code>data-installkite-install</code> is tapped on iOS, or when its floating button is tapped:</p>
+<pre data-kind="editor" data-lang="html" data-title="header.html">
+&lt;script src="/installkite.js" data-sw="/sw.js" data-install="auto" defer&gt;&lt;/script&gt;
+&lt;button data-installkite-install hidden&gt;Add to Home Screen&lt;/button&gt;
+</pre>
+<p>The sheet lists the three steps with the share, add and confirm icons, shows your apple-touch-icon and app name, closes with Escape or a tap outside, and returns focus to the button. The text is translatable:</p>
+<pre data-kind="editor" data-lang="js" data-title="i18n.js">
+installkite.init({
+  text: {
+    iosTitle: 'Adicione a sua Tela de Inicio',
+    iosStep1: 'Toque em Compartilhar na barra',
+    iosStep2: 'Toque em Adicionar a Tela de Inicio',
+    iosStep3: 'Toque em Adicionar',
+  },
+});
+</pre>
+</section>
+
+<section id="when-to-show"><h2>When to show the instructions</h2>
+<p>Showing the sheet on every page load is the fastest way to get it dismissed forever. Better moments: after the visitor has used the site for a while, after a success such as a finished order, or when they tap a button you labeled Add to Home Screen. Remember a dismissal for a couple of weeks, and never show the sheet inside an installed app, where <code>navigator.standalone</code> is true. The installkite floating button follows these rules: it appears only when the site can be installed, it hides itself for 14 days when dismissed, and it never shows in standalone mode.</p>
+</section>
+
+<section id="limits"><h2>iOS limits worth knowing</h2>
+<ul>
+<li><b>Storage eviction.</b> Safari may clear the caches of sites that have not been opened for a few weeks. Home screen apps are treated as used and keep theirs.</li>
+<li><b>Separate storage.</b> An installed app does not share cookies or local storage with Safari, so a visitor may need to sign in again after installing.</li>
+<li><b>Push notifications</b> work only for installed web apps, from iOS 16.4.</li>
+<li><b>No install event.</b> There is no <code>appinstalled</code> event on iOS; detect the first launch in standalone mode instead.</li>
+</ul>
+</section>
+
+<section id="check"><h2>Checking your site</h2>
+<p><code>npx installkite doctor</code> warns when the apple-touch-icon is missing, smaller than 180 pixels or has transparent pixels. On a real device, open the site in Safari, tap Share, and look at the preview in the Add to Home Screen sheet: the icon and name there are what people will see on their home screen.</p>
+</section>

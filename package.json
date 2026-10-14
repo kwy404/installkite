@@ -96,7 +96,8 @@
     "images": "bash scripts/render-images.sh",
     "prepublishOnly": "npm run build && npm test",
     "pretest": "node scripts/ensure-build.mjs",
-    "art": "node scripts/build-art.mjs"
+    "art": "node scripts/build-art.mjs",
+    "docs:links": "node scripts/check-links.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

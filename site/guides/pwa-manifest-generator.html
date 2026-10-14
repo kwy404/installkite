@@ -1,0 +1,82 @@
+<!--meta
+{
+  "slug": "pwa-manifest-generator",
+  "title": "PWA manifest generator: manifest.webmanifest fields explained",
+  "description": "Generate a web app manifest and learn every field: name, short_name, start_url, scope, display, colors, icons, shortcuts and screenshots, with common mistakes.",
+  "h1": "PWA manifest generator and every manifest field explained",
+  "crumb": "PWA manifest generator",
+  "lead": "The web app manifest is a small JSON file that tells browsers what your app is called, how it looks and where it starts. Generate one in seconds, then read what each field does and the mistakes that stop installs.",
+  "readTime": "8 min read",
+  "faq": [
+    {"q": "Should the manifest be manifest.json or manifest.webmanifest?", "a": "Both work. The <code>.webmanifest</code> extension is the one the specification registers, with the media type <code>application/manifest+json</code>. What matters is that the link tag points at the file and the server sends a JSON type."},
+    {"q": "Where should the manifest file go?", "a": "Usually at the site root. Relative URLs inside it, such as <code>./</code> for start_url, resolve against the manifest's own location, so a manifest in the root makes them simple."},
+    {"q": "What is the difference between name and short_name?", "a": "<code>name</code> appears on the install dialog and the splash screen. <code>short_name</code> is the label under the home screen icon, where only about 12 characters fit."},
+    {"q": "Do I need the id field?", "a": "It is optional, but recommended. Without it the browser uses start_url as the app's identity, so changing start_url later would create a second app on devices that installed the first one."}
+  ],
+  "related": ["pwa-icon-sizes", "make-website-installable", "pwa-tutorial"]
+}
+-->
+<section id="generate"><h2>Generate a manifest</h2>
+<p>Two free ways, both from installkite. In the browser, the <a href="generator.html">manifest and icon generator</a> takes your logo, name and colors, previews the icon on Android, iOS and desktop, and downloads a zip with the manifest, every icon and the head tags. Nothing is uploaded. On the command line, inside your site:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite init --name "Acme Bakery" --short-name Acme --theme-color "#e8590c"
+</pre>
+<p>The CLI also writes the service worker and links everything from your pages. Here is a typical result:</p>
+<pre data-kind="editor" data-lang="json" data-title="manifest.webmanifest">
+{
+  "id": "./",
+  "name": "Acme Bakery",
+  "short_name": "Acme",
+  "description": "Bread, cakes and coffee, baked every morning.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#e8590c",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Menu", "url": "./menu.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ],
+  "screenshots": [
+    { "src": "icons/screenshot-wide.png", "sizes": "1280x720", "type": "image/png", "form_factor": "wide" },
+    { "src": "icons/screenshot-narrow.png", "sizes": "720x1280", "type": "image/png", "form_factor": "narrow" }
+  ]
+}
+</pre>
+</section>
+
+<section id="identity"><h2>Identity: id, name, short_name, description</h2>
+<p><b>id</b> is the app's permanent identity, resolved against the start URL's origin. Set it once and never change it. <b>name</b> is the full name for the install dialog, the splash screen and the app list. <b>short_name</b> is the home screen label; launchers cut it after about 12 characters, so "Acme Bakery and Coffee" becomes "Acme Bakery a..." unless you set a short one. <b>description</b> appears in some install dialogs and in app stores that list web apps. <b>lang</b> and <b>dir</b> describe the language and direction of those strings.</p>
+</section>
+
+<section id="navigation"><h2>Navigation: start_url and scope</h2>
+<p><b>start_url</b> is the page the app opens when launched from the icon. <b>scope</b> is the set of URLs that belong to the app; navigating outside it opens a browser tab or shows the address bar. The start URL must be inside the scope and on the same origin, or browsers refuse to install. Both are resolved relative to the manifest file, so <code>"./"</code> works whether the site lives at the domain root or in a GitHub Pages subfolder. A query string like <code>"./?source=pwa"</code> is a common way to measure launches from the icon.</p>
+</section>
+
+<section id="display"><h2>Display: display, display_override, orientation</h2>
+<p><b>display</b> picks the window: <code>standalone</code> looks like a native app with a title bar, <code>fullscreen</code> hides everything for games and media, <code>minimal-ui</code> keeps back and reload buttons, and <code>browser</code> opens a normal tab and makes the site not installable. <b>display_override</b> is an ordered list of fancier modes with fallbacks, such as <code>window-controls-overlay</code> for desktop apps that draw their own title bar. <b>orientation</b> locks the rotation, for example <code>portrait</code>, and is best left out unless the app truly needs it.</p>
+</section>
+
+<section id="colors"><h2>Colors: theme_color and background_color</h2>
+<p><b>theme_color</b> colors the title bar of the installed app and the status bar on Android. Add the matching <code>&lt;meta name="theme-color"&gt;</code> tag to your pages so the browser toolbar matches before installation; that tag can also carry a separate dark mode color with a <code>media</code> attribute. <b>background_color</b> fills the splash screen while the app starts, so set it to your page background to avoid a flash.</p>
+</section>
+
+<section id="icons"><h2>Icons, shortcuts and screenshots</h2>
+<p><b>icons</b> lists the images with their <code>sizes</code>, <code>type</code> and <code>purpose</code>. You need 192 and 512 pixel icons with purpose <code>any</code>, plus maskable icons, which Android crops into shapes. Keep them as separate files: one icon marked <code>"any maskable"</code> either looks too small as a regular icon or gets cropped as a maskable one. The <a href="pwa-icon-sizes.html">icon sizes guide</a> lists every size and explains the safe zone. <b>shortcuts</b> adds up to about four entries to the long press menu of the icon. <b>screenshots</b> with a <code>wide</code> and a <code>narrow</code> form factor unlock the richer install dialog in Chrome, with your images instead of a small banner.</p>
+</section>
+
+<section id="mistakes"><h2>Common mistakes</h2>
+<ul>
+<li><b>A link with a root path on a subfolder site</b>, such as <code>href="/manifest.webmanifest"</code> on <code>user.github.io/repo/</code>, which loads the wrong file or none.</li>
+<li><b>Icons that do not match their sizes</b>, like a 180 pixel file declared as 192x192.</li>
+<li><b>A start_url outside the scope</b>, for example <code>"/app/"</code> with a scope of <code>"/app/dashboard/"</code>.</li>
+<li><b>JSON syntax errors</b>, such as a trailing comma, which make the whole manifest invalid.</li>
+<li><b>The wrong content type</b> from old servers, which some browsers reject. Serve <code>.webmanifest</code> as <code>application/manifest+json</code>.</li>
+</ul>
+<p><code>npx installkite doctor</code> catches each of these, on the files before deploying or on the live URL with <code>--url</code>.</p>
+</section>

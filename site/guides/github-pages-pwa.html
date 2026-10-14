@@ -1,0 +1,86 @@
+<!--meta
+{
+  "slug": "github-pages-pwa",
+  "title": "Make a GitHub Pages site a PWA (base path, scope, HTTPS)",
+  "description": "Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.",
+  "h1": "Make a GitHub Pages site a PWA",
+  "crumb": "GitHub Pages PWA",
+  "lead": "GitHub Pages is a great free host for an installable site: it serves HTTPS and static files fast. The catch is the base path of project sites. Get that right and everything else follows.",
+  "readTime": "7 min read",
+  "faq": [
+    {"q": "Why does my PWA work locally but not on GitHub Pages?", "a": "A project site lives under <code>/repo-name/</code>, so links like <code>/manifest.webmanifest</code> or <code>/sw.js</code> point outside it and return 404. Use the base path or relative URLs. installkite detects the repository from your git remote and writes the right base."},
+    {"q": "Does GitHub Pages support service workers?", "a": "Yes. Pages serves HTTPS, which service workers need, and sends JavaScript files with the right content type. Tick Enforce HTTPS in the repository Pages settings."},
+    {"q": "Why do visitors see an old version after I deploy?", "a": "GitHub Pages lets browsers cache files for ten minutes. Browsers check sw.js for updates on navigation and at least once a day, and installkite's worker downloads only the changed files, then the runtime shows Refresh to update."},
+    {"q": "Do I need a .nojekyll file?", "a": "Only if your site has files or folders that start with an underscore, such as <code>_next</code> or <code>_astro</code>, which Jekyll would skip. Add an empty <code>.nojekyll</code> to the published folder."}
+  ],
+  "related": ["make-website-installable", "service-worker-offline-page", "pwa-manifest-generator"]
+}
+-->
+<section id="two-kinds"><h2>Two kinds of Pages sites</h2>
+<p>A <b>user or organization site</b> comes from a repository named <code>user.github.io</code> and is served at <code>https://user.github.io/</code>. A <b>project site</b> comes from any other repository and is served at <code>https://user.github.io/repo/</code>. A project site with a custom domain, set with a <code>CNAME</code> file, is served at the domain root again. For a PWA the difference is everything: the manifest link, the service worker, the icons and the start URL all depend on the path the site lives under.</p>
+</section>
+
+<section id="base-path"><h2>The base path</h2>
+<p>On a project site, an absolute link such as <code>/sw.js</code> resolves to <code>https://user.github.io/sw.js</code>, which belongs to a different site, and the request fails. Every URL in the head must include <code>/repo/</code>, or be relative. installkite handles both:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite init --yes                 # reads the repository from git, writes /repo/
+npx installkite init --yes --base /repo/   # or say it yourself
+npx installkite init --yes --relative      # ./ and ../ per page, works under any path
+</pre>
+<p>Detection looks at a <code>homepage</code> in package.json, then the <code>base</code> of Vite or Astro or the <code>basePath</code> of Next.js, then your git remote together with signs that the repository publishes to Pages: a Pages workflow, a <code>docs/</code> site or the gh-pages package. A <code>CNAME</code> file switches back to <code>/</code>. The manifest itself uses relative URLs, so <code>"start_url": "./"</code> and <code>"scope": "./"</code> are right in every case.</p>
+</section>
+
+<section id="scope"><h2>Service worker scope</h2>
+<p>A service worker controls the folder it is served from and everything below. At <code>/repo/sw.js</code> it controls <code>/repo/</code>, which is exactly the project site and nothing else, so neighbouring projects on the same <code>user.github.io</code> origin are not affected. Keep the worker at the root of the published folder. Note that all project sites of one user share an origin, and so share storage quotas and the caches API; installkite prefixes its cache names and only deletes its own old caches.</p>
+</section>
+
+<section id="publishing"><h2>Publishing from a folder or from Actions</h2>
+<p>For a site committed as plain files, publish from <code>main</code> and the <code>/docs</code> folder or the root, and run installkite before you commit. For a site built by a tool, build and deploy in GitHub Actions and run <code>installkite build</code> between the two steps so the precache matches the built files:</p>
+<pre data-kind="editor" data-lang="yaml" data-title=".github/workflows/pages.yml">
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build            # vite build, astro build, next build
+      - run: npx installkite build    # re-hash the precache for this build
+      - run: npx installkite doctor
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - uses: actions/deploy-pages@v4
+</pre>
+</section>
+
+<section id="jekyll"><h2>Jekyll and underscore folders</h2>
+<p>Pages runs Jekyll on published folders unless told otherwise, and Jekyll skips files and folders whose names start with an underscore. Frameworks put their bundles in folders like <code>_next</code> and <code>_astro</code>, which would vanish and break both the site and the precache install. Add an empty <code>.nojekyll</code> file to the published folder. When you deploy with the Pages actions shown above, Jekyll does not run.</p>
+</section>
+
+<section id="caching"><h2>Caching and updates</h2>
+<p>Pages sends <code>Cache-Control: max-age=600</code>, so browsers may use a cached <code>sw.js</code> for up to ten minutes. Browsers always revalidate the worker at least once a day and usually on navigation, so a deploy reaches installed apps quickly. When the worker changes, installkite's version downloads only files whose hash changed, copies the rest from the previous cache, and the runtime offers Refresh to update.</p>
+</section>
+
+<section id="custom-domain"><h2>Custom domains</h2>
+<p>With a custom domain such as <code>bakery.example</code>, the project site moves to the domain root and the base path becomes <code>/</code> again. Keep the <code>CNAME</code> file in the published folder so installkite and GitHub both see it, and run <code>npx installkite init --yes</code> after adding the domain so the head tags lose the <code>/repo/</code> prefix. Installed apps keep their identity as long as the origin stays the same, so set the domain before people install the app: moving from <code>user.github.io/repo/</code> to a custom domain is a new origin, and visitors would need to install again.</p>
+</section>
+
+<section id="check"><h2>Check the live site</h2>
+<p>After the deploy, audit the real URL. Doctor fetches the page, the manifest, every icon and the worker exactly as a browser would, and checks HTTPS, the scope and that start_url loads:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite doctor --url https://user.github.io/repo/
+</pre>
+<p>This site, the installkite docs, is itself a GitHub Pages project site set up this way. Install it from the address bar and try it in airplane mode.</p>
+</section>

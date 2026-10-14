@@ -1,0 +1,98 @@
+<!--meta
+{
+  "slug": "make-website-installable",
+  "title": "How to make a website installable (PWA install criteria)",
+  "description": "Make a website installable on Android, Windows, macOS and iOS: the manifest fields, icons, HTTPS and service worker browsers check, and one command that adds them.",
+  "h1": "How to make a website installable",
+  "crumb": "Make a website installable",
+  "lead": "Browsers offer an Install button only when a site passes a short checklist. Here is that checklist, how to satisfy each rule by hand, and how to do it in one command.",
+  "readTime": "8 min read",
+  "faq": [
+    {"q": "Why does Chrome not show the install button for my site?", "a": "The usual causes are a missing 192 or 512 pixel icon, a <code>display</code> of <code>browser</code>, a start_url outside the scope, a page served over plain HTTP, or a manifest that fails to load. Run <code>npx installkite doctor</code> to see which rule fails and how to fix it."},
+    {"q": "Does a website need a service worker to be installable?", "a": "Chrome relaxed the rule in 2023 and now installs sites without one, but without a service worker the installed app shows an error page offline. Edge, Samsung Internet and older Chrome versions still look for one, so ship it."},
+    {"q": "Can every visitor install my site?", "a": "Chrome, Edge, Samsung Internet and Opera install sites on Android and desktop. Safari on iPhone and iPad installs through Share and Add to Home Screen, and Safari on macOS through File and Add to Dock. Firefox on desktop does not install sites."},
+    {"q": "Is an installable website the same as a PWA?", "a": "An installable website is the core of a progressive web app: a manifest, icons and a service worker. Offline support, an update flow and app shortcuts make it a good one."}
+  ],
+  "related": ["pwa-tutorial", "pwa-icon-sizes", "add-to-home-screen-ios"]
+}
+-->
+<section id="what-installable-means"><h2>What installable means</h2>
+<p>An installed website gets its own icon on the home screen, in the dock or in the Start menu, opens in its own window without the address bar, shows up in the app switcher and can be uninstalled like any app. Nothing about the website changes for visitors who never install it. The browser decides whether to offer the install, and it decides from a few files you control.</p>
+<p>On Android and desktop, Chromium browsers (Chrome, Edge, Samsung Internet, Opera, Brave) show an install icon in the address bar and may fire a <code>beforeinstallprompt</code> event that lets your page show its own button. Safari on iPhone and iPad never prompts: the visitor installs through Share and Add to Home Screen, which works for any page but looks far better when the site provides the right icon and metadata.</p>
+</section>
+
+<section id="the-checklist"><h2>The checklist browsers use</h2>
+<ol>
+<li><b>A web app manifest</b>, linked from the page with <code>&lt;link rel="manifest"&gt;</code>, that loads and parses as JSON.</li>
+<li><b>A name</b>: <code>name</code> or <code>short_name</code>. The short name is the label under the icon and should fit in 12 characters.</li>
+<li><b>Icons of 192 and 512 pixels</b> with purpose <code>any</code>. Most browsers also use a maskable icon when one is listed.</li>
+<li><b>An app display mode</b>: <code>standalone</code>, <code>fullscreen</code> or <code>minimal-ui</code>. With <code>browser</code> the site is not installable.</li>
+<li><b>A start_url</b> on the same origin and inside the <code>scope</code>.</li>
+<li><b>HTTPS</b>. Service workers and installs need a secure origin; <code>localhost</code> counts while you develop.</li>
+<li><b>A service worker</b> with a fetch handler, so the app opens when the network is gone.</li>
+</ol>
+<p>Chrome also waits for a little engagement before it fires the prompt, so the button may appear only after the visitor has clicked or tapped on the page once.</p>
+</section>
+
+<section id="by-hand"><h2>Doing it by hand</h2>
+<p>The manifest is a JSON file, usually <code>manifest.webmanifest</code> at the site root. URLs inside it are relative to the manifest itself, so <code>./</code> means the folder it sits in:</p>
+<pre data-kind="editor" data-lang="json" data-title="manifest.webmanifest">
+{
+  "id": "./",
+  "name": "Acme Bakery",
+  "short_name": "Acme",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#e8590c",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
+</pre>
+<p>Then link it, add the iOS and theme tags, and register a service worker from every page:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+&lt;link rel="manifest" href="/manifest.webmanifest"&gt;
+&lt;meta name="theme-color" content="#e8590c"&gt;
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;
+&lt;meta name="apple-mobile-web-app-title" content="Acme"&gt;
+&lt;script&gt;
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () =&gt; navigator.serviceWorker.register('/sw.js'));
+  }
+&lt;/script&gt;
+</pre>
+<p>The service worker needs at least a fetch handler, and to be useful offline it should cache your pages. The <a href="service-worker-offline-page.html">offline page guide</a> walks through a worker that does that well, and the <a href="pwa-icon-sizes.html">icon sizes guide</a> lists every image you need.</p>
+</section>
+
+<section id="one-command"><h2>Doing it in one command</h2>
+<p>installkite automates every item on the checklist. In the folder of a static site, or in a Vite, Next.js or Astro project, run:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite init
+</pre>
+<p>It reads the name, description, language and theme color from your home page, finds your logo, asks a few questions and writes the manifest, ten icon sizes plus maskable icons, the apple-touch-icon and favicons, a service worker that precaches your pages, an offline page and a 4 kB runtime that registers the worker and shows an install button. The head tags go into every HTML page between two marker comments, so running it again updates them instead of adding duplicates. Add <code>--dry-run</code> first to read a diff of every change.</p>
+</section>
+
+<section id="testing"><h2>Testing the install</h2>
+<p>Serve the site over HTTPS, or from <code>localhost</code>, and open it in Chrome or Edge. The Application panel of the developer tools shows the parsed manifest, the icons and any installability errors, and the install icon appears at the right of the address bar. On Android, open the browser menu and look for Install app. On iPhone, tap Share and check that the icon and name in the Add to Home Screen sheet are yours.</p>
+<p>Before you deploy, run the audit:</p>
+<pre data-kind="terminal" data-lang="bash">
+npx installkite doctor                          # the files on disk
+npx installkite doctor --url https://acme.example/   # the live site
+</pre>
+<p>Doctor checks every rule above, plus the icon files and their real pixel sizes, the service worker scope and whether the precache list matches your files, and prints a fix next to each failure.</p>
+</section>
+
+<section id="why-no-button"><h2>Why the install button does not appear</h2>
+<ul>
+<li><b>The page is on HTTP.</b> Only HTTPS and localhost are secure origins.</li>
+<li><b>The manifest returns 404</b>, often because the link uses <code>/manifest.webmanifest</code> on a site served from a subfolder such as a GitHub Pages project. Use the right base path or relative URLs.</li>
+<li><b>An icon is missing</b> or its file is not the size the manifest claims.</li>
+<li><b>The site is already installed.</b> Browsers hide the prompt for installed apps.</li>
+<li><b>The visitor dismissed the prompt</b>; Chrome waits a while before it offers again.</li>
+<li><b>The browser does not install sites</b>, like Firefox on desktop. Your site still works there as a website.</li>
+</ul>
+</section>

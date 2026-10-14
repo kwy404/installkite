@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kwy404.github.io/installkite/config.schema.json",
+  "title": "installkite.config.json",
+  "type": "object",
+  "required": [
+    "root",
+    "publicDir",
+    "base",
+    "icon",
+    "app"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "root": {
+      "type": "string",
+      "description": "The deployed folder, precached by installkite build."
+    },
+    "publicDir": {
+      "type": "string",
+      "description": "Where generated files are written."
+    },
+    "base": {
+      "type": "string",
+      "description": "URL path the site is served under, like / or /repo/."
+    },
+    "relative": {
+      "type": "boolean",
+      "description": "Write relative URLs in head tags."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Production URL, checked by doctor."
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon source image, or \"monogram\"."
+    },
+    "iconsDir": {
+      "type": "string",
+      "default": "icons"
+    },
+    "html": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "HTML files or globs that get head tags."
+    },
+    "app": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shortName": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "description": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "display": {
+          "enum": [
+            "standalone",
+            "fullscreen",
+            "minimal-ui",
+            "browser"
+          ]
+        },
+        "themeColor": {
+          "type": "string"
+        },
+        "themeColorDark": {
+          "type": "string"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "startUrl": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "orientation": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "shortcuts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "screenshots": {
+          "type": "boolean"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "local",
+            "cdn",
+            "none"
+          ]
+        },
+        "installButton": {
+          "enum": [
+            "auto",
+            "none"
+          ]
+        },
+        "updateToast": {
+          "type": "boolean"
+        },
+        "offlineIndicator": {
+          "type": "boolean"
+        }
+      }
+    },
+    "sw": {
+      "type": "object",
+      "properties": {
+        "offline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "navigationTimeout": {
+          "type": "number"
+        },
+        "imageMaxEntries": {
+          "type": "number"
+        },
+        "imageMaxAge": {
+          "type": "number"
+        },
+        "assetMaxEntries": {
+          "type": "number"
+        },
+        "pageMaxEntries": {
+          "type": "number"
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "crossOrigin": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipWaiting": {
+          "type": "boolean"
+        },
+        "importScripts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxFileSize": {
+          "type": "number"
+        }
+      }
+    },
+    "placeholders": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

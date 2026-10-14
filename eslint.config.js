@@ -32,6 +32,13 @@ const browser = {
   Response: 'readonly',
   Request: 'readonly',
   Headers: 'readonly',
+  createImageBitmap: 'readonly',
+  cancelAnimationFrame: 'readonly',
+  Element: 'readonly',
+  innerHeight: 'readonly',
+  addEventListener: 'readonly',
+  IntersectionObserver: 'readonly',
+  MessageChannel: 'readonly',
 };
 
 export default tseslint.config(
@@ -46,7 +53,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/runtime/**', 'src/sw/**', 'site/assets/**'],
+    files: ['src/runtime/**', 'src/sw/**', 'site/static/**'],
     languageOptions: { globals: { ...browser } },
   },
 );

@@ -1,0 +1,72 @@
+<!--meta
+{
+  "slug": "pwa-icon-sizes",
+  "title": "PWA icon sizes: the complete list for Android, iOS and favicons",
+  "description": "Every PWA icon size you need: manifest icons, maskable icons and the 80% safe zone, the 180 pixel apple-touch-icon, favicon.ico and SVG favicons, plus a generator.",
+  "h1": "PWA icon sizes: the complete list",
+  "crumb": "PWA icon sizes",
+  "lead": "A web app needs more icons than you would guess: manifest icons for Android and desktop, maskable icons that survive circle masks, an opaque icon for iPhone, and favicons for tabs. Here is the full list and the math behind maskable padding.",
+  "readTime": "8 min read",
+  "faq": [
+    {"q": "What icon sizes does a PWA need at minimum?", "a": "A 192 by 192 and a 512 by 512 PNG with purpose <code>any</code> in the manifest, a maskable 512 icon, a 180 by 180 apple-touch-icon and a favicon. installkite generates ten manifest sizes so every launcher gets a sharp image without scaling."},
+    {"q": "What is a maskable icon?", "a": "An icon with a full bleed background and its artwork inside the center 80%, so Android can crop it into a circle, squircle or teardrop without cutting the logo. It is listed in the manifest with <code>\"purpose\": \"maskable\"</code>."},
+    {"q": "How much padding does a maskable icon need?", "a": "Enough that the farthest visible pixel of the artwork is within 40% of the icon size from the center. A square logo that fills its canvas must shrink to about 56.6% of the icon; a round logo to 80%."},
+    {"q": "Can I use an SVG icon in the manifest?", "a": "Chromium browsers accept an SVG icon with <code>\"sizes\": \"any\"</code>, and SVG favicons work in every current browser. Keep the PNG sizes as well: iOS and many launchers only read PNG."}
+  ],
+  "related": ["pwa-manifest-generator", "add-to-home-screen-ios", "make-website-installable"]
+}
+-->
+<section id="the-list"><h2>The list</h2>
+<div class="table-wrap"><table class="table">
+<thead><tr><th>File</th><th>Size</th><th>Used by</th></tr></thead>
+<tbody>
+<tr><td><code>icon-512.png</code></td><td>512 x 512</td><td>Install dialogs, splash screens, app stores. Required.</td></tr>
+<tr><td><code>icon-384.png</code>, <code>icon-256.png</code></td><td>384, 256</td><td>High density launchers and desktop app lists.</td></tr>
+<tr><td><code>icon-192.png</code></td><td>192 x 192</td><td>Android home screen. Required.</td></tr>
+<tr><td><code>icon-152.png</code>, <code>icon-144.png</code>, <code>icon-128.png</code></td><td>152, 144, 128</td><td>Older tablets, Windows tiles, Chrome OS shelf.</td></tr>
+<tr><td><code>icon-96.png</code>, <code>icon-72.png</code>, <code>icon-48.png</code></td><td>96, 72, 48</td><td>Shortcuts, notifications, low density screens.</td></tr>
+<tr><td><code>maskable-512.png</code>, <code>maskable-192.png</code></td><td>512, 192</td><td>Android adaptive icons in any shape.</td></tr>
+<tr><td><code>apple-touch-icon.png</code></td><td>180 x 180</td><td>iPhone and iPad home screen. Opaque.</td></tr>
+<tr><td><code>favicon.ico</code></td><td>16, 32, 48 inside</td><td>Browser tabs, bookmarks, old tools that request /favicon.ico.</td></tr>
+<tr><td><code>favicon-32x32.png</code>, <code>favicon-16x16.png</code></td><td>32, 16</td><td>Tabs, when there is no SVG favicon.</td></tr>
+<tr><td><code>icon.svg</code></td><td>any</td><td>Sharp favicon at every zoom, and an <code>any</code> size manifest icon.</td></tr>
+</tbody></table></div>
+<p>Every one of these comes out of one source image with <code>npx installkite icons logo.svg</code>, or with <code>init</code>, which also writes the manifest and tags. The <a href="generator.html">online generator</a> does the same in the browser.</p>
+</section>
+
+<section id="source"><h2>Start from a good source</h2>
+<p>Use a square image of at least 512 pixels, or better an SVG, which installkite rasterizes at each size so small icons stay crisp. Simplify the artwork for small sizes: thin lines and tiny text disappear at 16 pixels. If your SVG uses text, convert the text to outlines before exporting, since icon renderers do not have your fonts.</p>
+</section>
+
+<section id="maskable"><h2>Maskable icons and the safe zone</h2>
+<p>Android launchers crop icons into the shape the phone maker chose: a circle, a squircle, a rounded square or a teardrop. To make that safe, a maskable icon fills the whole square with a background, and only a centered circle with a radius of 40% of the icon size, the safe zone, is guaranteed to remain visible. Everything important must sit inside it.</p>
+<p>The padding depends on the shape of your artwork. installkite measures it: it finds the visible pixel farthest from the center and computes its distance <em>r</em> as a fraction of the image size. The artwork is then drawn at a scale of 0.4 divided by <em>r</em>, never above 1:</p>
+<pre data-kind="editor" data-lang="ts" data-title="safe-zone.ts">
+// r: distance from the center to the farthest visible pixel, as a fraction of the artwork size
+export function maskableScale(r: number, safeZone = 0.4): number {
+  return r &gt; 0 ? Math.min(1, safeZone / r) : 1;
+}
+
+maskableScale(Math.SQRT1_2); // 0.566: a full bleed square logo
+maskableScale(0.5);          // 0.8:   a circle touching the edges
+maskableScale(0.3);          // 1:     small artwork stays as it is
+</pre>
+<p>A square logo reaches the corners, at a distance of half the diagonal, about 0.707, so it shrinks to 56.6%. A round logo only reaches 0.5 and keeps 80%. When the source is already a tile, an opaque square with a logo on it, installkite treats the tile color as the background, measures only the logo, and lets the tile color bleed to the edges. Preview your result under every mask in the <a href="generator.html">generator</a>, with the safe zone drawn on top.</p>
+</section>
+
+<section id="apple"><h2>The apple-touch-icon</h2>
+<p>iOS uses <code>&lt;link rel="apple-touch-icon"&gt;</code> and ignores manifest icons when it is present. Make it 180 by 180 pixels, the size of the largest iPhone screens, and opaque: iOS renders transparent pixels as black and adds its own rounded corners. For a transparent logo, put it on your background color with about 10% padding per side; for a tile, use it edge to edge. See <a href="add-to-home-screen-ios.html">Add to Home Screen on iOS</a> for the other tags.</p>
+</section>
+
+<section id="favicons"><h2>Favicons</h2>
+<p>Browsers still request <code>/favicon.ico</code> on their own, so keep one at the root. Modern ICO files hold PNG images; installkite bundles 16, 32 and 48 pixel versions. Add an SVG favicon for sharp tabs at any zoom, which can even adapt to dark mode with a <code>prefers-color-scheme</code> media query inside the SVG:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html (head)">
+&lt;link rel="icon" href="/favicon.ico" sizes="48x48"&gt;
+&lt;link rel="icon" href="/icons/icon.svg" type="image/svg+xml"&gt;
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;
+</pre>
+</section>
+
+<section id="checking"><h2>Checking the result</h2>
+<p><code>npx installkite doctor</code> opens every icon listed in the manifest, compares its real pixel size with the declared <code>sizes</code>, checks that 192 and 512 icons exist, warns about <code>"any maskable"</code> combinations and transparent maskable corners, and checks that the apple-touch-icon is 180 pixels and opaque.</p>
+</section>

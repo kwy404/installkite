@@ -1,0 +1,113 @@
+<!--meta
+{
+  "slug": "service-worker-offline-page",
+  "title": "Service worker offline page: a friendly fallback that works",
+  "description": "Show an offline page with a service worker: precache it, serve it for failed navigations with a timeout, list the pages saved on the device, and test it in DevTools.",
+  "h1": "Service worker offline page: a fallback that actually helps",
+  "crumb": "Offline page",
+  "lead": "When the network is gone, a visitor should see your site, not the browser's error. A service worker can serve a friendly offline page, and with a little care it can also send people to the pages they already have.",
+  "readTime": "8 min read",
+  "faq": [
+    {"q": "Why does my offline page not show?", "a": "The offline page must be in the cache before the network goes away, so precache it during the install event. It also only applies to navigations the worker controls: pages inside its scope, loaded after the worker activated."},
+    {"q": "Can the offline page load CSS and images?", "a": "Only what is cached. The safest offline page is self contained: inline styles and an inlined icon, which is what installkite generates."},
+    {"q": "How do I test the offline page?", "a": "In Chrome or Edge open the developer tools, Network panel, set Offline, then open a page you never visited. The Application panel lists the caches and lets you unregister the worker to start again."},
+    {"q": "Does the offline page work on iPhone?", "a": "Yes. Safari on iOS supports service workers, both in the browser and in sites installed to the home screen."}
+  ],
+  "related": ["pwa-tutorial", "make-website-installable", "github-pages-pwa"]
+}
+-->
+<section id="why"><h2>Why an offline page matters</h2>
+<p>Without a service worker, a lost connection means the browser's own error screen, and in an installed app that looks broken. With one, every page navigation goes through your code first. You decide what to show: fresh content when the network answers, a cached copy when it does not, and a clear, branded page for the rest.</p>
+</section>
+
+<section id="precache"><h2>Precache the page during install</h2>
+<p>The offline page has to be stored while the network still works. Add it to the install step of your worker:</p>
+<pre data-kind="editor" data-lang="js" data-title="sw.js">
+const CACHE = 'pages-v3';
+
+self.addEventListener('install', (event) =&gt; {
+  event.waitUntil(caches.open(CACHE).then((cache) =&gt; cache.addAll(['offline.html', './'])));
+});
+</pre>
+<p>Keep the page self contained. If it links a stylesheet or an image, those must be cached too, and a missing one leaves the offline page unstyled exactly when it matters. Inline the CSS and put small images in data URLs.</p>
+</section>
+
+<section id="navigations"><h2>Serve it for failed navigations, with a timeout</h2>
+<p>Navigations are the requests for whole pages. Try the network first so people get fresh content, then fall back. A plain <code>fetch().catch()</code> only falls back when the request fails, but on a weak signal requests hang for a long time instead of failing. Race the network against a timer:</p>
+<pre data-kind="editor" data-lang="js" data-title="sw.js" data-numbered>
+const TIMEOUT = 3000;
+
+self.addEventListener('fetch', (event) =&gt; {
+  if (event.request.mode !== 'navigate') return;
+  event.respondWith(page(event));
+});
+
+async function page(event) {
+  const network = fetch(event.request).then(async (res) =&gt; {
+    if (res.ok) (await caches.open(CACHE)).put(event.request, res.clone());
+    return res;
+  });
+  const slow = new Promise((resolve) =&gt; setTimeout(resolve, TIMEOUT, 'slow'));
+  const first = await Promise.race([network.catch(() =&gt; 'failed'), slow]);
+  if (first instanceof Response) return first;
+
+  const cached = await caches.match(event.request);
+  if (cached) {
+    event.waitUntil(network.catch(() =&gt; {})); // refresh it in the background
+    return cached;
+  }
+  if (first === 'slow') {
+    try { return await network; } catch {}
+  }
+  return caches.match('offline.html');
+}
+</pre>
+<p>Three details matter here. Successful pages are stored, so every page someone reads becomes available offline. A slow response still finishes in the background and refreshes the cache. And a page with nothing cached waits for the slow network instead of jumping to the offline page while the content is on its way.</p>
+</section>
+
+<section id="url-variants"><h2>Match folders and file names</h2>
+<p>Static hosts serve <code>/menu/</code> from <code>menu/index.html</code> and often <code>/menu</code> from <code>menu.html</code>. If you precached <code>menu/index.html</code>, a navigation to <code>/menu/</code> will not match it by default. Try the variants before giving up: the URL without its query string, the folder index, and the <code>.html</code> name. installkite's worker does this for every navigation.</p>
+</section>
+
+<section id="saved-pages"><h2>Point people to what they have</h2>
+<p>An offline page that says only "You are offline" is a dead end. The page can read the Cache Storage API itself and list the pages already saved on the device:</p>
+<pre data-kind="editor" data-lang="js" data-title="offline.html (script)">
+const names = await caches.keys();
+const urls = [];
+for (const name of names) {
+  for (const req of await (await caches.open(name)).keys()) {
+    const path = new URL(req.url).pathname;
+    if (path.endsWith('/') || path.endsWith('.html')) urls.push(path);
+  }
+}
+document.querySelector('#saved').innerHTML = [...new Set(urls)].map((p) =&gt; `&lt;a href="${p}"&gt;${p}&lt;/a&gt;`).join('');
+addEventListener('online', () =&gt; location.reload());
+</pre>
+<p>Reloading on the <code>online</code> event brings the visitor back to what they wanted the moment the connection returns.</p>
+</section>
+
+<section id="installkite"><h2>The installkite offline page</h2>
+<p><code>npx installkite init</code> writes <code>offline.html</code> in your theme and background colors, with your app icon inlined as a data URL, a Try again button, automatic reload when the connection returns and a list of the pages saved on the device. It is precached with a content hash, and the worker serves it for any navigation inside the scope that has no cached copy. The timeout is configurable:</p>
+<pre data-kind="editor" data-lang="json" data-title="installkite.config.json">
+"sw": {
+  "offline": "offline.html",
+  "navigationTimeout": 2500,
+  "exclude": ["api/", "admin/"]
+}
+</pre>
+<p>Run <code>npx installkite init --yes</code> again to apply config changes, and <code>npx installkite doctor</code> checks that the offline page exists and is precached.</p>
+</section>
+
+<section id="what-not-to-cache"><h2>What not to cache</h2>
+<p>Be careful with pages that depend on the visitor: a cart, an account page, anything behind a login. Storing them in a shared cache can show stale or private data after a sign out. Exclude those paths from the worker, and let API calls and form posts go straight to the network. installkite only handles GET requests, never touches requests with a Range header such as video seeking, and takes an <code>exclude</code> list of path prefixes or regular expressions in its config, as shown above. Also avoid caching opaque responses from other origins: browsers count each one as several megabytes against your storage quota.</p>
+</section>
+
+<section id="testing"><h2>Testing it</h2>
+<ol>
+<li>Load the site once so the worker installs, then reload so it controls the page.</li>
+<li>In developer tools, Network panel, switch to Offline.</li>
+<li>Open a page you visited: it loads from the cache. Open one you never visited: the offline page appears.</li>
+<li>Switch back online: the offline page reloads itself.</li>
+</ol>
+<p>To start fresh, use Application, Storage, Clear site data. On a phone, airplane mode is the honest test.</p>
+</section>

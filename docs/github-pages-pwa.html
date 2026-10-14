@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>
+<title>Make a GitHub Pages site a PWA (base path, scope, HTTPS)</title>
+<meta name="description" content="Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.">
+<link rel="canonical" href="https://kwy404.github.io/installkite/github-pages-pwa.html">
+<meta name="author" content="Alexandre Kohler">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="installkite">
+<meta property="og:title" content="Make a GitHub Pages site a PWA (base path, scope, HTTPS)">
+<meta property="og:description" content="Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.">
+<meta property="og:url" content="https://kwy404.github.io/installkite/github-pages-pwa.html">
+<meta property="og:image" content="https://kwy404.github.io/installkite/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="installkite: make any website installable and offline capable with one line">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Make a GitHub Pages site a PWA (base path, scope, HTTPS)">
+<meta name="twitter:description" content="Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.">
+<meta name="twitter:image" content="https://kwy404.github.io/installkite/og.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+<script type="module" src="site.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": "Make a GitHub Pages site a PWA",
+      "description": "Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.",
+      "url": "https://kwy404.github.io/installkite/github-pages-pwa.html",
+      "mainEntityOfPage": "https://kwy404.github.io/installkite/github-pages-pwa.html",
+      "image": "https://kwy404.github.io/installkite/og.png",
+      "datePublished": "2026-10-13",
+      "dateModified": "2026-10-13",
+      "inLanguage": "en",
+      "proficiencyLevel": "Beginner",
+      "author": {
+        "@type": "Person",
+        "name": "Alexandre Kohler",
+        "url": "https://github.com/kwy404",
+        "sameAs": [
+          "https://github.com/kwy404",
+          "https://www.linkedin.com/in/alexandre-silva-173687256/"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Alexandre Kohler",
+        "url": "https://github.com/kwy404"
+      },
+      "about": {
+        "@type": "SoftwareApplication",
+        "name": "installkite",
+        "url": "https://kwy404.github.io/installkite/",
+        "applicationCategory": "DeveloperApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does my PWA work locally but not on GitHub Pages?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A project site lives under /repo-name/, so links like /manifest.webmanifest or /sw.js point outside it and return 404. Use the base path or relative URLs. installkite detects the repository from your git remote and writes the right base."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does GitHub Pages support service workers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Pages serves HTTPS, which service workers need, and sends JavaScript files with the right content type. Tick Enforce HTTPS in the repository Pages settings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do visitors see an old version after I deploy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "GitHub Pages lets browsers cache files for ten minutes. Browsers check sw.js for updates on navigation and at least once a day, and installkite's worker downloads only the changed files, then the runtime shows Refresh to update."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a .nojekyll file?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Only if your site has files or folders that start with an underscore, such as _next or _astro, which Jekyll would skip. Add an empty .nojekyll to the published folder."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "installkite",
+          "item": "https://kwy404.github.io/installkite/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://kwy404.github.io/installkite/guides.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "GitHub Pages PWA",
+          "item": "https://kwy404.github.io/installkite/github-pages-pwa.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- installkite:start -->
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#2b8ff0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1426" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="./favicon.ico" sizes="48x48">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="installkite">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="./installkite.js" data-sw="./sw.js" data-offline="badge" defer></script>
+<!-- installkite:end -->
+</head>
+<body class="antialiased bg-background text-foreground page-guide">
+<svg class="sprite" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol><symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" fill="currentColor" stroke="none"/></symbol><symbol id="i-npm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v9h-9v2H8v-2H3z" fill="currentColor" stroke="none"/><path d="M6 9.5v4.5M6 9.5h3v4.5M13 9.5v6M13 9.5h3v3h-3M18 9.5v4.5" stroke="var(--background)" stroke-width="1.4"/></symbol><symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2Zm0 0A2 2 0 0 0 6 21h14"/></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></symbol><symbol id="i-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h3v12H3zM9 9h2.9v1.7c.4-.8 1.4-1.9 3.3-1.9 3.4 0 4 2.2 4 5.1V21h-3v-6.3c0-1.5 0-3.4-2.1-3.4s-2.4 1.6-2.4 3.3V21H9z" fill="currentColor" stroke="none"/></symbol><symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></symbol><symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9m0 0-4.5 4.5M12 9l4.5 4.5M5 4h14"/></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol><symbol id="i-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 13.8 3 11l1.6-1.6 8 1.1 4.6-4.6a2 2 0 0 1 2.9 2.9l-4.6 4.6 1.1 8L15 23l-2.8-7.2-3.4 3.4.4 2.5-1.4 1.4-1.6-3.3-3.3-1.6 1.4-1.4 2.5.4z"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.3a5 5 0 0 1 7 0"/><path d="M12 20h.01"/></symbol><symbol id="i-wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.3a5 5 0 0 1 7 0"/><path d="M12 20h.01M3 3l18 18"/></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></symbol><symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol><symbol id="i-zip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M10 6h1M10 9h1M10 12h1M9.5 15h2v3h-2z"/></symbol><symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol><symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol><symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M12 7v5m-2-2 2 2 2-2"/></symbol><symbol id="i-battery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2"/><rect x="4" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"/></symbol><symbol id="i-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18v-2M9 18v-5M14 18v-8M19 18V7"/></symbol><symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 3v6h6"/></symbol><symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6z"/></symbol><symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol></svg>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar" v-data="{ open: false }" @keydown.escape="open = false">
+  <div class="wrap topbar-in">
+    <a href="./" class="brand" aria-label="installkite home"><img src="assets/mascot-head.svg" width="34" height="34" alt=""><span class="brand-name">install<b>kite</b></span></a>
+    <nav id="topnav" class="topnav" :class="{ 'is-open': open }" aria-label="Main" @click="open = false"><a href="./#demo" class="top-link">Demo</a><a href="generator.html" class="top-link">Generator</a><a href="docs.html" class="top-link">Docs</a><a href="guides.html" class="top-link" aria-current="page">Guides</a></nav>
+    <div class="top-right">
+      <button type="button" class="install-site" data-installkite-install hidden><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg><span>Install this site</span></button>
+      <button type="button" class="search-btn" data-search-open v-hotkey="mod+k" aria-haspopup="dialog" aria-label="Search the site"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><span class="search-label">Search</span><kbd class="kbd kbd-sm">Ctrl K</kbd></button>
+      <a href="https://github.com/kwy404/installkite" class="icon-btn" aria-label="installkite on GitHub"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg></a>
+      <button type="button" class="icon-btn theme-btn" v-theme-toggle.cycle aria-label="Switch theme" title="Theme: system, light or dark"><svg class="ic ti-system" aria-hidden="true"><use href="#i-system"/></svg><svg class="ic ti-light" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic ti-dark" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button type="button" class="icon-btn nav-btn" aria-controls="topnav" :aria-expanded="open ? 'true' : 'false'" aria-expanded="false" @click="open = !open" aria-label="Menu"><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<div class="read-progress" aria-hidden="true"></div>
+<div class="guide-top">
+  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c3"></span><span class="stars"></span></div>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">installkite</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">GitHub Pages PWA</span></li></ol></nav>
+    <header class="guide-head">
+      <div>
+        <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Hosting guide</p>
+        <h1>Make a GitHub Pages site a PWA</h1>
+        <p class="lead">GitHub Pages is a great free host for an installable site: it serves HTTPS and static files fast. The catch is the base path of project sites. Get that right and everything else follows.</p>
+        <p class="byline"><span>By <a href="https://github.com/kwy404" rel="author">Alexandre Kohler</a></span><span>Updated <time datetime="2026-10-13">October 13, 2026</time></span><span>7 min read</span></p>
+      </div>
+      <span class="art-ic guide-hero-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#ff9d5c"/></g></svg></span>
+    </header>
+  </div>
+</div>
+<div class="wrap read">
+  <aside class="read-toc" aria-labelledby="toc-title"><p class="side-title" id="toc-title">In this guide</p><ol><li><a href="#two-kinds">Two kinds of Pages sites</a></li><li><a href="#base-path">The base path</a></li><li><a href="#scope">Service worker scope</a></li><li><a href="#publishing">Publishing from a folder or from Actions</a></li><li><a href="#jekyll">Jekyll and underscore folders</a></li><li><a href="#caching">Caching and updates</a></li><li><a href="#custom-domain">Custom domains</a></li><li><a href="#check">Check the live site</a></li><li><a href="#faq">Questions</a></li><li><a href="#related">Keep reading</a></li></ol></aside>
+  <article class="read-main prose-ik">
+<section id="two-kinds" class="chapter"><h2><a href="#two-kinds" class="anchor" aria-hidden="true" tabindex="-1">#</a>Two kinds of Pages sites</h2>
+<p>A <b>user or organization site</b> comes from a repository named <code>user.github.io</code> and is served at <code>https://user.github.io/</code>. A <b>project site</b> comes from any other repository and is served at <code>https://user.github.io/repo/</code>. A project site with a custom domain, set with a <code>CNAME</code> file, is served at the domain root again. For a PWA the difference is everything: the manifest link, the service worker, the icons and the start URL all depend on the path the site lives under.</p>
+</section>
+
+<section id="base-path" class="chapter"><h2><a href="#base-path" class="anchor" aria-hidden="true" tabindex="-1">#</a>The base path</h2>
+<p>On a project site, an absolute link such as <code>/sw.js</code> resolves to <code>https://user.github.io/sw.js</code>, which belongs to a different site, and the request fails. Every URL in the head must include <code>/repo/</code>, or be relative. installkite handles both:</p>
+<figure class="frame frame-terminal" data-lang="bash"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#3f8f4f"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">$_</text></svg><span>Terminal</span></span><button type="button" class="frame-copy" v-copy-from="#code-1" aria-label="Copy Terminal"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="code-1"><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> installkite</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> init</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --yes</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">                 # reads the repository from git, writes /repo/</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> installkite</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> init</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --yes</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --base</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> /repo/</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">   # or say it yourself</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> installkite</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> init</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --yes</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --relative</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">      # ./ and ../ per page, works under any path</span></span></code></pre></figure>
+<p>Detection looks at a <code>homepage</code> in package.json, then the <code>base</code> of Vite or Astro or the <code>basePath</code> of Next.js, then your git remote together with signs that the repository publishes to Pages: a Pages workflow, a <code>docs/</code> site or the gh-pages package. A <code>CNAME</code> file switches back to <code>/</code>. The manifest itself uses relative URLs, so <code>"start_url": "./"</code> and <code>"scope": "./"</code> are right in every case.</p>
+</section>
+
+<section id="scope" class="chapter"><h2><a href="#scope" class="anchor" aria-hidden="true" tabindex="-1">#</a>Service worker scope</h2>
+<p>A service worker controls the folder it is served from and everything below. At <code>/repo/sw.js</code> it controls <code>/repo/</code>, which is exactly the project site and nothing else, so neighbouring projects on the same <code>user.github.io</code> origin are not affected. Keep the worker at the root of the published folder. Note that all project sites of one user share an origin, and so share storage quotas and the caches API; installkite prefixes its cache names and only deletes its own old caches.</p>
+</section>
+
+<section id="publishing" class="chapter"><h2><a href="#publishing" class="anchor" aria-hidden="true" tabindex="-1">#</a>Publishing from a folder or from Actions</h2>
+<p>For a site committed as plain files, publish from <code>main</code> and the <code>/docs</code> folder or the root, and run installkite before you commit. For a site built by a tool, build and deploy in GitHub Actions and run <code>installkite build</code> between the two steps so the precache matches the built files:</p>
+<figure class="frame frame-editor" data-lang="yaml"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#cb171e"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="5" font-weight="700" fill="#fff">YML</text></svg><span>.github/workflows/pages.yml</span></span><button type="button" class="frame-copy" v-copy-from="#code-2" aria-label="Copy .github/workflows/pages.yml"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="code-2"><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">name</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">Deploy to GitHub Pages</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">on</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  push</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    branches</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: [</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">main</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">]</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">permissions</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  contents</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">read</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  pages</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">write</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  id-token</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">write</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">jobs</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  deploy</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    runs-on</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">ubuntu-latest</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    environment</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">github-pages</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    steps</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/checkout@v4</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/setup-node@v4</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">        with</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">          node-version</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">22</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npm ci</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npm run build</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">            # vite build, astro build, next build</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npx installkite build</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">    # re-hash the precache for this build</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npx installkite doctor</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/upload-pages-artifact@v3</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">        with</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">          path</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">dist</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/deploy-pages@v4</span></span></code></pre></figure>
+</section>
+
+<section id="jekyll" class="chapter"><h2><a href="#jekyll" class="anchor" aria-hidden="true" tabindex="-1">#</a>Jekyll and underscore folders</h2>
+<p>Pages runs Jekyll on published folders unless told otherwise, and Jekyll skips files and folders whose names start with an underscore. Frameworks put their bundles in folders like <code>_next</code> and <code>_astro</code>, which would vanish and break both the site and the precache install. Add an empty <code>.nojekyll</code> file to the published folder. When you deploy with the Pages actions shown above, Jekyll does not run.</p>
+</section>
+
+<section id="caching" class="chapter"><h2><a href="#caching" class="anchor" aria-hidden="true" tabindex="-1">#</a>Caching and updates</h2>
+<p>Pages sends <code>Cache-Control: max-age=600</code>, so browsers may use a cached <code>sw.js</code> for up to ten minutes. Browsers always revalidate the worker at least once a day and usually on navigation, so a deploy reaches installed apps quickly. When the worker changes, installkite's version downloads only files whose hash changed, copies the rest from the previous cache, and the runtime offers Refresh to update.</p>
+</section>
+
+<section id="custom-domain" class="chapter"><h2><a href="#custom-domain" class="anchor" aria-hidden="true" tabindex="-1">#</a>Custom domains</h2>
+<p>With a custom domain such as <code>bakery.example</code>, the project site moves to the domain root and the base path becomes <code>/</code> again. Keep the <code>CNAME</code> file in the published folder so installkite and GitHub both see it, and run <code>npx installkite init --yes</code> after adding the domain so the head tags lose the <code>/repo/</code> prefix. Installed apps keep their identity as long as the origin stays the same, so set the domain before people install the app: moving from <code>user.github.io/repo/</code> to a custom domain is a new origin, and visitors would need to install again.</p>
+</section>
+
+<section id="check" class="chapter"><h2><a href="#check" class="anchor" aria-hidden="true" tabindex="-1">#</a>Check the live site</h2>
+<p>After the deploy, audit the real URL. Doctor fetches the page, the manifest, every icon and the worker exactly as a browser would, and checks HTTPS, the scope and that start_url loads:</p>
+<figure class="frame frame-terminal" data-lang="bash"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#3f8f4f"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">$_</text></svg><span>Terminal</span></span><button type="button" class="frame-copy" v-copy-from="#code-3" aria-label="Copy Terminal"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="code-3"><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> installkite</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> doctor</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --url</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> https://user.github.io/repo/</span></span></code></pre></figure>
+<p>This site, the installkite docs, is itself a GitHub Pages project site set up this way. Install it from the address bar and try it in airplane mode.</p>
+</section>
+
+    <section id="faq" class="chapter"><h2><a href="#faq" class="anchor" aria-hidden="true" tabindex="-1">#</a>Questions</h2><div class="accordion collapse-plus"><details class="collapse" name="gfaq" open><summary class="collapse-title">Why does my PWA work locally but not on GitHub Pages?</summary><div class="collapse-content"><p>A project site lives under <code>/repo-name/</code>, so links like <code>/manifest.webmanifest</code> or <code>/sw.js</code> point outside it and return 404. Use the base path or relative URLs. installkite detects the repository from your git remote and writes the right base.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">Does GitHub Pages support service workers?</summary><div class="collapse-content"><p>Yes. Pages serves HTTPS, which service workers need, and sends JavaScript files with the right content type. Tick Enforce HTTPS in the repository Pages settings.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">Why do visitors see an old version after I deploy?</summary><div class="collapse-content"><p>GitHub Pages lets browsers cache files for ten minutes. Browsers check sw.js for updates on navigation and at least once a day, and installkite's worker downloads only the changed files, then the runtime shows Refresh to update.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">Do I need a .nojekyll file?</summary><div class="collapse-content"><p>Only if your site has files or folders that start with an underscore, such as <code>_next</code> or <code>_astro</code>, which Jekyll would skip. Add an empty <code>.nojekyll</code> to the published folder.</p></div></details></div></section>
+    <aside class="guide-cta" aria-label="Get started">
+      <img src="assets/mascot.svg" width="104" height="104" alt="" loading="lazy">
+      <div><h2>Let Skye do the setup</h2><p>Manifest, every icon size, service worker, offline page and head tags, in one command. Free and open source.</p>
+      <div class="cmd-box"><code id="cta-cmd">npx installkite init</code><button type="button" class="copy-btn" v-copy-from="#cta-cmd" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div></div>
+    </aside>
+    <section id="related" class="chapter"><h2><a href="#related" class="anchor" aria-hidden="true" tabindex="-1">#</a>Keep reading</h2><div class="guide-grid two-col"><a href="make-website-installable.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#ff9d5c"/></g></svg></span><span><b>How to make a website installable</b><small>Make a website installable on Android, Windows, macOS and iOS: the manifest fields, icons, HTTPS and service worker browsers check, and one command that adds them.</small></span></a><a href="service-worker-offline-page.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#1667d6" stroke="none"/><path d="M9 9l30 30" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#cfe6ff" stroke="none"/><path d="M9 9l30 30" stroke="#ff9d5c"/></g></svg></span><span><b>Service worker offline page: a fallback that actually helps</b><small>Show an offline page with a service worker: precache it, serve it for failed navigations with a timeout, list the pages saved on the device, and test it in DevTools.</small></span></a><a href="pwa-manifest-generator.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#ff9d5c" stroke="none"/></g></svg></span><span><b>PWA manifest generator and every manifest field explained</b><small>Generate a web app manifest and learn every field: name, short_name, start_url, scope, display, colors, icons, shortcuts and screenshots, with common mistakes.</small></span></a></div></section>
+  </article>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a href="./" class="brand"><img src="assets/mascot-head.svg" width="40" height="40" alt="" loading="lazy"><span class="brand-name">install<b>kite</b></span></a>
+        <p>One command makes any website installable and offline capable: manifest, every icon size, a service worker, an offline page and the head tags. Free and open source.</p>
+        <p class="foot-links"><a href="https://github.com/kwy404/installkite"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a><a href="https://www.npmjs.com/package/installkite"><svg class="ic" aria-hidden="true"><use href="#i-npm"/></svg>npm</a><a href="https://github.com/kwy404/installkite/blob/main/CHANGELOG.md"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Changelog</a></p>
+      </div>
+      <nav aria-labelledby="f-tool"><h2 id="f-tool" class="foot-title">installkite</h2><ul>
+        <li><a href="./#demo">Live demo</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
+      </ul></nav>
+      <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul><li><a href="make-website-installable.html">Make a website installable</a></li><li><a href="convert-website-to-app.html">Convert a website to an app</a></li><li><a href="pwa-tutorial.html">PWA tutorial</a></li><li><a href="service-worker-offline-page.html">Offline page with a service worker</a></li><li><a href="add-to-home-screen-ios.html">Add to Home Screen on iOS</a></li><li><a href="pwa-manifest-generator.html">PWA manifest generator</a></li><li><a href="pwa-icon-sizes.html">PWA icon sizes</a></li><li><a href="github-pages-pwa.html">GitHub Pages PWA</a></li></ul></nav>
+      <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more"><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a><small>Utility-first CSS with no build step</small></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a><small>Reactive attributes for plain HTML</small></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a><small>Find bugs in any JS library</small></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a><small>Vue 2 to Vue 3 migration</small></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a><small>Grapheme aware string utilities</small></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a><small>Parse localized numbers</small></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a><small>Edge case inputs for testing</small></li></ul></nav>
+    </div>
+    <div class="foot-bottom">
+      <p>Made by <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a><a href="https://github.com/kwy404" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg></a><a href="https://www.linkedin.com/in/alexandre-silva-173687256/" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="ic" aria-hidden="true"><use href="#i-linkedin"/></svg></a></p>
+      <p>Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>. This site installs itself with installkite. MIT licensed.</p>
+    </div>
+  </div>
+</footer>
+<dialog id="search" class="modal modal-top search-dlg" aria-label="Search the site">
+  <div class="command-palette" v-data="{ q: '', sel: 0 }" @keydown.down.prevent="sel = Math.min(sel + 1, hits(q, S.ready).length - 1)" @keydown.up.prevent="sel = Math.max(sel - 1, 0)" @keydown.enter.prevent="go(q, sel)">
+    <label class="command-palette-search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><input id="search-input" class="command-palette-input" v-model="q" @input="sel = 0" placeholder="Search guides, commands and options" autocomplete="off" spellcheck="false" aria-label="Search" aria-controls="search-results"></label>
+    <div id="search-results" class="command-palette-list" role="listbox" aria-label="Results">
+      <p class="command-palette-heading" v-if="!q">Suggestions</p>
+      <a v-for="(r, i) in hits(q, S.ready)" :key="r.url" :href="link(r.url)" class="command-palette-item" role="option" :aria-selected="i === sel ? 'true' : 'false'" @mouseenter="sel = i"><span class="hit-kind" v-text="r.kind"></span><span class="hit-text"><span class="hit-title" v-text="r.title"></span><span class="hit-sub" v-text="r.sub"></span></span></a>
+      <p class="command-palette-empty" v-if="q && !hits(q, S.ready).length">Nothing matches. Skye looked behind every cloud.</p>
+    </div>
+    <div class="command-palette-footer"><span><kbd class="kbd kbd-xs">Enter</kbd> open</span><span><kbd class="kbd kbd-xs">Esc</kbd> close</span></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+</dialog>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2b8ff0">
+<meta name="robots" content="noindex">
+<title>You are offline | installkite</title>
+<style>
+  :root {
+    --accent: #2b8ff0;
+    --on-accent: #111827;
+    --ink: #2375c5;
+    --bg: #ffffff;
+    --fg: #111827;
+    --muted: #4b5563;
+    --card: rgba(255,255,255,.78);
+    --line: rgba(17,24,39,.1);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--fg);
+    background:
+      radial-gradient(120% 70% at 50% -10%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+      radial-gradient(60% 40% at 100% 100%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+      var(--bg);
+  }
+  main {
+    width: min(100%, 440px);
+    text-align: center;
+    padding: 36px 28px 28px;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.28);
+  }
+  .badge-wrap { position: relative; width: 96px; height: 96px; margin: 0 auto 22px; }
+  .icon { width: 96px; height: 96px; border-radius: 24px; display: block; box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--accent) 70%, transparent); }
+  .icon-letter { display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 44px; font-weight: 700; }
+  .signal {
+    position: absolute; right: -10px; bottom: -10px; width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--bg); border: 1px solid var(--line); color: var(--muted);
+  }
+  .signal svg { width: 22px; height: 22px; }
+  h1 { margin: 0 0 8px; font-size: 1.6rem; line-height: 1.2; letter-spacing: -0.01em; }
+  p { margin: 0 auto; color: var(--muted); max-width: 34ch; }
+  button {
+    margin-top: 22px; display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border: 0; border-radius: 999px; cursor: pointer;
+    font: inherit; font-weight: 600; color: var(--on-accent); background: var(--accent);
+    box-shadow: 0 10px 24px -12px var(--accent);
+  }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  button svg { width: 18px; height: 18px; }
+  .status { margin-top: 14px; font-size: .875rem; min-height: 1.4em; }
+  .saved { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); text-align: left; }
+  .saved[hidden] { display: none; }
+  .saved h2 { margin: 0 0 10px; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .saved ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .saved a {
+    display: block; padding: 9px 12px; border-radius: 12px; color: var(--ink); text-decoration: none;
+    border: 1px solid var(--line); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .saved a:hover, .saved a:focus-visible { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .signal { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 50% { transform: scale(1.08); } }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="badge-wrap">
+    <img class="icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAARDklEQVR42u1dWYwcx3n+qnumu+fe5ezNXV6CSGslUyJNWlGgC6HEwILtRIGch0hJ9kEwASqJA0QQhCBBgsQBHMFI4CQSsn6I6dh6iQ0Kjh1L1mFYEi3ZIkVRF+WIoSSTXC73mL1nps+q5O+eWXF2d+7umY0xP1Dgcqa7ju/7r6rq6gE60pGOdKQjHelIRzrSkZYL+//W4b4jZyMAegolVPjYBjBLZXp8NN8hwH/Q0wAOSDL7ZCymHFA1uScUlrokiWn0PedCty2+YOjObDZrnuKOeBvAqenx0UyHgOaAHwTwm8mUek8ipd6USCrb4klV1bQQFFVCSJY89Xc4TIND122sLBnG8pJ5YXnROLO0aPwQwI+mx0cnOwTUB3wYwN3xpHJ/uid6KN0b7d/SE4GiySXXXdvldf/cgij53NQdzM3mkZnJTWVmcy+sLJlPAnhuenzU6hBQHfyELLMjvQOxB3r7Y3sHtiZYKCxteO31aa/772bEht/bFseViWUxM5V9a+ZK9tuOI8anx0eXN9N45U0Gfl9YkR8eGE4c2bare3ffYJxJUnkdGYx5303lNv6e7k12aUyLhAeEwGg+Zyci+46+k3398WyHgA3AV1T5kaGRxIPbr+keSKSUitdrMsOhbZ5lnF8Qla+NhBCLK0nBxWg+Z8W0m46e2SwkyJsJ/IGtibHt13SnI7EwCNJyJRIC7hiW0BtliIaBM9MCvML1VMKKjFhcjTo237OZSJA3E/jbdnWlNUK0gsTDwO3DEqIhIBpmkBnDpWVg2azeFsWSWFyJOo7YNCTImwH8fgJ/Z3Xwkwpw61YJlAwJAVf7SbuzFjCxUlubobC8SoK+CUiQ2w7+UGJs2AU/VPH6lMpwyxADJURceCUWZi4RFgf+Z15AoFYSJERjSpQTCfn2kiC3E/w+An+HB34l/92lAjcPSpDZx+C7BCjM/X7FBK5kBXSnchy4uhRJcNpMgtw28AcTY1t3ptJapLLbSWvAwQEJkrQexHiBgCUTmDeAJaO+vrgkxMNRbrePBLkd4PcS+DsI/MpupyfCsK9fAluj+cUSL7igxQL4c7qou0+hkIRIISYYbSBBbjn4A/GxIXI7VcDvjTDs7WPuVJ1A3qjEFc8SFg2BJVNgtsF1UJcEigk232PodktJkFsFflghzY+PDW2vDn5flOH6Hm+Wu5HmF0tS8SxgoWABs00sRBdJcBy+R8/bsci+1pAgtxL8wW2ptBqpPMnqiwHXpb0ZbjnNL5aE6sWABd2LAZl87UF4oyK7JISjnIuWkSC3AvyegSL4lTV/IMZw7RbJBZfXUIoWMK8DMzmBJUM0DwiREPVSVKMFJMhBg58m8EdSaSVSOdUk8Hd1s5rBdwkoWMC8LjCxDOTs5iygxBKiStThwZMgBwp+f3xsYFsqrWiVNX8wzrAjVR/4VFKq54rmdODDBQFH+AhMMTCTJejBkSAHBf4WAn8kWRP4I0mpLuCLpUvzLODiksDkivBfOwsxgVJUMyAS5EDA74uP9dUI/lCcNQT+KgECODvL3dlwIC4iJEGLhl1LCIIE2W/wu/tiY33DqbSihipmMAR+f6xx8Kl0a979b1zhcHj1rKnRIssSNMqOHO47CbKv4PfGxnqHa/P5PdHmwHcJiHhzgHNzAkGLZwmKR4LhHwmyH+CHiuBvrc3tbIk0D75he/sBc3mBy8u8NcsGIQlq0R35RALzA/wuAn8o6bqdSi1Rqkl+u14h/dZtgZwF5CwB3YbrcvYNehO2NyZbQ0BRTMPGzOWlzMJM9phtOo9Nj49Ot5wAF/ywB37PUDIdrgA+LaaRv0+qdQzS8TZaCPC85Wn9WtlfIOB0iwkgsQwbs0USrMZJkJsBP0XgDybS4Qpuh7nLCxJiSnW3Qho+nxeYztKygkDWEi4Roqw78wiYXGk9ARK5o4i3bGE1EZjlhsHviY2lawCfgm0kVN7nk2uhtZyZrMCCUXAvNcbUwUSBgGWBdohLglYgocGYINcJfkIOSQ+nemMPbhkouJ1y83naTIky0CVrQbe5t4meyQks6l5A5Q2sGQwmPA86uST8WYNooEiyBMW1BDdFDUX3Hz2Zff1x03cC6HFBJrGHkunYke6B5ACBXxZ7BjfTUaRSzTccYFEXbuaSt4SXuzcx/qIFUBbUJvzdQiSEVXeesNPIW3bsUw8RCTX5xVAdBnB3vCvyQKo3PkxuR1RwO7SBTvu3diFyEvA5EzC5z65ClPzTViFMCBvH5g8sz+XOAvihbwT0HTk7pETC90dT2l41qkDw8tkOrdETCZbjZTK5gqYHIUXgBcemEMKGMDLy1v19R86emR4fveyXBRyOJNRDsa4oK6fE9AhnrLC/Tu4lX8jVgxRR6AsX2DRCGOlZ85CZtw4DOFY1kNeg/WklEv6MFtf6mUSLX2JdIV2kZIiC66LOsWwI2I7Y8Npf9UIYEVaEWeFgSdMWcFCJhPdpcWVV49a6HUXy0kmbN+6QV869irmffQfGzEcIxdNI7T2MLTf/DsDkqhYgKrUpHMz9/DgW33oW9koGau8ObPm1LyB+7S2BWQFhRZiZeesggGeasgAmsevDWnibJMvrVgmLQZfcjWV7vriR1ca5147j8lN/B33yfQjbxL5dadzZNYG5/3oMnPPy9xYzkTLf070Tx7+M2Ze+CWthEpKwcdfeAYzOPY/5k8cDWz0lrAgzwq4pC6ADcSEldDCshlW+Rs1YYfDN+nlj+gPMvvixq7zv83dh/B/+wv37tdPv4Pef+B5SB367SgzY2AQWT30P2fMnV///j19+GPd/4R73768+/i18a+o81L5dwWRFalgl7AjDSgcHq1lArxySemjGt067XA1rXlsWXjteksb8xm2fXv370/tvgP3eMxBclLm/6Hs3+I4LV8uvlkO3f1z3odsOum0HZgUhiVZP6SRnbzMuKM0kqYvJUmAdzX30ekmDTz9/gk49un+/9MppLExNuFZSb710j5OdL6n7B8++XPI3tR3UuAgzwo4wbCYIK2BQZIlh74AM1ecdZFPP4kO99Lny7//oJdz5+QcxMtSPH5/w3Mf20AyGt+7eMPV1s4St6zt2aW4GE2s+e/Rv/glPP/9T6IaBn5162/3sxrQORYv5Oi6aeL55ySE/rbgYNjsPKJo7F/6e6SuXvbz7i/Nuufq6jXJ9qcI8QGz4mcBPfnpq3XW+T9ALbtGPmbApuDAtm+ONy04Qc0dIWhxcX0FEU3H9J67BqTNn1131gdmDSxftdZ/fPOJ1/+cbfGeaPat/D/SlkUjEcO78hVICtThOz6iFg/b+imNzikO0KGc2EwMynIsFt7KAfKW2fb/b0GcP34bH/vpPcc2O4dLVwlg3wj076w7CdA/dS/InR34Pf/9XX1qfr2/fH9i4CDPCjjBsxgJmuM1nHctBSAtmvh/bdy9y75/AMz9+BVdm5vDBL0s9d3z/vRCU9G5g0+Iqk99oWZDuXXz53/Cv3/gOUsnE2gmO27YQwYyLMCPsCMOGLYDyV8e0T1qGbTS7iU5FgQMJouSzUM8uJH/9D7G8ksPLr54uAUTdcQDRvZ8rW19JSrxBoXupjguXruDts+dKxkZtUttXX099oz76MVbCjLCr9vKQUA0B5V3bsC5w27mWyVJdWkBX3x6bwt3xSXxCXYTGvDgy7Wg4nU/jqaURXLKiiN70W5CTA1g5/V3YmV9Cim1B9Lq7PQ0to/0ly9Gi/OJ492f+HNk3nkLuvefAs3MIpbcjvv8+qLtudu8bDudwb/Ii9kcy6JN19y5dyPiFkcJzK4N4KduPeueawuEgzAi7qisNtSzGhdTwE5F0/HfVuFb7VhsT+Mu+t3AwUt4FWkLCV2dHcSLb15CZ37LN059XLzQWRG+NTePhnrMIs/IQn8yn8bfTe+HUkQEaKzrymZX/sA3raLU3tlRVaarANqynrZwxxet4/Oyu2OWK4LvTdcbxpfR7CMMpuZc00164XLWN1R24KtdRXWLNZ9Sm2zarrN80BhpLreMmjAgrwqyW1+XU6lOetXLmC+ZyXtSaBfTIRk0belHJQZTZpYt8tG88dxGZ448i++Z/wl6c3LCNjwlb/x3dQ/dSHVQX1nxPbVLbtfSRxlLruAkjwoow821HjHZ2+o6cfdLMGtdLSujGkBques8Ly/24N3UBEany/OFEthfzdnjdOray/SCc7ByWX/46ll/5BuR4D8L9eyB3j0BO9kOKpDDLo57JT+TA84twlqbgzF+ENfXfcFZmXQ+buO2Lbl1r4wS1SW2TG6okeS67Y6klW7INC2bWeMsx7Sdr2Q2rd0/4OStnjjJZSrMUG5aVyusSly0NfzaxH3/U+z5GtcX1fpLL+MHSEL6Z2VV2EyEyehgspGDpxSdcQD1QryKvom3LSN5xFNruO8vW/9iV6zCVVvHZ5GWoGyjKWT2Ff5nZ7Y6l2kaHYzowlvKXrJz5bcKqVlDrWlugx1KYLD2qxrUjajKSlkO1LQ4NKzlcpy2hWzZhCAmTVgTv6CnknNr4NyfexNJP/hk8N19b9hXtRvLOP4ay9caaro/KNm7QFjEYzkP9v7g07yh4T0/ikhmtcdbrgp8xVvRx4fCv1PNOoroXd+jBLEmWHgnH1DEtGUlLodacdO23ZnDf7PdxeeJ9vDO9gCvZPDK6N8tPawoGYhHc0NeFoa278d2ez2Eq3NuSfnHbgb6Uz1hZ4xh3eN2PKDa0unY1CWqCSJBaMtg4s/BFcQp/oH6AiLTWVwP/buzC19kBrIhwi8DnMJYbBx/NPpzLZOkRJaqOqUmtZZbgugzYuFWexB1bvKcAX5yL4YQziFxdIa15zTeW9IyZM46JBsGHH4+neyQoLbWE1YnYDm+p/dWPzJa2W9R8M2c2BT6aPaBBD6LG9h89wx0egxB7pJAcZVLrSBjp8rp/ccFpqeabK7ov4MOPEzJXkyC42COH5Cik1ryMcaS7QMB8awgQpPkresbK+wM+/DojtkqCzWPCtQQpyhhrgQWECgTYwWs+vRx2xchYpPncH/DrWYqoZbY8TR2jDprLeob8ZPCPJq99QCiYQmOhMfkNPvw+J+xawqc+jgksYEsY6Q7eAtzFtazhuR0ufAUfQZyU90h4qBAT4AbmoN7Pu60QAy4ERIBwBK3tZGw9GPB9dUHr3ZF4jDpOAxAtcUf+Fupz0OAHRsA6EnJGISb4u/O9+nS2z8X1+bngwQ+UgFISrGNWgQQ/sVp1FT7WSX20XPCtwMFHK96YVYwJglNgxh4msSh8CszFecCFOdsnn89h6xbtALYE/MAtYJ0lGNYxK29mhG9v1qjyfHo97oyynbzZUvBbRsDVJDim7ZLAHR8C86rqNpnnF8CnvrUS/JYSsJYEO2+5JLT7SBH1gfrSDvBbTsA6EnSr4I7alGoWfH67wG8LAaskiAIJRuOWUESyYc03CuCL9oDfNgJKSXBcEkQDx23WPp5S8328CL7TVvDbSsDVJHCLSLDpSez65gEVngsqf3BPwG3Laj/4bSdgLQmOaXuWEFAaRHVTG5sF/E1BwEYkBJEdUZ2bDfxNQ0BJTLD5uGM6l9xlC46KZTWbqXId1UV1Ut2bCfxNRUCRBAjxFW47X+OW8yb33nfQ1GIc1VGo62tU92YCH5v9pwwZY/czmR1ikuS+p2Lt5s7Bnd7j8ic/1EvXdNxMx/X5U8IRLwghOj9l2CAR7o95MsbugcRuYoxtYwyqu5jHgFBh8999L1EhKxIChhDiArg4I4To/JinT0S4P2cL4JOMsQNg7m8J0yHo4okRMoEFCMwKIegcaufnbAMk41fqB5070pGOdKQjHelIRzrSkTbI/wLG7XOlQWT7WAAAAABJRU5ErkJggg==" width="96" height="96" alt="">
+    <span class="signal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M5 12.6a10 10 0 0 1 14 0"/><path d="M8.5 16.3a5 5 0 0 1 7 0"/><path d="M12 20h.01"/><path d="M3 3l18 18"/></svg></span>
+  </div>
+  <h1>You are offline</h1>
+  <p>installkite could not reach the network. Check your connection, then try again. Pages you opened before still work.</p>
+  <button type="button" id="retry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Try again</button>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <nav class="saved" id="saved" hidden aria-labelledby="saved-title">
+    <h2 id="saved-title">Saved on this device</h2>
+    <ul id="saved-list"></ul>
+  </nav>
+</main>
+<script>
+(function () {
+  var status = document.getElementById('status');
+  function retry() {
+    status.textContent = navigator.onLine ? 'Reconnecting...' : 'Still offline. Retrying when the network is back.';
+    if (navigator.onLine) location.reload();
+  }
+  document.getElementById('retry').addEventListener('click', retry);
+  window.addEventListener('online', function () { location.reload(); });
+  // List pages this device already has, so the visitor can keep reading.
+  if (!('caches' in window)) return;
+  var scope = '/';
+  var sw = navigator.serviceWorker;
+  (sw ? sw.getRegistration().catch(function () {}) : Promise.resolve()).then(function (reg) {
+    if (reg) scope = new URL(reg.scope).pathname;
+    return caches.keys();
+  }).then(function (names) {
+    var wanted = names.filter(function (n) { return /^installkite-(pages|precache-)/.test(n); });
+    return Promise.all(wanted.map(function (n) {
+      return caches.open(n).then(function (c) { return c.keys().then(function (keys) { return keys.map(function (k) { return [k, c]; }); }); });
+    }));
+  }).then(function (lists) {
+    var seen = {}, links = [];
+    [].concat.apply([], lists || []).forEach(function (pair) {
+      var u = new URL(pair[0].url);
+      if (u.origin !== location.origin || /__installkite|offline\.html$|404\.html$/.test(u.pathname)) return;
+      if (!/(\/|\.html)$/.test(u.pathname)) return;
+      var key = u.pathname.replace(/index\.html$/, '');
+      if (seen[key] || key === location.pathname) return;
+      seen[key] = 1;
+      links.push({ path: key, req: pair[0], cache: pair[1] });
+    });
+    // The home page first, then the rest in path order.
+    links.sort(function (a, b) { return (a.path === scope ? -1 : b.path === scope ? 1 : a.path < b.path ? -1 : 1); });
+    return Promise.all(links.slice(0, 8).map(function (l) {
+      // Use each page's own title, read from the cached copy.
+      return l.cache.match(l.req).then(function (res) { return res ? res.text() : ''; }).then(function (html) {
+        var t = /<title[^>]*>([^<]*)<\/title>/i.exec(html);
+        var fallback = decodeURIComponent(l.path.replace(/\.html$/, '').replace(/\/$/, '').split('/').pop() || '').replace(/[-_]+/g, ' ');
+        var dec = document.createElement('textarea');
+        dec.innerHTML = t ? t[1] : '';
+        l.title = l.path === scope ? 'Home' : dec.value.split(/\s*[|:]\s+/)[0].replace(/\s*\([^)]*\)$/, '').trim() || fallback;
+        return l;
+      }, function () { return l; });
+    }));
+  }).then(function (links) {
+    var list = document.getElementById('saved-list');
+    links.forEach(function (l) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = l.path;
+      a.textContent = l.title || l.path;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    if (links.length) document.getElementById('saved').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>

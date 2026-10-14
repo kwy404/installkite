@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+Disallow: /offline.html
+
+Sitemap: https://kwy404.github.io/installkite/sitemap.xml

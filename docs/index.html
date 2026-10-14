@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>
+<title>installkite: make any website installable and offline (PWA in one line)</title>
+<meta name="description" content="Make any website installable and offline capable with one command: web app manifest, every PWA icon size, service worker, offline page and an install button.">
+<link rel="canonical" href="https://kwy404.github.io/installkite/">
+<meta name="author" content="Alexandre Kohler">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="installkite">
+<meta property="og:title" content="installkite: make any website installable and offline (PWA in one line)">
+<meta property="og:description" content="Make any website installable and offline capable with one command: web app manifest, every PWA icon size, service worker, offline page and an install button.">
+<meta property="og:url" content="https://kwy404.github.io/installkite/">
+<meta property="og:image" content="https://kwy404.github.io/installkite/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="installkite: make any website installable and offline capable with one line">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="installkite: make any website installable and offline (PWA in one line)">
+<meta name="twitter:description" content="Make any website installable and offline capable with one command: web app manifest, every PWA icon size, service worker, offline page and an install button.">
+<meta name="twitter:image" content="https://kwy404.github.io/installkite/og.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+<script type="module" src="site.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "installkite",
+      "description": "Make any website installable and offline capable with one line: web app manifest, every PWA icon size, a service worker with an offline page, head tags and a tiny install runtime.",
+      "url": "https://kwy404.github.io/installkite/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "softwareVersion": "0.1.0",
+      "license": "https://opensource.org/licenses/MIT",
+      "downloadUrl": "https://www.npmjs.com/package/installkite",
+      "codeRepository": "https://github.com/kwy404/installkite",
+      "image": "https://kwy404.github.io/installkite/og.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Alexandre Kohler",
+        "url": "https://github.com/kwy404",
+        "sameAs": [
+          "https://github.com/kwy404",
+          "https://www.linkedin.com/in/alexandre-silva-173687256/"
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I make my website installable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A browser offers to install a site when it has a web app manifest with a name, a start URL, a standalone display mode and 192 and 512 pixel icons, is served over HTTPS and registers a service worker. npx installkite init writes all of that and links it from your pages, then npx installkite doctor checks each rule."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert a website to an app without a framework?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. installkite works on plain HTML folders, and on sites built with Vite, Next.js (static export), Astro, WordPress or Laravel. Your site keeps working as a website, and visitors can also install it as an app with its own icon and window."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work on iPhone and iPad?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "iOS Safari installs sites through Share, then Add to Home Screen, and never fires an install prompt. The installkite runtime detects iOS and shows a short sheet with those three steps, and the generated apple-touch-icon is the opaque 180 pixel PNG iOS wants."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The service worker precaches your built pages and assets with content hashes, so the start page opens offline on first launch. Pages are network first with a three second timeout, so slow networks fall back to the cached copy, and a page that was never visited shows your offline page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do updates reach people who installed the app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run npx installkite build after each site build. It re-hashes the files and rewrites sw.js, the browser notices the new worker, and the runtime shows a \"Refresh to update\" toast. Unchanged files are copied from the old cache, not downloaded again."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work on GitHub Pages and Netlify?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. installkite detects a GitHub Pages project site from your git remote and writes the /repo/ base path into every URL, or use --relative to work under any folder. Both hosts serve HTTPS, which installs need."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is installkite free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, it is free and open source under the MIT license, with no account, no tracking and no runtime dependencies. The runtime script is about 4.4 kB gzipped."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- installkite:start -->
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#2b8ff0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1426" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="./favicon.ico" sizes="48x48">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="installkite">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="./installkite.js" data-sw="./sw.js" data-offline="badge" defer></script>
+<!-- installkite:end -->
+</head>
+<body class="antialiased bg-background text-foreground page-home">
+<svg class="sprite" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol><symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" fill="currentColor" stroke="none"/></symbol><symbol id="i-npm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v9h-9v2H8v-2H3z" fill="currentColor" stroke="none"/><path d="M6 9.5v4.5M6 9.5h3v4.5M13 9.5v6M13 9.5h3v3h-3M18 9.5v4.5" stroke="var(--background)" stroke-width="1.4"/></symbol><symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2Zm0 0A2 2 0 0 0 6 21h14"/></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></symbol><symbol id="i-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h3v12H3zM9 9h2.9v1.7c.4-.8 1.4-1.9 3.3-1.9 3.4 0 4 2.2 4 5.1V21h-3v-6.3c0-1.5 0-3.4-2.1-3.4s-2.4 1.6-2.4 3.3V21H9z" fill="currentColor" stroke="none"/></symbol><symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></symbol><symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9m0 0-4.5 4.5M12 9l4.5 4.5M5 4h14"/></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol><symbol id="i-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 13.8 3 11l1.6-1.6 8 1.1 4.6-4.6a2 2 0 0 1 2.9 2.9l-4.6 4.6 1.1 8L15 23l-2.8-7.2-3.4 3.4.4 2.5-1.4 1.4-1.6-3.3-3.3-1.6 1.4-1.4 2.5.4z"/></symbol><symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.3a5 5 0 0 1 7 0"/><path d="M12 20h.01"/></symbol><symbol id="i-wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.3a5 5 0 0 1 7 0"/><path d="M12 20h.01M3 3l18 18"/></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></symbol><symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol><symbol id="i-zip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M10 6h1M10 9h1M10 12h1M9.5 15h2v3h-2z"/></symbol><symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol><symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol><symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M12 7v5m-2-2 2 2 2-2"/></symbol><symbol id="i-battery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2"/><rect x="4" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"/></symbol><symbol id="i-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18v-2M9 18v-5M14 18v-8M19 18V7"/></symbol><symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 3v6h6"/></symbol><symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6z"/></symbol><symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol></svg>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar" v-data="{ open: false }" @keydown.escape="open = false">
+  <div class="wrap topbar-in">
+    <a href="./" class="brand" aria-label="installkite home"><img src="assets/mascot-head.svg" width="34" height="34" alt=""><span class="brand-name">install<b>kite</b></span></a>
+    <nav id="topnav" class="topnav" :class="{ 'is-open': open }" aria-label="Main" @click="open = false"><a href="./#demo" class="top-link">Demo</a><a href="generator.html" class="top-link">Generator</a><a href="docs.html" class="top-link">Docs</a><a href="guides.html" class="top-link">Guides</a></nav>
+    <div class="top-right">
+      <button type="button" class="install-site" data-installkite-install hidden><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg><span>Install this site</span></button>
+      <button type="button" class="search-btn" data-search-open v-hotkey="mod+k" aria-haspopup="dialog" aria-label="Search the site"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><span class="search-label">Search</span><kbd class="kbd kbd-sm">Ctrl K</kbd></button>
+      <a href="https://github.com/kwy404/installkite" class="icon-btn" aria-label="installkite on GitHub"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg></a>
+      <button type="button" class="icon-btn theme-btn" v-theme-toggle.cycle aria-label="Switch theme" title="Theme: system, light or dark"><svg class="ic ti-system" aria-hidden="true"><use href="#i-system"/></svg><svg class="ic ti-light" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic ti-dark" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button type="button" class="icon-btn nav-btn" aria-controls="topnav" :aria-expanded="open ? 'true' : 'false'" aria-expanded="false" @click="open = !open" aria-label="Menu"><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<section class="hero" id="demo" v-data>
+  <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span><span class="stars"></span></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg>Free and open source, one command</p>
+      <h1>Make any website <em>installable</em> and offline capable</h1>
+      <p class="lead">installkite writes the web app manifest, every icon size from one image, a service worker with an offline page and the head tags. Then your site installs like an app, on Android, iPhone, Windows and macOS.</p>
+      <div class="cmd-box"><code id="hero-cmd">npx installkite init</code><button type="button" class="copy-btn" v-copy-from="#hero-cmd" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div>
+      <div class="hero-cta"><a href="#what" class="btn btn-primary">See what it writes<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a><a href="generator.html" class="btn btn-outline"><svg class="ic" aria-hidden="true"><use href="#i-image"/></svg>Icon and manifest generator</a></div>
+      <ul class="hero-facts"><li><b>4.4 kB</b> runtime, gzipped</li><li><b>0</b> runtime dependencies</li><li><b>154</b> tests</li></ul>
+    </div>
+    <div class="hero-demo">
+      <div class="stage" :class="{ 'is-air': H.air, 'is-installed': H.installed, 'is-open': H.open, 'is-dialog': H.step === 'dialog', 'is-flying': H.step === 'flying' }">
+  <div class="laptop">
+    <div class="lap-screen">
+      <div class="win-bar">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="url" v-show="!H.installed"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg><span>acme-bakery.example</span><button type="button" class="url-install" @click="askInstall()" title="Install Acme Bakery" aria-label="Install Acme Bakery"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></button></span>
+        <span class="app-title" v-show="H.installed"><span class="acme-ic sm"></span>Acme Bakery</span>
+      </div>
+      <div class="lap-view">
+        <div class="ms" aria-hidden="true">
+    <div class="ms-head"><span class="ms-logo"></span><b>Acme Bakery</b><span class="ms-nav"><i></i><i></i><i></i></span></div>
+    <div class="ms-hero"><b>Fresh bread daily</b><i></i><i class="short"></i><span class="ms-btn">Order now</span></div>
+    <div class="ms-cards"><div class="ms-card"><span class="ms-bread" style="--b:#e9b872"></span><b>Sourdough</b><i></i></div><div class="ms-card"><span class="ms-bread" style="--b:#f2c36b"></span><b>Croissant</b><i></i></div><div class="ms-card"><span class="ms-bread" style="--b:#b9845a"></span><b>Rye loaf</b><i></i></div></div>
+  </div>
+        <button type="button" class="mini-fab" v-show="!H.installed && H.step !== 'dialog'" @click="askInstall()" id="lap-fab"><span class="acme-dl"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg></span>Install app</button>
+        <div class="install-dlg" v-show="H.step === 'dialog'" role="dialog" aria-label="Install app">
+          <p class="dlg-title">Install app?</p>
+          <div class="dlg-app"><span class="acme-ic" id="dlg-icon"></span><span><b>Acme Bakery</b><small>acme-bakery.example</small></span></div>
+          <div class="dlg-actions"><button type="button" class="btn btn-sm btn-ghost" @click="cancelInstall()">Cancel</button><button type="button" class="btn btn-sm btn-primary" @click="confirmInstall()">Install</button></div>
+        </div>
+        <div class="lap-offline" v-show="H.air && H.installed"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>You are offline. Cached pages still open.</div>
+      </div>
+    </div>
+    <div class="lap-base" aria-hidden="true"></div>
+  </div>
+  <div class="phone" aria-label="Phone home screen">
+    <div class="ph-screen">
+      <div class="ph-status"><span>9:41</span><span class="ph-icons"><span v-show="H.air" class="ph-air"><svg class="ic" aria-hidden="true"><use href="#i-plane"/></svg></span><span v-show="!H.air"><svg class="ic" aria-hidden="true"><use href="#i-signal"/></svg></span><span v-show="!H.air"><svg class="ic" aria-hidden="true"><use href="#i-wifi"/></svg></span><svg class="ic" aria-hidden="true"><use href="#i-battery"/></svg></span></div>
+      <div class="ph-home" v-show="!H.open"><div class="tile"><span class="app-ic" style="--t:#7cc4ff"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#ffb37a"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#9be0c0"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#c7b4ff"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#ffd76e"></span><span class="tile-label"></span></div><div class="tile slot" :class="{ 'is-filled': H.installed }" id="ph-slot"><button type="button" class="app-ic" @click="openApp()" :tabindex="H.installed ? 0 : -1" aria-label="Open the Acme app"><span class="acme-ic"></span></button><span class="tile-label">Acme</span></div><div class="tile"><span class="app-ic" style="--t:#ff9fb3"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#b8c4d8"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#a5e3d0"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#ffc2a8"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#b4c8ff"></span><span class="tile-label"></span></div><div class="tile"><span class="app-ic" style="--t:#f7d9a0"></span><span class="tile-label"></span></div><div class="ph-dock" aria-hidden="true"><span style="--t:#5fb0ff"></span><span style="--t:#6fd39b"></span><span style="--t:#ffb35f"></span><span style="--t:#ff7f9f"></span></div></div>
+      <div class="ph-app" v-show="H.open">
+        <div class="ph-splash" v-show="H.splash"><span class="acme-ic lg"></span><b>Acme Bakery</b></div>
+        <div class="ph-app-bar"><button type="button" class="ph-back" @click="closeApp()" aria-label="Back to the home screen"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button><span class="acme-ic sm"></span><b>Acme Bakery</b></div>
+        <div class="ph-tabs" role="tablist" aria-label="App pages">
+          <button type="button" role="tab" :aria-selected="H.page === 'home' ? 'true' : 'false'" @click="H.page = 'home'">Home</button>
+          <button type="button" role="tab" :aria-selected="H.page === 'specials' ? 'true' : 'false'" @click="H.page = 'specials'">Specials</button>
+        </div>
+        <div class="ph-page" v-show="H.page === 'home' || !H.air">
+          <div class="ph-offline-pill" v-show="H.air"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>Offline, from the cache</div>
+          <b class="ph-h" v-text="H.page === 'home' ? 'Fresh bread daily' : 'This week: rye and figs'"></b>
+          <i></i><i></i><i class="short"></i>
+          <div class="ph-cards"><span style="--b:#e9b872"></span><span style="--b:#f2c36b"></span></div>
+        </div>
+        <div class="ph-offpage" v-show="H.page === 'specials' && H.air">
+          <span class="off-ic"><span class="acme-ic"></span><span class="off-signal"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg></span></span>
+          <b>You are offline</b>
+          <small>Acme Bakery could not reach the network.</small>
+          <span class="off-btn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Try again</span>
+          <span class="off-saved">Saved on this device</span>
+          <span class="off-link">Home</span><span class="off-link">Menu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <img class="skye" src="assets/mascot.svg" width="150" height="150" alt="">
+</div>
+      <div class="demo-controls">
+        <button type="button" class="btn btn-primary btn-sm" @click="askInstall()" :disabled="H.installed || H.step === 'dialog'"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Install</button>
+        <label class="air-switch"><input type="checkbox" class="toggle toggle-accent" role="switch" v-model="H.air" @change="airChanged()"><span><svg class="ic" aria-hidden="true"><use href="#i-plane"/></svg>Airplane mode</span></label>
+        <button type="button" class="btn btn-ghost btn-sm" @click="openApp()" :disabled="!H.installed">Open the app</button>
+        <button type="button" class="btn btn-ghost btn-sm" @click="resetDemo()"><svg class="ic" aria-hidden="true"><use href="#i-reset"/></svg>Reset</button>
+      </div>
+      <ol class="demo-steps"><li :class="{ 'is-done': H.done > 0, 'is-now': H.done === 0 }"><span class="step-no">1</span><span><b>Install</b><small>The browser offers to install the bakery site. installkite.js caught the prompt and shows the button.</small></span></li><li :class="{ 'is-done': H.done > 1, 'is-now': H.done === 1 }"><span class="step-no">2</span><span><b>Home screen</b><small>The site lands on the home screen as an app icon, with its own window and name.</small></span></li><li :class="{ 'is-done': H.done > 2, 'is-now': H.done === 2 }"><span class="step-no">3</span><span><b>Airplane mode</b><small>No network. The service worker still opens the app from the precache.</small></span></li><li :class="{ 'is-done': H.done > 3, 'is-now': H.done === 3 }"><span class="step-no">4</span><span><b>Offline page</b><small>A page you never opened shows the friendly offline page, with the pages saved on the device.</small></span></li></ol>
+      <p class="sr-only" aria-live="polite" v-text="H.say"></p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="what">
+  <div class="wrap two">
+    <div>
+      <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-terminal"/></svg>One line</p>
+      <h2>One command writes all of it</h2>
+      <p class="lead">Run it in any static site folder, or in a Vite, Next.js or Astro project. It scans your pages, takes the name and colors from your home page, finds your logo and asks a few questions (or none with <code>--yes</code>). Run it twice and nothing changes: the head tags live in one marked block.</p>
+      <ul class="checks">
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span><code>--dry-run</code> prints a diff of every file before writing</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span>Your own favicon, manifest link or theme color are kept, never duplicated</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span><code>installkite build</code> refreshes the precache after each site build</span></li>
+      </ul>
+    </div>
+    <div class="term-col">
+      <figure class="frame frame-output" data-lang="text"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#6b7280"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">&gt;_</text></svg><span>npx installkite init --yes</span></span><button type="button" class="frame-copy" v-copy-from="#code-1" aria-label="Copy npx installkite init --yes"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="term-out" tabindex="0"><code id="code-1">$ npx installkite init --yes
+
+<span class="f-sky">installkite</span> <span class="f-k2">0.1.0</span>  <span class="a-b">make it installable</span>
+
+  <span class="f-k2">site</span>     static HTML in ./<span class="f-k2"> (3 HTML files)</span>
+  <span class="f-k2">base</span>     /
+  <span class="f-k2">icon</span>     logo.svg
+
+  <span class="f-k2">app</span>      <span class="a-b">Acme Bakery</span> <span class="f-k2">(standalone, theme #e8590d)</span>
+  <span class="f-k2">offline</span>  13 files precached <span class="f-k2">(48.2 kB)</span>
+
+  <span class="f-g">create</span>  icons/icon-48.png            <span class="f-k2">   905 B</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-72.png            <span class="f-k2">  1.4 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-96.png            <span class="f-k2">  1.9 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-128.png           <span class="f-k2">  2.6 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-144.png           <span class="f-k2">  3.0 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-152.png           <span class="f-k2">  3.0 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-192.png           <span class="f-k2">  3.8 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-256.png           <span class="f-k2">  5.3 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-384.png           <span class="f-k2">  8.2 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/icon-512.png           <span class="f-k2"> 11.3 kB</span><span class="f-k2">  icon</span>
+  <span class="f-g">create</span>  icons/maskable-192.png       <span class="f-k2">  3.8 kB</span><span class="f-k2">  maskable</span>
+  <span class="f-g">create</span>  icons/maskable-512.png       <span class="f-k2"> 11.2 kB</span><span class="f-k2">  maskable</span>
+  <span class="f-g">create</span>  apple-touch-icon.png         <span class="f-k2">  3.7 kB</span><span class="f-k2">  apple-touch-icon</span>
+  <span class="f-g">create</span>  favicon-16x16.png            <span class="f-k2">   355 B</span><span class="f-k2">  favicon</span>
+  <span class="f-g">create</span>  favicon-32x32.png            <span class="f-k2">   637 B</span><span class="f-k2">  favicon</span>
+  <span class="f-g">create</span>  favicon.ico                  <span class="f-k2">  1.9 kB</span><span class="f-k2">  favicon-ico</span>
+  <span class="f-g">create</span>  icons/icon.svg               <span class="f-k2">   288 B</span><span class="f-k2">  favicon-svg</span>
+  <span class="f-g">create</span>  icons/screenshot-wide.png    <span class="f-k2">  9.8 kB</span><span class="f-k2">  screenshot</span>
+  <span class="f-g">create</span>  icons/screenshot-narrow.png  <span class="f-k2"> 10.5 kB</span><span class="f-k2">  screenshot</span>
+  <span class="f-g">create</span>  manifest.webmanifest         <span class="f-k2">  2.7 kB</span><span class="f-k2">  manifest</span>
+  <span class="f-g">create</span>  offline.html                 <span class="f-k2">  9.9 kB</span><span class="f-k2">  offline page</span>
+  <span class="f-g">create</span>  installkite.js               <span class="f-k2"> 10.2 kB</span><span class="f-k2">  runtime</span>
+  <span class="f-y">update</span>  about.html                   <span class="f-k2">  1.2 kB</span><span class="f-k2">  head tags</span>
+  <span class="f-y">update</span>  index.html                   <span class="f-k2">  1.2 kB</span><span class="f-k2">  head tags</span>
+  <span class="f-y">update</span>  menu.html                    <span class="f-k2">  1.2 kB</span><span class="f-k2">  head tags</span>
+  <span class="f-g">create</span>  sw.js                        <span class="f-k2">  7.7 kB</span><span class="f-k2">  service worker</span>
+  <span class="f-g">create</span>  installkite.config.json      <span class="f-k2">   916 B</span><span class="f-k2">  config</span>
+  <span class="f-b">note</span>  placeholder screenshots written to icons/: replace them with real ones for the richer install dialog
+
+  <span class="f-g">done.</span> 27 files written.
+  Next: <span class="a-b">npx installkite doctor</span> to audit, then deploy over HTTPS.</code></pre></figure>
+    </div>
+  </div>
+  <div class="wrap">
+    <h3 class="files-title">The files, from a real run on a three page bakery site</h3>
+    <ul class="file-grid"><li><span class="ft-name">icons/icon-48.png</span><span class="ft-size">905 B</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-72.png</span><span class="ft-size">1.4 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-96.png</span><span class="ft-size">1.9 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-128.png</span><span class="ft-size">2.6 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-144.png</span><span class="ft-size">3.0 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-152.png</span><span class="ft-size">3.0 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-192.png</span><span class="ft-size">3.8 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-256.png</span><span class="ft-size">5.3 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-384.png</span><span class="ft-size">8.2 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/icon-512.png</span><span class="ft-size">11.3 kB</span><span class="ft-note">icon</span></li><li><span class="ft-name">icons/maskable-192.png</span><span class="ft-size">3.8 kB</span><span class="ft-note">maskable</span></li><li><span class="ft-name">icons/maskable-512.png</span><span class="ft-size">11.2 kB</span><span class="ft-note">maskable</span></li><li><span class="ft-name">apple-touch-icon.png</span><span class="ft-size">3.7 kB</span><span class="ft-note">apple-touch-icon</span></li><li><span class="ft-name">favicon-16x16.png</span><span class="ft-size">355 B</span><span class="ft-note">favicon</span></li><li><span class="ft-name">favicon-32x32.png</span><span class="ft-size">637 B</span><span class="ft-note">favicon</span></li><li><span class="ft-name">favicon.ico</span><span class="ft-size">1.9 kB</span><span class="ft-note">favicon-ico</span></li><li><span class="ft-name">icons/icon.svg</span><span class="ft-size">288 B</span><span class="ft-note">favicon-svg</span></li><li><span class="ft-name">icons/screenshot-wide.png</span><span class="ft-size">9.8 kB</span><span class="ft-note">screenshot</span></li><li><span class="ft-name">icons/screenshot-narrow.png</span><span class="ft-size">10.5 kB</span><span class="ft-note">screenshot</span></li><li><span class="ft-name">manifest.webmanifest</span><span class="ft-size">2.7 kB</span><span class="ft-note">manifest</span></li><li><span class="ft-name">offline.html</span><span class="ft-size">9.9 kB</span><span class="ft-note">offline page</span></li><li><span class="ft-name">installkite.js</span><span class="ft-size">10.2 kB</span><span class="ft-note">runtime</span></li><li><span class="ft-name">about.html</span><span class="ft-size">1.2 kB</span><span class="ft-note">head tags</span></li><li><span class="ft-name">index.html</span><span class="ft-size">1.2 kB</span><span class="ft-note">head tags</span></li><li><span class="ft-name">menu.html</span><span class="ft-size">1.2 kB</span><span class="ft-note">head tags</span></li><li><span class="ft-name">sw.js</span><span class="ft-size">7.7 kB</span><span class="ft-note">service worker</span></li><li><span class="ft-name">installkite.config.json</span><span class="ft-size">916 B</span><span class="ft-note">config</span></li></ul>
+  </div>
+</section>
+
+<section class="band band-alt" id="features">
+  <div class="wrap">
+    <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg>What lands on the home screen</p>
+    <h2>Everything a website needs to become an app</h2>
+    <div class="app-grid"><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#ff9d5c" stroke="none"/></g></svg></span><h3>Web app manifest</h3><p>Name, short name, colors, display, start_url, scope, id, shortcuts from your navigation and screenshot placeholders.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="4"/><rect x="26" y="9" width="13" height="13" rx="4"/><rect x="9" y="26" width="13" height="13" rx="4"/><rect x="26" y="26" width="13" height="13" rx="4" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="4"/><rect x="26" y="9" width="13" height="13" rx="4"/><rect x="9" y="26" width="13" height="13" rx="4"/><rect x="26" y="26" width="13" height="13" rx="4" fill="#ff9d5c" stroke="none"/></g></svg></span><h3>Every icon size</h3><p>One PNG or SVG in, 48 to 512 pixel icons, favicon.ico, favicon PNGs and the apple-touch-icon out. Pure JS resizing.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="32" height="32" rx="9"/><circle cx="24" cy="24" r="12.8" stroke-dasharray="3 3" stroke="#f25f2a"/><path d="M24 17v11m-4.5-4.5L24 28l4.5-4.5"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="32" height="32" rx="9"/><circle cx="24" cy="24" r="12.8" stroke-dasharray="3 3" stroke="#ff9d5c"/><path d="M24 17v11m-4.5-4.5L24 28l4.5-4.5"/></g></svg></span><h3>Maskable icons</h3><p>The artwork is measured and scaled into the 80% safe zone, on a full bleed background, so Android masks never crop it.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 7l14 6v10c0 9-6 15-14 18-8-3-14-9-14-18V13z"/><path d="M18 24l4.5 4.5L31 20" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 7l14 6v10c0 9-6 15-14 18-8-3-14-9-14-18V13z"/><path d="M18 24l4.5 4.5L31 20" stroke="#ff9d5c"/></g></svg></span><h3>Service worker</h3><p>Precache with content hashes, network first pages with a timeout, stale while revalidate assets, capped image cache.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#1667d6" stroke="none"/><path d="M9 9l30 30" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#cfe6ff" stroke="none"/><path d="M9 9l30 30" stroke="#ff9d5c"/></g></svg></span><h3>Offline page</h3><p>A self contained page in your colors, with your icon inlined and links to the pages saved on the device.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#ff9d5c"/></g></svg></span><h3>Install button</h3><p>Catches beforeinstallprompt and shows a small button, or turns any element with data-installkite-install into one.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 28V8m-6 6l6-6 6 6"/><path d="M16 20h-3v20h22V20h-3" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 28V8m-6 6l6-6 6 6"/><path d="M16 20h-3v20h22V20h-3" stroke="#ff9d5c"/></g></svg></span><h3>iOS instructions</h3><p>iPhone and iPad never fire an install prompt, so Skye shows the three Add to Home Screen steps instead.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M38 24a14 14 0 1 1-4.1-9.9"/><path d="M38 9v7h-7" stroke="#f25f2a"/><path d="M24 18v7l4 3"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M38 24a14 14 0 1 1-4.1-9.9"/><path d="M38 9v7h-7" stroke="#ff9d5c"/><path d="M24 18v7l4 3"/></g></svg></span><h3>Update toast</h3><p>When a new version is ready the runtime shows "Refresh to update", then activates it and reloads once.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8v9a9 9 0 0 0 18 0V8"/><path d="M24 26v5a7 7 0 0 0 14 0v-3"/><circle cx="38" cy="25" r="3" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8v9a9 9 0 0 0 18 0V8"/><path d="M24 26v5a7 7 0 0 0 14 0v-3"/><circle cx="38" cy="25" r="3" fill="#ff9d5c" stroke="none"/></g></svg></span><h3>installkite doctor</h3><p>Audits the files on disk or a live URL: manifest fields, icon sizes, HTTPS, scope, start_url and the worker.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="12" rx="13" ry="5"/><path d="M11 12v24c0 2.8 5.8 5 13 5s13-2.2 13-5V12M11 24c0 2.8 5.8 5 13 5s13-2.2 13-5"/><path d="M30 33h6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="12" rx="13" ry="5"/><path d="M11 12v24c0 2.8 5.8 5 13 5s13-2.2 13-5V12M11 24c0 2.8 5.8 5 13 5s13-2.2 13-5"/><path d="M30 33h6" stroke="#ff9d5c"/></g></svg></span><h3>CI friendly build</h3><p>installkite build re-hashes the precache after every site build; --check fails a pipeline when it is stale.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#ff9d5c"/></g></svg></span><h3>Any host, any base</h3><p>Detects GitHub Pages project paths, Vite, Astro and Next.js base settings, or writes relative URLs.</p></article><article class="app-card"><span class="art-ic app-card-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16h28M10 24h20M10 32h12"/><path d="M34 28l4 4-4 4" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16h28M10 24h20M10 32h12"/><path d="M34 28l4 4-4 4" stroke="#ff9d5c"/></g></svg></span><h3>Tiny runtime</h3><p>4.4 kB gzipped, no dependencies. The service worker logic adds 2.9 kB.</p></article></div>
+  </div>
+</section>
+
+<section class="band" id="offline">
+  <div class="wrap">
+    <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>Offline, by default</p>
+    <h2>A service worker with sensible strategies</h2>
+    <p class="lead narrow">Four routes cover what a website loads. Everything else, such as API calls, form posts and video ranges, goes straight to the network.</p>
+    <div class="lanes"><article class="lane"><header><h3>Precached files</h3><span class="tag tag-primary">cache first</span></header><p>Built pages, CSS, JS and icons are downloaded on install, each with a content hash. A new version only fetches what changed.</p><ol class="flow" aria-label="Steps"><li>install</li><li>cache</li><li>serve</li></ol></article><article class="lane"><header><h3>Page navigations</h3><span class="tag tag-primary">network first, 3 s timeout</span></header><p>Fresh HTML when the network answers in time. On a slow or missing network: the cached page, then the offline page.</p><ol class="flow" aria-label="Steps"><li>network</li><li>timeout</li><li>cache</li><li>offline</li></ol></article><article class="lane"><header><h3>Scripts, styles, fonts</h3><span class="tag tag-primary">stale while revalidate</span></header><p>The cached copy answers at once and the network refreshes it in the background, capped at 120 entries.</p><ol class="flow" aria-label="Steps"><li>cache</li><li>serve</li><li>refresh</li></ol></article><article class="lane"><header><h3>Images</h3><span class="tag tag-primary">cache first, capped</span></header><p>Up to 60 images for 30 days, oldest out first, so photo heavy pages do not fill the disk.</p><ol class="flow" aria-label="Steps"><li>cache</li><li>expire</li></ol></article></div>
+    <figure class="frame frame-editor" data-lang="js"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#c9a400"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">JS</text></svg><span>sw.js</span></span><button type="button" class="frame-copy" v-copy-from="#code-4" aria-label="Copy sw.js"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="code-4"><span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">/* Service worker generated by installkite 0.1.0: https://kwy404.github.io/installkite/</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"> * Run "npx installkite build" after every site build to refresh the precache list. */</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">self</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">__INSTALLKITE__</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = {</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">  "version"</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">:</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "81cc8621ef"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">  "precache"</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">:</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> [</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    [</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"about.html"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ec810b41b7a8"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">],</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    [</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"apple-touch-icon.png"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"821006243b6d"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">],</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    [</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"favicon-32x32.png"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"4e48f2b8460a"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">],</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    [</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"favicon.ico"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"5fc5d0cfdb3f"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">],</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">    /* 9 more files, each with its content hash */</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">  ]</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">};</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">/* the bundled strategies follow, about 7 kB */</span></span></code></pre></figure>
+  </div>
+</section>
+
+<section class="band band-alt" id="doctor">
+  <div class="wrap two">
+    <div>
+      <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>installkite doctor</p>
+      <h2>An audit with fixes, before you deploy</h2>
+      <p class="lead">Doctor checks the rules browsers use to decide whether a site can be installed, then the parts that make it work offline. Every failure comes with the fix. Point it at the files on disk or at a live URL with <code>--url</code>.</p>
+      <ul class="checks">
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span>Manifest fields, icon files and their real pixel sizes</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span>HTTPS, scope, start_url reachable and inside scope</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span>Service worker registered, scope, fetch handler, stale precache</span></li>
+      </ul>
+    </div>
+    <div class="term-col">
+      <div class="tabs tabs-boxed doctor-tabs" role="tablist">
+        <input type="radio" name="doctor-tabs" class="tab" aria-label="Before init" checked>
+        <div class="tab-content" role="tabpanel"><figure class="frame frame-output" data-lang="text"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#6b7280"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">&gt;_</text></svg><span>before: npx installkite doctor</span></span><button type="button" class="frame-copy" v-copy-from="#code-2" aria-label="Copy before: npx installkite doctor"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="term-out" tabindex="0"><code id="code-2">$ npx installkite doctor
+
+<span class="a-b">installkite doctor</span> <span class="f-k2">/ (files on disk)</span>
+
+  <span class="f-b">info</span>  Served over HTTPS<span class="f-k2">: checked when you run doctor --url against the live site</span>
+        <span class="a-d">fix:</span> Deploy over HTTPS (localhost also works while developing).
+  <span class="f-g">pass</span>  Viewport meta tag<span class="f-k2">: the page sets a viewport</span>
+  <span class="f-r">fail</span>  Page links a web app manifest<span class="f-k2">: no &lt;link rel=&quot;manifest&quot;&gt; on the start page</span>
+        <span class="a-d">fix:</span> Run &quot;npx installkite init&quot;, or add &lt;link rel=&quot;manifest&quot; href=&quot;manifest.webmanifest&quot;&gt; to the head.
+  <span class="f-b">info</span>  theme-color meta tag<span class="f-k2">: no &lt;meta name=&quot;theme-color&quot;&gt; on the page</span>
+        <span class="a-d">fix:</span> Add &lt;meta name=&quot;theme-color&quot; content=&quot;#2563eb&quot;&gt; to color the browser toolbar before install.
+  <span class="f-y">warn</span>  apple-touch-icon<span class="f-k2">: no apple-touch-icon, so iOS uses a screenshot of the page as the home screen icon</span>
+        <span class="a-d">fix:</span> Add &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;apple-touch-icon.png&quot;&gt; with a 180x180 opaque PNG.
+  <span class="f-b">info</span>  Favicon<span class="f-k2">: no favicon</span>
+        <span class="a-d">fix:</span> Add &lt;link rel=&quot;icon&quot; href=&quot;favicon.ico&quot; sizes=&quot;48x48&quot;&gt;.
+  <span class="f-r">fail</span>  Service worker registered<span class="f-k2">: the start page does not register a service worker</span>
+        <span class="a-d">fix:</span> Add &lt;script src=&quot;installkite.js&quot; defer&gt;&lt;/script&gt; (installkite init does this), or call navigator.serviceWorker.register(&quot;sw.js&quot;).
+
+  <span class="f-r">2 problems block install or offline use</span><span class="f-y">, 1 warning</span></code></pre></figure></div>
+        <input type="radio" name="doctor-tabs" class="tab" aria-label="After init">
+        <div class="tab-content" role="tabpanel"><figure class="frame frame-output" data-lang="text"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#6b7280"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">&gt;_</text></svg><span>after: npx installkite doctor</span></span><button type="button" class="frame-copy" v-copy-from="#code-3" aria-label="Copy after: npx installkite doctor"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="term-out" tabindex="0"><code id="code-3">$ npx installkite doctor
+
+<span class="a-b">installkite doctor</span> <span class="f-k2">/ (files on disk)</span>
+
+  <span class="f-b">info</span>  Served over HTTPS<span class="f-k2">: checked when you run doctor --url against the live site</span>
+        <span class="a-d">fix:</span> Deploy over HTTPS (localhost also works while developing).
+  <span class="f-g">pass</span>  Viewport meta tag<span class="f-k2">: the page sets a viewport</span>
+  <span class="f-g">pass</span>  Page links a web app manifest<span class="f-k2">: links /manifest.webmanifest</span>
+  <span class="f-g">pass</span>  Manifest loads<span class="f-k2">: the manifest is valid JSON</span>
+  <span class="f-g">pass</span>  App name<span class="f-k2">: &quot;Acme Bakery&quot;</span>
+  <span class="f-g">pass</span>  Home screen label fits<span class="f-k2">: &quot;Acme Bakery&quot;</span>
+  <span class="f-g">pass</span>  Opens in its own window<span class="f-k2">: display: standalone</span>
+  <span class="f-g">pass</span>  start_url is inside scope<span class="f-k2">: scope /</span>
+  <span class="f-g">pass</span>  start_url is reachable<span class="f-k2">: / loads</span>
+  <span class="f-g">pass</span>  App id<span class="f-k2">: id ./</span>
+  <span class="f-g">pass</span>  theme_color<span class="f-k2">: #e8590d</span>
+  <span class="f-g">pass</span>  background_color<span class="f-k2">: #ffffff</span>
+  <span class="f-g">pass</span>  Icons 192 and 512<span class="f-k2">: 13 icons</span>
+  <span class="f-g">pass</span>  Icon files load<span class="f-k2">: every icon file loads</span>
+  <span class="f-y">warn</span>  Screenshots<span class="f-k2">: 2 screenshots are still the installkite placeholder</span>
+        <span class="a-d">fix:</span> Replace the screenshot files with real captures of your app (same file names and sizes).
+  <span class="f-g">pass</span>  theme-color meta tag<span class="f-k2">: #e8590d</span>
+  <span class="f-g">pass</span>  apple-touch-icon<span class="f-k2">: 180x180, opaque</span>
+  <span class="f-g">pass</span>  Favicon<span class="f-k2">: /favicon.ico</span>
+  <span class="f-g">pass</span>  Service worker registered<span class="f-k2">: via installkite.js</span>
+  <span class="f-g">pass</span>  Service worker file loads<span class="f-k2">: /sw.js</span>
+  <span class="f-g">pass</span>  Service worker controls start_url<span class="f-k2">: scope /</span>
+  <span class="f-g">pass</span>  Works offline<span class="f-k2">: the service worker handles fetch events</span>
+  <span class="f-g">pass</span>  Offline page<span class="f-k2">: offline.html is precached</span>
+  <span class="f-g">pass</span>  start_url works offline<span class="f-k2">: the start page is precached</span>
+  <span class="f-g">pass</span>  Precache list is current<span class="f-k2">: 13 files, hashes match</span>
+
+  <span class="f-g">installable and offline ready</span><span class="f-y">, 1 warning</span></code></pre></figure></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="runtime">
+  <div class="wrap two">
+    <div>
+      <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>installkite.js</p>
+      <h2>A runtime the size of a small image</h2>
+      <p class="lead">One script tag registers the service worker and adds the install button, the iOS sheet, the update toast and the offline badge. Each part is optional, styled from your theme color and translatable. Listen to its events to build your own install flow.</p>
+      <figure class="frame frame-editor" data-lang="html"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#e44d26"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">&lt;&gt;</text></svg><span>index.html</span></span><button type="button" class="frame-copy" v-copy-from="#code-5" aria-label="Copy index.html"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="code-5"><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"/installkite.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-sw</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"/sw.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-install</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"auto"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-offline</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"badge"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> defer</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">button</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-installkite-install</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> hidden</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">Install the app</span><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">button</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span></code></pre></figure>
+    </div>
+    <div class="ui-previews" aria-label="Runtime interface previews">
+      <div class="uip uip-fab"><span class="uip-go"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Install app</span><span class="uip-x"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></span></div>
+      <div class="uip uip-toast"><span>A new version is available</span><span class="uip-go">Refresh</span></div>
+      <div class="uip uip-badge"><i></i>You are offline</div>
+      <div class="uip uip-sheet"><b>Add to your Home Screen</b><span><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Tap the Share button in the toolbar</span><span><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg>Tap "Add to Home Screen"</span><span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Tap "Add" in the top corner</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-alt" id="generator-teaser">
+  <div class="wrap gen-teaser">
+    <div class="gen-art" aria-hidden="true">
+      <img class="mask m-circle" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-squircle" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-rounded" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-drop" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy">
+    </div>
+    <div>
+      <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-image"/></svg>In your browser, nothing uploaded</p>
+      <h2>Free PWA manifest and icon generator</h2>
+      <p class="lead">Drop a logo, type a name, pick colors. Preview the icon under every Android mask, the iOS home screen and the splash screen, then download a zip with the manifest, all icon sizes, favicon.ico and the head tags.</p>
+      <a href="generator.html" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-image"/></svg>Open the generator</a>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="recipes">
+  <div class="wrap">
+    <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg>Recipes</p>
+    <h2>Works with your stack</h2>
+    <div class="recipe-row">
+      <a class="recipe-chip" href="docs.html#recipe-plain-html">Plain HTML</a><a class="recipe-chip" href="docs.html#recipe-vite">Vite</a><a class="recipe-chip" href="docs.html#recipe-next-js">Next.js</a><a class="recipe-chip" href="docs.html#recipe-astro">Astro</a><a class="recipe-chip" href="docs.html#recipe-wordpress">WordPress</a><a class="recipe-chip" href="docs.html#recipe-laravel">Laravel</a><a class="recipe-chip" href="docs.html#recipe-github-pages">GitHub Pages</a><a class="recipe-chip" href="docs.html#recipe-netlify">Netlify</a>
+    </div>
+  </div>
+</section>
+
+<section class="band band-alt" id="guides">
+  <div class="wrap">
+    <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Guides</p>
+    <h2>Learn the parts</h2>
+    <div class="guide-grid"><a href="make-website-installable.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8v20m-7-7l7 7 7-7"/><path d="M10 30v6a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-6" stroke="#ff9d5c"/></g></svg></span><span><b>How to make a website installable</b><small>Make a website installable on Android, Windows, macOS and iOS: the manifest fields, icons, HTTPS and service worker browsers check, and one command that adds them.</small></span></a><a href="convert-website-to-app.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="-11" y="-11" width="22" height="22" rx="6" transform="translate(24 20) rotate(45)"/><path d="M24 36c-3 3 3 5 0 8" /><rect x="20" y="40" width="5" height="5" rx="1.5" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="-11" y="-11" width="22" height="22" rx="6" transform="translate(24 20) rotate(45)"/><path d="M24 36c-3 3 3 5 0 8" /><rect x="20" y="40" width="5" height="5" rx="1.5" fill="#ff9d5c" stroke="none"/></g></svg></span><span><b>Convert a website to an app without rewriting it</b><small>Turn an existing website into an installable app with its own icon, window and offline mode, without a rewrite, an app store account or a native wrapper.</small></span></a><a href="pwa-tutorial.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="10" width="34" height="28" rx="5"/><path d="M14 20l5 4-5 4"/><path d="M23 29h10" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="10" width="34" height="28" rx="5"/><path d="M14 20l5 4-5 4"/><path d="M23 29h10" stroke="#ff9d5c"/></g></svg></span><span><b>PWA tutorial: turn a static site into a progressive web app</b><small>A step by step PWA tutorial: write the manifest, cache pages with a service worker, handle updates, test offline and deploy, then automate it all with one command.</small></span></a><a href="service-worker-offline-page.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#1667d6" stroke="none"/><path d="M9 9l30 30" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 19a23 23 0 0 1 32 0M13 25a16 16 0 0 1 22 0M18.5 31a8 8 0 0 1 11 0"/><circle cx="24" cy="37" r="2.4" fill="#cfe6ff" stroke="none"/><path d="M9 9l30 30" stroke="#ff9d5c"/></g></svg></span><span><b>Service worker offline page: a fallback that actually helps</b><small>Show an offline page with a service worker: precache it, serve it for failed navigations with a timeout, list the pages saved on the device, and test it in DevTools.</small></span></a><a href="add-to-home-screen-ios.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 28V8m-6 6l6-6 6 6"/><path d="M16 20h-3v20h22V20h-3" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 28V8m-6 6l6-6 6 6"/><path d="M16 20h-3v20h22V20h-3" stroke="#ff9d5c"/></g></svg></span><span><b>Add to Home Screen on iOS: how iPhone and iPad install websites</b><small>How Add to Home Screen works on iPhone and iPad: the Safari share flow, apple-touch-icon and meta tags, detecting standalone mode and showing install instructions.</small></span></a><a href="pwa-manifest-generator.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="9" width="24" height="30" rx="4"/><path d="M17 17h14M17 23h14M17 29h8"/><circle cx="33" cy="33" r="5" fill="#ff9d5c" stroke="none"/></g></svg></span><span><b>PWA manifest generator and every manifest field explained</b><small>Generate a web app manifest and learn every field: name, short_name, start_url, scope, display, colors, icons, shortcuts and screenshots, with common mistakes.</small></span></a><a href="pwa-icon-sizes.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="4"/><rect x="26" y="9" width="13" height="13" rx="4"/><rect x="9" y="26" width="13" height="13" rx="4"/><rect x="26" y="26" width="13" height="13" rx="4" fill="#f25f2a" stroke="none"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="4"/><rect x="26" y="9" width="13" height="13" rx="4"/><rect x="9" y="26" width="13" height="13" rx="4"/><rect x="26" y="26" width="13" height="13" rx="4" fill="#ff9d5c" stroke="none"/></g></svg></span><span><b>PWA icon sizes: the complete list</b><small>Every PWA icon size you need: manifest icons, maskable icons and the 80% safe zone, the 180 pixel apple-touch-icon, favicon.ico and SVG favicons, plus a generator.</small></span></a><a href="github-pages-pwa.html" class="guide-tile"><span class="art-ic guide-tile-ic" aria-hidden="true"><svg viewBox="0 0 48 48" class="ai-light"><rect x="1" y="1" width="46" height="46" rx="12" fill="#eaf5ff" stroke="#cfe6ff"/><g fill="none" stroke="#1667d6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#f25f2a"/></g></svg><svg viewBox="0 0 48 48" class="ai-dark"><rect x="1" y="1" width="46" height="46" rx="12" fill="#16233d" stroke="#2a3d63"/><g fill="none" stroke="#cfe6ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M8 24h32M24 8c5 5 5 27 0 32M24 8c-5 5-5 27 0 32"/><path d="M33 33l6 6" stroke="#ff9d5c"/></g></svg></span><span><b>Make a GitHub Pages site a PWA</b><small>Turn a GitHub Pages site into an installable, offline PWA: the /repo/ base path, service worker scope, HTTPS, custom domains, Jekyll and a deploy workflow.</small></span></a></div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap narrow-wrap">
+    <p class="kicker"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg>FAQ</p>
+    <h2>Questions people search for</h2>
+    <div class="accordion collapse-plus"><details class="collapse" name="faq" open><summary class="collapse-title">How do I make my website installable?</summary><div class="collapse-content"><p>A browser offers to install a site when it has a web app manifest with a name, a start URL, a standalone display mode and 192 and 512 pixel icons, is served over HTTPS and registers a service worker. <code>npx installkite init</code> writes all of that and links it from your pages, then <code>npx installkite doctor</code> checks each rule.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">Can I convert a website to an app without a framework?</summary><div class="collapse-content"><p>Yes. installkite works on plain HTML folders, and on sites built with Vite, Next.js (static export), Astro, WordPress or Laravel. Your site keeps working as a website, and visitors can also install it as an app with its own icon and window.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">Does it work on iPhone and iPad?</summary><div class="collapse-content"><p>iOS Safari installs sites through Share, then Add to Home Screen, and never fires an install prompt. The installkite runtime detects iOS and shows a short sheet with those three steps, and the generated apple-touch-icon is the opaque 180 pixel PNG iOS wants.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">What happens offline?</summary><div class="collapse-content"><p>The service worker precaches your built pages and assets with content hashes, so the start page opens offline on first launch. Pages are network first with a three second timeout, so slow networks fall back to the cached copy, and a page that was never visited shows your offline page.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">How do updates reach people who installed the app?</summary><div class="collapse-content"><p>Run <code>npx installkite build</code> after each site build. It re-hashes the files and rewrites sw.js, the browser notices the new worker, and the runtime shows a "Refresh to update" toast. Unchanged files are copied from the old cache, not downloaded again.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">Does it work on GitHub Pages and Netlify?</summary><div class="collapse-content"><p>Yes. installkite detects a GitHub Pages project site from your git remote and writes the <code>/repo/</code> base path into every URL, or use <code>--relative</code> to work under any folder. Both hosts serve HTTPS, which installs need.</p></div></details><details class="collapse" name="faq"><summary class="collapse-title">Is installkite free?</summary><div class="collapse-content"><p>Yes, it is free and open source under the MIT license, with no account, no tracking and no runtime dependencies. The runtime script is about 4.4 kB gzipped.</p></div></details></div>
+  </div>
+</section>
+
+<section class="takeoff">
+  <div class="wrap takeoff-in">
+    <img src="assets/mascot.svg" width="130" height="130" alt="" loading="lazy">
+    <div><h2>Ready for take off?</h2><p>Free, MIT licensed, no account. Your site keeps working as a website.</p></div>
+    <div class="cmd-box"><code id="cta-cmd">npx installkite init</code><button type="button" class="copy-btn" v-copy-from="#cta-cmd" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div>
+    <a href="https://github.com/kwy404/installkite" class="btn btn-outline"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg>Star on GitHub</a>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a href="./" class="brand"><img src="assets/mascot-head.svg" width="40" height="40" alt="" loading="lazy"><span class="brand-name">install<b>kite</b></span></a>
+        <p>One command makes any website installable and offline capable: manifest, every icon size, a service worker, an offline page and the head tags. Free and open source.</p>
+        <p class="foot-links"><a href="https://github.com/kwy404/installkite"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a><a href="https://www.npmjs.com/package/installkite"><svg class="ic" aria-hidden="true"><use href="#i-npm"/></svg>npm</a><a href="https://github.com/kwy404/installkite/blob/main/CHANGELOG.md"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Changelog</a></p>
+      </div>
+      <nav aria-labelledby="f-tool"><h2 id="f-tool" class="foot-title">installkite</h2><ul>
+        <li><a href="./#demo">Live demo</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
+      </ul></nav>
+      <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul><li><a href="make-website-installable.html">Make a website installable</a></li><li><a href="convert-website-to-app.html">Convert a website to an app</a></li><li><a href="pwa-tutorial.html">PWA tutorial</a></li><li><a href="service-worker-offline-page.html">Offline page with a service worker</a></li><li><a href="add-to-home-screen-ios.html">Add to Home Screen on iOS</a></li><li><a href="pwa-manifest-generator.html">PWA manifest generator</a></li><li><a href="pwa-icon-sizes.html">PWA icon sizes</a></li><li><a href="github-pages-pwa.html">GitHub Pages PWA</a></li></ul></nav>
+      <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more"><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a><small>Utility-first CSS with no build step</small></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a><small>Reactive attributes for plain HTML</small></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a><small>Find bugs in any JS library</small></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a><small>Vue 2 to Vue 3 migration</small></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a><small>Grapheme aware string utilities</small></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a><small>Parse localized numbers</small></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a><small>Edge case inputs for testing</small></li></ul></nav>
+    </div>
+    <div class="foot-bottom">
+      <p>Made by <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a><a href="https://github.com/kwy404" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg></a><a href="https://www.linkedin.com/in/alexandre-silva-173687256/" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="ic" aria-hidden="true"><use href="#i-linkedin"/></svg></a></p>
+      <p>Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>. This site installs itself with installkite. MIT licensed.</p>
+    </div>
+  </div>
+</footer>
+<dialog id="search" class="modal modal-top search-dlg" aria-label="Search the site">
+  <div class="command-palette" v-data="{ q: '', sel: 0 }" @keydown.down.prevent="sel = Math.min(sel + 1, hits(q, S.ready).length - 1)" @keydown.up.prevent="sel = Math.max(sel - 1, 0)" @keydown.enter.prevent="go(q, sel)">
+    <label class="command-palette-search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><input id="search-input" class="command-palette-input" v-model="q" @input="sel = 0" placeholder="Search guides, commands and options" autocomplete="off" spellcheck="false" aria-label="Search" aria-controls="search-results"></label>
+    <div id="search-results" class="command-palette-list" role="listbox" aria-label="Results">
+      <p class="command-palette-heading" v-if="!q">Suggestions</p>
+      <a v-for="(r, i) in hits(q, S.ready)" :key="r.url" :href="link(r.url)" class="command-palette-item" role="option" :aria-selected="i === sel ? 'true' : 'false'" @mouseenter="sel = i"><span class="hit-kind" v-text="r.kind"></span><span class="hit-text"><span class="hit-title" v-text="r.title"></span><span class="hit-sub" v-text="r.sub"></span></span></a>
+      <p class="command-palette-empty" v-if="q && !hits(q, S.ready).length">Nothing matches. Skye looked behind every cloud.</p>
+    </div>
+    <div class="command-palette-footer"><span><kbd class="kbd kbd-xs">Enter</kbd> open</span><span><kbd class="kbd kbd-xs">Esc</kbd> close</span></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+</dialog>
+</body>
+</html>
