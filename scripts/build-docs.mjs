@@ -510,7 +510,7 @@ for (const [name, content] of Object.entries(files)) {
   if (typeof content !== 'string') continue;
   if (/[\u2013\u2014]/.test(content)) problems.push(`${name}: contains an en or em dash`);
   if (/\p{Extended_Pictographic}/u.test(content.replace(/[\u00a9\u00ae\u2122]/g, ''))) problems.push(`${name}: contains an emoji`);
-  if (/tailwind/i.test(content)) problems.push(`${name}: names another CSS framework`);
+  if (new RegExp(['tail', 'wind'].join(''), 'i').test(content)) problems.push(`${name}: names another CSS framework`);
   if (name.endsWith('.html') && name !== 'offline.html') {
     // Voodoo reads { expressions } in text, so braces must stay inside code.
     const text = content

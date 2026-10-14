@@ -35,7 +35,7 @@ for (const file of files) {
       }
     }
     for (const w of words) {
-      if (w.test(line) && file !== 'scripts/check-chars.mjs') {
+      if (w.test(line)) {
         problems++;
         console.error(`${file}:${index + 1}: names another CSS framework (${w.source})`);
       }
