@@ -230,6 +230,8 @@ Sim, código aberto sob licença MIT, sem conta e sem rastreamento.
 - [edgegoat](https://kwy404.github.io/edgegoat/): entradas de casos extremos para testes
 - [cookieowl](https://kwy404.github.io/cookieowl/): consentimento de cookies que bloqueia rastreadores de verdade
 - [a11ymedic](https://kwy404.github.io/a11ymedic/): checagem WCAG com explicações simples e correções exatas no HTML
+- [fontsketch](https://kwy404.github.io/fontsketch/): transforma a sua letra em uma fonte, grátis e no navegador
+- [kastor](https://kwy404.github.io/kastor/): ORM para TypeScript para PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB e mais
 
 ## Autor
 

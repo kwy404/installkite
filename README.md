@@ -455,6 +455,8 @@ No. It works on a folder of HTML files. With a framework, it plugs into the buil
 - [edgegoat](https://kwy404.github.io/edgegoat/): edge case inputs for JavaScript testing
 - [cookieowl](https://kwy404.github.io/cookieowl/): cookie consent that really blocks trackers before consent
 - [a11ymedic](https://kwy404.github.io/a11ymedic/): WCAG checks with plain language explanations and exact HTML fixes
+- [fontsketch](https://kwy404.github.io/fontsketch/): turn your handwriting into a font, free in your browser
+- [kastor](https://kwy404.github.io/kastor/): TypeScript ORM for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB and more
 
 ## Author
 

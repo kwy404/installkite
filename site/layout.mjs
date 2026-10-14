@@ -36,6 +36,8 @@ export const MORE = [
   ['edgegoat', 'https://kwy404.github.io/edgegoat/', 'Edge case inputs for testing'],
   ['cookieowl', 'https://kwy404.github.io/cookieowl/', 'Cookie consent that blocks trackers'],
   ['a11ymedic', 'https://kwy404.github.io/a11ymedic/', 'WCAG checks with exact HTML fixes'],
+  ['fontsketch', 'https://kwy404.github.io/fontsketch/', 'Turn your handwriting into a font'],
+  ['kastor', 'https://kwy404.github.io/kastor/', 'TypeScript ORM for almost every database'],
 ];
 
 const THEME_SNIPPET = `<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>`;
