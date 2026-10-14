@@ -1,0 +1,111 @@
+{
+  "name": "installkite",
+  "version": "0.1.0",
+  "description": "Make any website installable and offline capable with one line. npx installkite init generates the web app manifest, a complete PWA icon set from one image (maskable, apple-touch-icon, favicon), a service worker with an offline page, and injects the head tags. A tiny runtime adds an install button, iOS Add to Home Screen sheet and update toast.",
+  "keywords": [
+    "pwa",
+    "progressive web app",
+    "make website installable",
+    "convert website to app",
+    "pwa generator",
+    "pwa manifest generator",
+    "web app manifest",
+    "manifest.webmanifest",
+    "pwa icon generator",
+    "pwa icon sizes",
+    "maskable icon",
+    "apple-touch-icon",
+    "favicon generator",
+    "service worker",
+    "service worker generator",
+    "offline page",
+    "offline first",
+    "precache",
+    "add to home screen",
+    "add to home screen ios",
+    "install button",
+    "beforeinstallprompt",
+    "github pages pwa",
+    "netlify pwa",
+    "static site",
+    "vite pwa",
+    "nextjs pwa",
+    "astro pwa",
+    "cli"
+  ],
+  "homepage": "https://kwy404.github.io/installkite/",
+  "bugs": {
+    "url": "https://github.com/kwy404/installkite/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwy404/installkite.git"
+  },
+  "license": "MIT",
+  "author": "Alexandre Kohler (https://github.com/kwy404)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/installkite.min.js",
+  "jsdelivr": "./dist/installkite.min.js",
+  "bin": {
+    "installkite": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "default": "./dist/runtime.js"
+    },
+    "./browser": "./dist/installkite.min.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md"
+  ],
+  "sideEffects": [
+    "./dist/installkite.js",
+    "./dist/installkite.min.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/clean.mjs && tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && node scripts/check-chars.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "size": "node scripts/size.mjs",
+    "docs": "node scripts/build-docs.mjs",
+    "docs:check": "node scripts/build-docs.mjs --check",
+    "images": "bash scripts/render-images.sh",
+    "prepublishOnly": "npm run build && npm test",
+    "pretest": "node scripts/ensure-build.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.19.0",
+    "eslint": "9.39.5",
+    "jsdom": "26.1.0",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "3.2.7"
+  }
+}
