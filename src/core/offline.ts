@@ -142,27 +142,46 @@ export function generateOfflinePage(o: OfflinePageOptions): string {
   window.addEventListener('online', function () { location.reload(); });
   // List pages this device already has, so the visitor can keep reading.
   if (!('caches' in window)) return;
-  caches.keys().then(function (names) {
+  var scope = '/';
+  var sw = navigator.serviceWorker;
+  (sw ? sw.getRegistration().catch(function () {}) : Promise.resolve()).then(function (reg) {
+    if (reg) scope = new URL(reg.scope).pathname;
+    return caches.keys();
+  }).then(function (names) {
     var wanted = names.filter(function (n) { return /^installkite-(pages|precache-)/.test(n); });
-    return Promise.all(wanted.map(function (n) { return caches.open(n).then(function (c) { return c.keys(); }); }));
+    return Promise.all(wanted.map(function (n) {
+      return caches.open(n).then(function (c) { return c.keys().then(function (keys) { return keys.map(function (k) { return [k, c]; }); }); });
+    }));
   }).then(function (lists) {
     var seen = {}, links = [];
-    [].concat.apply([], lists || []).forEach(function (req) {
-      var u = new URL(req.url);
-      if (u.origin !== location.origin || /__installkite|offline\\.html$/.test(u.pathname)) return;
+    [].concat.apply([], lists || []).forEach(function (pair) {
+      var u = new URL(pair[0].url);
+      if (u.origin !== location.origin || /__installkite|offline\\.html$|404\\.html$/.test(u.pathname)) return;
       if (!/(\\/|\\.html)$/.test(u.pathname)) return;
       var key = u.pathname.replace(/index\\.html$/, '');
       if (seen[key] || key === location.pathname) return;
       seen[key] = 1;
-      links.push(key);
+      links.push({ path: key, req: pair[0], cache: pair[1] });
     });
-    links.sort();
+    // The home page first, then the rest in path order.
+    links.sort(function (a, b) { return (a.path === scope ? -1 : b.path === scope ? 1 : a.path < b.path ? -1 : 1); });
+    return Promise.all(links.slice(0, 8).map(function (l) {
+      // Use each page's own title, read from the cached copy.
+      return l.cache.match(l.req).then(function (res) { return res ? res.text() : ''; }).then(function (html) {
+        var t = /<title[^>]*>([^<]*)<\\/title>/i.exec(html);
+        var fallback = decodeURIComponent(l.path.replace(/\\.html$/, '').replace(/\\/$/, '').split('/').pop() || '').replace(/[-_]+/g, ' ');
+        var dec = document.createElement('textarea');
+        dec.innerHTML = t ? t[1] : '';
+        l.title = l.path === scope ? 'Home' : dec.value.split(/\\s*[|:]\\s+/)[0].replace(/\\s*\\([^)]*\\)$/, '').trim() || fallback;
+        return l;
+      }, function () { return l; });
+    }));
+  }).then(function (links) {
     var list = document.getElementById('saved-list');
-    links.slice(0, 8).forEach(function (path) {
+    links.forEach(function (l) {
       var li = document.createElement('li'), a = document.createElement('a');
-      a.href = path;
-      a.textContent = decodeURIComponent(path.replace(/\\.html$/, '').replace(/\\/$/, '').split('/').pop() || '') || 'Home';
-      a.textContent = a.textContent.charAt(0).toUpperCase() + a.textContent.slice(1).replace(/[-_]+/g, ' ');
+      a.href = l.path;
+      a.textContent = l.title || l.path;
       li.appendChild(a);
       list.appendChild(li);
     });
