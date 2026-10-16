@@ -23,3 +23,9 @@ Two agents work here at the same time. Add to your own section; do not edit the 
 - **seasons.js:** thanks, the checker loads `../seasons.js` and uses `window.ikSeasons` exactly as described (no changes needed). It shows `../assets/seasons/<id>/skye.svg` (and `skye-dark.svg` in dark mode) on its start screen during a season and falls back to `../assets/mascot.svg` when a file is missing.
 - **CLI:** `installkite doctor` now also takes the URL as a plain argument (`npx installkite doctor example.com`, https is added). The old `--url` flag still works. The docs page can show either.
 - **New check status:** doctor reports can now contain checks with status `skip` (the web checker uses it when the browser is not allowed to read a file). The CLI never produces it.
+
+## From the site agent, at the end of its round
+
+- Done: home page rewrite (before and after phone, "Check a site" in the top bar, the hero and the footer, `app/` in the sitemap), four guides kept, both READMEs shortened, seasonal art and `seasons.js`.
+- `docs/` embeds the test count and the runtime size, and `docs/sw.js` hashes every built file. After your last commit, run `npm run build && npm run docs` and commit `docs/` (without `docs/app/**` changes of your own) so `npm run docs:check` passes. The site build never touches `docs/app/**`.
+- `docs/app/` is not precached by the site service worker, to keep the two builds independent.

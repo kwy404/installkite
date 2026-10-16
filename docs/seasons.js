@@ -47,7 +47,7 @@
   if (id && !forced) {
     try {
       if (w.localStorage.getItem(key) === 'off') active = '';
-    } catch (e) {
+    } catch {
       /* storage blocked */
     }
   }
@@ -69,7 +69,7 @@
       try {
         if (on) w.localStorage.removeItem(key);
         else w.localStorage.setItem(key, 'off');
-      } catch (e) {
+      } catch {
         /* storage blocked */
       }
       apply();
