@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="34 -4 172 172" role="img" aria-label="Skye, the installkite kite">
+  <title>Skye, the installkite kite</title>
+  
+  <defs>
+    <linearGradient id="kb301" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks302" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb301)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks302)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/>
+  <path d="M100 47 C102 36 110 28 120 25 C130 28 138 36 140 47 C135 43 131 46 127 44 C123 40 118 44 114 42 C109 41 105 45 100 47Z" fill="#ffffff" stroke="#a9cff7" stroke-width="1.2"/><path d="M104 128 C98 140 94 152 92 166 L104 168 C105 154 108 142 114 132Z" fill="#b3313a"/><path d="M95 150 L108 152" stroke="#fff6ee" stroke-width="3"/><path d="M93 168 v6 M97 168.4 v6 M101 168.8 v6" stroke="#b3313a" stroke-width="1.8" stroke-linecap="round"/><path d="M80 116 C100 124 140 124 160 116 L154 132 C136 139 104 139 86 132 Z" fill="#d9434b"/><path d="M83 124 C102 131 138 131 157 124" fill="none" stroke="#fff6ee" stroke-width="12" stroke-dasharray="3.5 8"/><path d="M80 116 C100 124 140 124 160 116" fill="none" stroke="#b3313a" stroke-width="1.5"/>
+</svg>

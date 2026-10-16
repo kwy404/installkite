@@ -194,14 +194,14 @@ export const PAPER = {
     lantern: '#ffb45e',
   },
 };
-const pal = (dark) => (dark ? PAPER.dark : PAPER.light);
+export const pal = (dark) => (dark ? PAPER.dark : PAPER.light);
 
 /** A drop shadow filter for one paper layer. */
-function shadowFilter(p, fid, { dy = 2.4, blur = 2, o = 1 } = {}) {
+export function shadowFilter(p, fid, { dy = 2.4, blur = 2, o = 1 } = {}) {
   return `<filter id="${fid}" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="${dy}" stdDeviation="${blur}" flood-color="${p.shade}" flood-opacity="${(p.shadeO * o).toFixed(2)}"/></filter>`;
 }
 /** The darker half of a fold. */
-const crease = (p, d) => `<path d="${d}" fill="#000" fill-opacity="${p.crease}"/>`;
+export const crease = (p, d) => `<path d="${d}" fill="#000" fill-opacity="${p.crease}"/>`;
 
 // ---------- Icon set: folded paper on a dog eared tile ----------
 
@@ -255,13 +255,19 @@ export const ICON_NAMES = Object.keys(ICON_GLYPHS);
 
 /** One icon (48 x 48): a folded paper glyph on a dog eared paper tile. */
 export function icon(name, { dark = false, tile = true } = {}) {
+  return tileIcon(ICON_GLYPHS[name], { dark, tile });
+}
+
+/** Any glyph, drawn with the paper palette, on the icon tile. */
+export function tileIcon(glyph, { dark = false, tile = true } = {}) {
   const p = pal(dark);
   const f = id('isf');
   const g = id('igf');
   const tileSvg = tile
     ? `<path d="M13 3 H35 L45 13 V36 a9 9 0 0 1 -9 9 H12 a9 9 0 0 1 -9 -9 V13 a10 10 0 0 1 10 -10 Z" fill="${p.tile}" stroke="${p.tileLine}" stroke-opacity="${dark ? 0.14 : 0.1}" filter="url(#${f})"/><path d="M35 3 V10 a3 3 0 0 0 3 3 H45 Z" fill="${p.tileFold}"/>`
     : '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48"><defs>${shadowFilter(p, f, { dy: 1.2, blur: 1, o: 0.8 })}${shadowFilter(p, g, { dy: 1, blur: 0.7, o: 0.9 })}</defs>${tileSvg}<g filter="url(#${g})">${ICON_GLYPHS[name](p)}</g></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48"><defs>${shadowFilter(p, f, { dy: 1.2, blur: 1, o: 0.8 })}${shadowFilter(p, g, { dy: 1, blur: 0.7, o: 0.9 })}</defs>${tileSvg}<g filter="url(#${g})">${glyph(p)}</g></svg>
+`;
 }
 
 // ---------- Scene primitives (all paper layers) ----------

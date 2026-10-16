@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="34 -4 172 172" role="img" aria-label="Skye, the installkite kite">
+  <title>Skye, the installkite kite</title>
+  
+  <defs>
+    <linearGradient id="kb245" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks246" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb245)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks246)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/>
+  <g transform="rotate(-6 120 44)"><ellipse cx="120" cy="46" rx="50" ry="10" fill="#e8c46a" /><path d="M74 47 C98 55 142 55 166 47" fill="none" stroke="#c9a24a" stroke-width="1.4" stroke-dasharray="3 3"/><path d="M71 44 l-4 -2 M70 48 l-5 1 M169 44 l4 -2 M170 48 l5 1" stroke="#c9a24a" stroke-width="1.4" stroke-linecap="round"/><path d="M96 45 C96 26 104 16 120 16 C136 16 144 26 144 45 C136 49 104 49 96 45Z" fill="#e8c46a"/><path d="M98 34 C110 37 130 37 142 34 M101 26 C112 29 128 29 139 26" fill="none" stroke="#c9a24a" stroke-width="1.3"/><path d="M96.4 39 C108 43 132 43 143.6 39 L144 45 C136 49 104 49 96 45Z" fill="#d9434b"/><g transform="rotate(12 128 25)"><rect x="123.5" y="20.5" width="9" height="8" rx="1" fill="#3b86e6"/><rect x="124.5" y="21.5" width="7" height="6" rx=".5" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width=".8" stroke-dasharray="1.4 1.2"/></g></g>
+</svg>
