@@ -1,10 +1,10 @@
 <!--meta
 {
   "slug": "pwa-icon-sizes",
-  "title": "PWA icon sizes: the complete list for Android, iOS and favicons",
-  "description": "Every PWA icon size you need: manifest icons, maskable icons and the 80% safe zone, the 180 pixel apple-touch-icon, favicon.ico and SVG favicons, plus a generator.",
-  "h1": "PWA icon sizes: the complete list",
-  "crumb": "PWA icon sizes",
+  "title": "App icon sizes and maskable icons",
+  "description": "The icon files an installable site needs, the maskable safe zone, the apple-touch-icon and favicons.",
+  "h1": "App icon sizes and maskable icons",
+  "crumb": "Icon sizes",
   "lead": "A web app needs more icons than you would guess: manifest icons for Android and desktop, maskable icons that survive circle masks, an opaque icon for iPhone, and favicons for tabs. Here is the full list and the math behind maskable padding.",
   "readTime": "8 min read",
   "faq": [
@@ -13,7 +13,7 @@
     {"q": "How much padding does a maskable icon need?", "a": "Enough that the farthest visible pixel of the artwork is within 40% of the icon size from the center. A square logo that fills its canvas must shrink to about 56.6% of the icon; a round logo to 80%."},
     {"q": "Can I use an SVG icon in the manifest?", "a": "Chromium browsers accept an SVG icon with <code>\"sizes\": \"any\"</code>, and SVG favicons work in every current browser. Keep the PNG sizes as well: iOS and many launchers only read PNG."}
   ],
-  "related": ["pwa-manifest-generator", "add-to-home-screen-ios", "make-website-installable"]
+  "related": ["make-website-installable", "add-to-home-screen-ios", "service-worker-offline-page"]
 }
 -->
 <section id="the-list"><h2>The list</h2>

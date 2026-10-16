@@ -3,10 +3,10 @@
 import { GUIDES, SITE, esc } from './layout.mjs';
 import { artTile, icon, scene } from './ui.mjs';
 
-export const UPDATED = '2026-10-13';
-const UPDATED_LABEL = 'October 13, 2026';
+export const UPDATED = '2026-10-15';
+const UPDATED_LABEL = 'October 15, 2026';
 
-export const TOPICS = { install: 'Install', basics: 'Basics', offline: 'Offline', hosting: 'Hosting' };
+export const TOPICS = { install: 'Install', offline: 'Offline', basics: 'Icons' };
 
 function crumbs(items) {
   const lis = items.map(([label, href], i) => (i === items.length - 1 ? `<li><span aria-current="page">${label}</span></li>` : `<li><a href="${href}">${label}</a></li>`)).join('');
@@ -117,7 +117,7 @@ export function indexBody(guides) {
       ${crumbs([['installkite', './'], ['Guides', '']])}
       <p class="tag-kicker"><span class="tag-hole"></span>The workshop shelf</p>
       <h1>Guides to installable, offline websites</h1>
-      <p class="lead">From the manifest and icon sizes to service workers, iOS and GitHub Pages. Each booklet explains the rule, shows the code, and how installkite handles it.</p>
+      <p class="lead">Short reads on how installing works: the checklist browsers use, iPhone and iPad, offline pages and icons. Each one shows the code and what installkite does for you.</p>
     </div>
     ${scene('shelf', { cls: 'scene head-art', eager: true })}
   </div>

@@ -1,9 +1,9 @@
 <!--meta
 {
   "slug": "service-worker-offline-page",
-  "title": "Service worker offline page: a friendly fallback that works",
-  "description": "Show an offline page with a service worker: precache it, serve it for failed navigations with a timeout, list the pages saved on the device, and test it in DevTools.",
-  "h1": "Service worker offline page: a fallback that actually helps",
+  "title": "An offline page with a service worker",
+  "description": "Precache an offline page, serve it when a navigation fails, and point visitors to the pages already saved on their device.",
+  "h1": "An offline page with a service worker",
   "crumb": "Offline page",
   "lead": "When the network is gone, a visitor should see your site, not the browser's error. A service worker can serve a friendly offline page, and with a little care it can also send people to the pages they already have.",
   "readTime": "8 min read",
@@ -13,7 +13,7 @@
     {"q": "How do I test the offline page?", "a": "In Chrome or Edge open the developer tools, Network panel, set Offline, then open a page you never visited. The Application panel lists the caches and lets you unregister the worker to start again."},
     {"q": "Does the offline page work on iPhone?", "a": "Yes. Safari on iOS supports service workers, both in the browser and in sites installed to the home screen."}
   ],
-  "related": ["pwa-tutorial", "make-website-installable", "github-pages-pwa"]
+  "related": ["make-website-installable", "add-to-home-screen-ios", "pwa-icon-sizes"]
 }
 -->
 <section id="why"><h2>Why an offline page matters</h2>
