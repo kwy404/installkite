@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { doctorLocal, doctorRemote, findServiceWorker, localLoader, withinScope, type DoctorReport } from '../src/core/doctor.js';
+import { doctorLocal, doctorRemote, findServiceWorker, localLoader, runDoctor, withinScope, type DoctorReport, type Loader } from '../src/core/doctor.js';
 import { applyPlan, planBuild, planInit } from '../src/core/project.js';
 import { createImage, encodePng } from '../src/core/png.js';
 import { LOGO_SVG, PAGE, cleanupTemp, tempSite } from './helpers.js';
@@ -172,6 +172,36 @@ describe('doctor on a live URL', () => {
     const dir = readySite({}, { startUrl: './menu.html' });
     const r = await doctorRemote('https://acme.example/', { fetch: server(dir, { headers: { 'service-worker-allowed': '/' } }) });
     expect(status(r, 'sw-scope')).toBe('pass');
+  });
+});
+
+describe('doctor with files it may not read', () => {
+  it('marks rules as skipped instead of failing them, and does not call the site installable', async () => {
+    const dir = readySite();
+    const files = localLoader([dir], 'https://acme.example', '/');
+    const load: Loader = async (url) => {
+      const res = await files(url);
+      return /\.png$|sw\.js$/.test(url) && res ? { ...res, status: 0, bytes: new Uint8Array(), blocked: 'cors' } : res;
+    };
+    const r = await runDoctor({ pageUrl: 'https://acme.example/', load, mode: 'remote' });
+    expect(status(r, 'icon-file')).toBe('skip');
+    expect(statuses(r, 'icon-file')).toHaveLength(1);
+    expect(status(r, 'apple-touch-icon')).toBe('skip');
+    expect(status(r, 'sw-fetch')).toBe('skip');
+    expect(r.checks.find((c) => c.id === 'sw-fetch')!.message).toMatch(/does not let other pages read sw\.js/);
+    expect(r.errors).toBe(0);
+    expect(r.skipped).toBe(4);
+    expect(r.installable).toBe(false);
+    expect(r.offlineReady).toBe(false);
+  });
+
+  it('keeps going when a PNG cannot be decoded', async () => {
+    const dir = readySite();
+    const png = readFileSync(join(dir, 'icons', 'maskable-192.png'));
+    writeFileSync(join(dir, 'icons', 'maskable-192.png'), png.subarray(0, 60));
+    const r = await doctorLocal(dir);
+    expect(r.checks.length).toBeGreaterThan(10);
+    expect(status(r, 'sw-fetch-handler')).toBe('pass');
   });
 });
 

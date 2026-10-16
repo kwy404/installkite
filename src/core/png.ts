@@ -3,6 +3,9 @@
 // transparency, Adam7 interlacing) to 8 bit RGBA, and encodes RGBA images
 // with per row adaptive filtering.
 import { deflateSync, inflateSync } from 'node:zlib';
+import { SIGNATURE, isPng } from './pnginfo.js';
+
+export { isPng, readPngSize } from './pnginfo.js';
 
 /** An 8 bit RGBA image: `data` holds width * height * 4 bytes, not premultiplied. */
 export interface RGBAImage {
@@ -10,8 +13,6 @@ export interface RGBAImage {
   height: number;
   data: Uint8Array;
 }
-
-const SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
 
 const CRC_TABLE = (() => {
   const t = new Uint32Array(256);
@@ -45,18 +46,6 @@ export function createImage(width: number, height: number, fill?: [number, numbe
     }
   }
   return { width, height, data };
-}
-
-/** True when the bytes start with the PNG signature. */
-export function isPng(bytes: Uint8Array): boolean {
-  return bytes.length >= 8 && SIGNATURE.every((b, i) => bytes[i] === b);
-}
-
-/** Reads width and height from the IHDR chunk without decoding the pixels. */
-export function readPngSize(bytes: Uint8Array): { width: number; height: number } {
-  if (!isPng(bytes) || bytes.length < 24) throw new Error('not a PNG file');
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  return { width: view.getUint32(16), height: view.getUint32(20) };
 }
 
 interface Header {

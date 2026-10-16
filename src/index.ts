@@ -49,5 +49,5 @@ export { generateOfflinePage, type OfflinePageOptions } from './core/offline.js'
 export { scanSite, readPageMeta, detectFramework, detectBase, normalizeBase, type ScanResult, type Framework, type Host } from './core/scan.js';
 export { readConfig, validateConfig, stringifyConfig, CONFIG_FILE, type InstallkiteConfig } from './core/config.js';
 export { planInit, planBuild, planIcons, applyPlan, expandHtml, CDN_RUNTIME, type InitAnswers, type InitPlan, type PlannedFile, type BuildResult } from './core/project.js';
-export { runDoctor, doctorLocal, doctorRemote, localLoader, remoteLoader, findServiceWorker, withinScope, type Check, type DoctorReport, type Loader } from './core/doctor.js';
+export { runDoctor, doctorLocal, doctorRemote, localLoader, remoteLoader, findServiceWorker, withinScope, normalizeSiteUrl, type Check, type DoctorReport, type Loader, type Resource, type Status } from './core/doctor.js';
 export { run } from './cli/main.js';

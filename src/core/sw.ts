@@ -43,13 +43,4 @@ export function generateServiceWorker(
   return `${lines.join('\n')}\n`;
 }
 
-/** Reads the embedded settings back out of a generated sw.js, or null. */
-export function readSwSettings(source: string): { version: string; precache: Array<[string, string]>; [k: string]: unknown } | null {
-  const m = /self\.__INSTALLKITE__\s*=\s*(\{.*?\});\s*$/m.exec(source);
-  if (!m) return null;
-  try {
-    return JSON.parse(m[1]!);
-  } catch {
-    return null;
-  }
-}
+export { readSwSettings } from './audit.js';
