@@ -77,7 +77,8 @@
     "pretest": "node scripts/ensure-build.mjs",
     "art": "node scripts/build-art.mjs",
     "docs:links": "node scripts/check-links.mjs",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "e2e": "node test/e2e/checker.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
