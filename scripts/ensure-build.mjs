@@ -10,7 +10,7 @@ const newest = (dir) =>
     const p = join(dir, e.name);
     return Math.max(t, e.isDirectory() ? newest(p) : statSync(p).mtimeMs);
   }, 0);
-const outputs = ['cli.js', 'index.js', 'sw-runtime.js', 'installkite.min.js'].map((f) => join(root, 'dist', f));
+const outputs = [...['cli.js', 'index.js', 'sw-runtime.js', 'installkite.min.js'].map((f) => join(root, 'dist', f)), join(root, 'docs', 'app', 'checker.js')];
 const stale = outputs.some((f) => !existsSync(f)) || Math.min(...outputs.map((f) => statSync(f).mtimeMs)) < Math.max(newest(join(root, 'src')), statSync(join(root, 'package.json')).mtimeMs);
 if (stale) {
   console.log('building dist/ for the tests');

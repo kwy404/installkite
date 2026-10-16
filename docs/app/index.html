@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>
+<script src="../seasons.js"></script>
+<title>installkite site checker</title>
+<meta name="description" content="Paste a link and see what a website still needs to be installed as an app and to work offline.">
+<link rel="canonical" href="https://kwy404.github.io/installkite/app/">
+<meta name="author" content="Alexandre Kohler">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="installkite">
+<meta property="og:title" content="installkite site checker">
+<meta property="og:description" content="Paste a link and see what a website still needs to be installed as an app and to work offline.">
+<meta property="og:url" content="https://kwy404.github.io/installkite/app/">
+<meta property="og:image" content="https://kwy404.github.io/installkite/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Kalam:wght@400;700&display=swap">
+<link rel="stylesheet" href="app.css">
+<script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+<script src="checker.js" defer></script>
+<script type="module" src="app.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "installkite site checker",
+  "url": "https://kwy404.github.io/installkite/app/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "Alexandre Kohler", "url": "https://github.com/kwy404" }
+}
+</script>
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#fffaf1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d1a2b" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script src="../installkite.js" data-sw="../sw.js" data-offline="badge" defer></script>
+</head>
+<body class="antialiased">
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5v7M12 17.5v.01"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v9M8 10l4 4 4-4M7 19h10"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11v6M12 7v.01"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="10.5" width="12" height="9" rx="2"/><path d="M9 10.5V8a3 3 0 0 1 6 0v2.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-paste" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5h6v2.5H9zM9 12h6M9 16h4"/></symbol>
+  <symbol id="i-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.79-1.7-2.79-1.7 0-1.96 1.33-1.96 2.7V21h-4z"/></symbol>
+</svg>
+
+<a class="skip-link" href="#check">Skip to the checker</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a href="../" class="brand"><img src="../assets/mascot-head.svg" width="34" height="34" alt=""><span class="brand-name">install<b>kite</b></span><span class="brand-tag">site checker</span></a>
+    <nav class="bar-nav" aria-label="installkite">
+      <a href="../">Home</a>
+      <a href="../docs.html">Docs</a>
+      <a href="../generator.html">Icon generator</a>
+    </nav>
+    <div class="bar-right" v-cloak>
+      <button type="button" class="season-chip" v-show="C.seasonId" @click="toggleSeason()" :aria-pressed="C.season ? 'true' : 'false'" :title="C.season ? 'Turn the seasonal theme off' : 'Turn the seasonal theme on'"><span class="season-dot" aria-hidden="true"></span><span v-text="C.seasonLabel"></span><span class="season-state" v-text="C.season ? 'on' : 'off'"></span></button>
+      <button type="button" class="icon-btn theme-btn" v-theme-toggle.cycle aria-label="Switch theme" title="Theme: system, light or dark"><svg class="ic ti-system" aria-hidden="true"><use href="#i-system"/></svg><svg class="ic ti-light" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic ti-dark" aria-hidden="true"><use href="#i-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="check" class="wrap">
+  <section class="hero" aria-labelledby="title">
+    <div class="hero-art" aria-hidden="true">
+      <img class="skye light-only" :src="mascot(false)" src="../assets/mascot.svg" data-fallback="../assets/mascot.svg" width="150" height="150" alt="">
+      <img class="skye dark-only" :src="mascot(true)" src="../assets/mascot-dark.svg" data-fallback="../assets/mascot-dark.svg" width="150" height="150" alt="">
+    </div>
+    <h1 id="title">Can your site be installed?</h1>
+    <p class="lead">Paste a link. The checker reads the page, the manifest, the icons and the service worker, then lists what is missing and how to fix it.</p>
+
+    <form class="ask" @submit.prevent="check()" novalidate>
+      <label for="url" class="sr-only">Website address</label>
+      <div class="ask-row">
+        <input id="url" class="input ask-input" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="example.com" v-model="C.input" :aria-invalid="C.error ? 'true' : 'false'" aria-describedby="ask-help">
+        <button type="submit" class="btn ask-go" :disabled="C.phase === 'checking'"><span v-text="C.phase === 'checking' ? 'Checking' : 'Check'">Check</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+      <p class="ask-error" v-cloak role="alert" v-show="C.error" v-text="C.error"></p>
+      <p id="ask-help" class="ask-help">
+        <button type="button" class="link-btn" @click="tryHere()">Try it on this site</button>
+        <span aria-hidden="true">or</span>
+        <button type="button" class="link-btn" @click="openPaste()">paste the page source instead</button>
+      </p>
+    </form>
+  </section>
+
+  <section class="idle" v-show="C.phase === 'idle'" aria-label="What the checker looks at">
+    <p class="season-note" v-cloak v-show="C.season" v-text="seasonLine()"></p>
+    <ol class="steps">
+      <li><b>A web app manifest</b><span>with a name, colors, a start page and display mode that opens in its own window.</span></li>
+      <li><b>Icons</b><span>192 and 512 pixel icons, a maskable one for Android, an apple-touch-icon for iOS and a favicon.</span></li>
+      <li><b>A service worker</b><span>that answers requests, so the app opens without a connection.</span></li>
+    </ol>
+    <p class="cors-note"><b>Good to know:</b> a browser tab may only read another site when that site allows it, a rule called CORS. Most sites do not allow it, so for them you get a one line command that runs the same check from your computer.</p>
+  </section>
+
+  <section class="busy" v-cloak v-show="C.phase === 'checking'" aria-live="polite">
+    <div class="busy-kite" aria-hidden="true"><span></span></div>
+    <p><span v-text="C.step || 'Starting'"></span></p>
+  </section>
+
+  <section class="paste paper" v-cloak v-show="C.pasteOpen" aria-labelledby="paste-title">
+    <h2 id="paste-title">Check pasted source</h2>
+    <p>Open the site in another tab and press <kbd class="kbd">Ctrl</kbd> <kbd class="kbd">U</kbd> (<kbd class="kbd">Option</kbd> <kbd class="kbd">Cmd</kbd> <kbd class="kbd">U</kbd> on a Mac) to see its source. Select all, copy and paste it below. Nothing leaves your browser.</p>
+    <label class="label" for="paste-html">Page source (HTML)</label>
+    <textarea id="paste-html" class="input paste-box" rows="6" spellcheck="false" placeholder="&lt;!doctype html&gt; ..." v-model="C.html"></textarea>
+    <label class="label" for="paste-manifest">Manifest (optional): open the file linked as rel="manifest" and paste it here</label>
+    <textarea id="paste-manifest" class="input paste-box" rows="4" spellcheck="false" placeholder="The JSON of manifest.webmanifest" v-model="C.manifest"></textarea>
+    <div class="paste-actions">
+      <button type="button" class="btn" @click="checkPasted()">Check the pasted source</button>
+      <button type="button" class="btn btn-outline" @click="C.pasteOpen = false">Close</button>
+    </div>
+  </section>
+
+  <section class="result" v-cloak v-show="C.phase === 'done' && C.result" aria-live="polite" aria-labelledby="verdict-title">
+    <div class="verdict" :class="'tone-' + tone()">
+      <span class="verdict-ic" aria-hidden="true"><svg class="ic"><use :href="'#i-' + toneIcon()"/></svg></span>
+      <div>
+        <h2 id="verdict-title" v-text="C.result ? C.result.verdict.title : ''"></h2>
+        <p v-text="C.result ? C.result.verdict.text : ''"></p>
+        <p class="tally" v-show="tally()" v-text="tally()"></p>
+      </div>
+    </div>
+
+    <div class="why paper" v-show="access() === 'blocked' || access() === 'down'">
+      <h3 v-text="access() === 'down' ? 'Check it from your computer' : 'Three ways to check it anyway'"></h3>
+      <ol class="ways">
+        <li>
+          <b>Run the full check on your computer.</b> It needs Node.js and reads everything, because the command line has no CORS rule.
+          <figure class="cmd"><code id="cmd" v-text="command()"></code><button type="button" class="cmd-copy" v-copy-from="#cmd" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></figure>
+        </li>
+        <li v-show="access() === 'blocked'">
+          <b>Paste the page source.</b> The checker reads it here, with no request to the site.
+          <button type="button" class="btn btn-outline btn-sm" @click="openPaste()"><svg class="ic" aria-hidden="true"><use href="#i-paste"/></svg>Paste the source</button>
+        </li>
+        <li v-show="access() === 'blocked'">
+          <b>If it is your site, allow reading.</b> For public pages it is safe to send this header, and then this checker can read everything:
+          <figure class="cmd"><code id="cors-header">Access-Control-Allow-Origin: *</code><button type="button" class="cmd-copy" v-copy-from="#cors-header" aria-label="Copy the header"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></figure>
+        </li>
+      </ol>
+    </div>
+
+    <div class="partial paper" v-show="access() === 'partial'">
+      <p><svg class="ic" aria-hidden="true"><use href="#i-skip"/></svg> Some files are private to the site, so their checks are marked <b>not readable</b>. Nothing is wrong with them as far as this page knows. For the full picture run:</p>
+      <figure class="cmd"><code id="cmd-partial" v-text="command()"></code><button type="button" class="cmd-copy" v-copy-from="#cmd-partial" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></figure>
+    </div>
+
+    <div class="groups">
+      <section class="group paper" v-for="g in groups()" :key="g.id">
+        <h3><span v-text="g.title"></span><small v-text="groupNote(g)" :class="g.errors ? 'bad' : g.skipped ? 'skip' : 'good'"></small></h3>
+        <ul class="checks">
+          <li v-for="(c, i) in g.checks" :key="c.id + i" class="row" :class="'st-' + c.status" :style="'--i:' + i">
+            <span class="badge" :title="label(c.status)"><svg class="ic" aria-hidden="true"><use :href="'#i-' + c.status"/></svg><span class="sr-only" v-text="label(c.status)"></span></span>
+            <div class="row-body">
+              <p class="row-title"><b v-text="c.title"></b> <span class="row-tag" v-text="label(c.status)"></span></p>
+              <p class="row-msg" v-text="c.message"></p>
+              <p class="row-fix" v-show="c.fix"><span>Fix:</span> <span v-text="c.fix || ''"></span></p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="next paper" v-show="C.result && C.result.report.errors > 0">
+      <p><b>Fix everything in one go.</b> In the project folder, this writes the manifest, every icon size, the service worker, an offline page and the head tags:</p>
+      <figure class="cmd"><code id="cmd-init">npx installkite init</code><button type="button" class="cmd-copy" v-copy-from="#cmd-init" aria-label="Copy the command"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></figure>
+    </div>
+
+    <p class="result-actions">
+      <button type="button" class="btn btn-outline btn-sm" @click="copyReport()"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span v-text="C.copied === 'report' ? 'Copied' : 'Copy the report'"></span></button>
+      <button type="button" class="btn btn-outline btn-sm" @click="again()"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Check another site</button>
+    </p>
+  </section>
+
+  <noscript><p class="paper noscript">The checker runs in your browser and needs JavaScript. Without it, run <code>npx installkite doctor example.com</code> on your computer.</p></noscript>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <nav aria-labelledby="f-more" class="foot-more">
+      <h2 id="f-more">More from kwy404</h2>
+      <ul>
+        <li><a href="https://kwy404.github.io/monsoon/">Monsoon</a></li>
+        <li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a></li>
+        <li><a href="https://kwy404.github.io/breakhound/">breakhound</a></li>
+        <li><a href="https://kwy404.github.io/vueleap/">vueleap</a></li>
+        <li><a href="https://kwy404.github.io/graphemely/">graphemely</a></li>
+        <li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a></li>
+        <li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a></li>
+        <li><a href="https://kwy404.github.io/cookieowl/">cookieowl</a></li>
+        <li><a href="https://kwy404.github.io/a11ymedic/">a11ymedic</a></li>
+        <li><a href="https://kwy404.github.io/fontsketch/">fontsketch</a></li>
+        <li><a href="https://kwy404.github.io/kastor/">kastor</a></li>
+      </ul>
+    </nav>
+    <p class="foot-made">Made by <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a><a href="https://github.com/kwy404" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="ic" aria-hidden="true"><use href="#i-github"/></svg></a><a href="https://www.linkedin.com/in/alexandre-silva-173687256/" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="ic" aria-hidden="true"><use href="#i-linkedin"/></svg></a></p>
+    <p class="foot-built">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>. The checks are the same rules as <a href="../docs.html#doctor">installkite doctor</a>. MIT licensed.</p>
+  </div>
+</footer>
+</body>
+</html>

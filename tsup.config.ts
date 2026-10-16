@@ -20,6 +20,8 @@ export default defineConfig([
   // The script tag runtime: readable and minified.
   { ...browser, entry: { installkite: 'src/runtime/global.ts' }, minify: false },
   { ...browser, entry: { 'installkite.min': 'src/runtime/global.ts' }, minify: true },
+  // The web checker page (docs/app/), from the same rules as doctor.
+  { ...browser, entry: { checker: 'src/web/global.ts' }, minify: true, outDir: 'docs/app' },
   // The runtime as an ES module for bundlers.
   { entry: { runtime: 'src/runtime/index.ts' }, format: ['esm'], platform: 'browser', target: 'es2020', dts: true, define, outExtension: js },
   // The Node API and the CLI.
