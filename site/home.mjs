@@ -1,8 +1,9 @@
-// The home page: the paper kite workshop. The hero is a live demo: the
-// visitor presses Install (or drags the fold slider) and the bakery web page
-// folds like origami into an app icon that flies onto a paper phone. Then a
-// kite assembly manual lays out every generated part with its real code, and
-// "cut the string" takes the network away while the app keeps working.
+// The home page: the paper kite workshop. The hero is a before and after:
+// a paper phone shows the bakery site in a browser tab, the install prompt,
+// the icon landing on the home screen, the splash screen and the app in its
+// own window, on a loop. Then a kite assembly manual lays out every generated
+// part with its real code, and "cut the string" takes the network away while
+// the app keeps working.
 import { GUIDES, GITHUB, SITE, esc, hills } from './layout.mjs';
 import { artTile, icon, scene } from './ui.mjs';
 
@@ -12,8 +13,8 @@ export const FAQ = [
     'A browser offers to install a site when it has a web app manifest with a name, a start URL, a standalone display mode and 192 and 512 pixel icons, is served over HTTPS and registers a service worker. <code>npx installkite init</code> writes all of that and links it from your pages, then <code>npx installkite doctor</code> checks each rule.',
   ],
   [
-    'Can I convert a website to an app without a framework?',
-    'Yes. installkite works on plain HTML folders, and on sites built with Vite, Next.js (static export), Astro, WordPress or Laravel. Your site keeps working as a website, and visitors can also install it as an app with its own icon and window.',
+    'Does it work with my site?',
+    'It works on plain HTML folders and on sites built with Vite, Next.js (static export), Astro, WordPress or Laravel, hosted anywhere with HTTPS, including GitHub Pages and Netlify. Your site keeps working as a website for everyone who does not install it.',
   ],
   [
     'Does it work on iPhone and iPad?',
@@ -25,48 +26,66 @@ export const FAQ = [
   ],
   [
     'How do updates reach people who installed the app?',
-    'Run <code>npx installkite build</code> after each site build. It re-hashes the files and rewrites sw.js, the browser notices the new worker, and the runtime shows a "Refresh to update" toast. Unchanged files are copied from the old cache, not downloaded again.',
+    'Run <code>npx installkite build</code> after each site build. It hashes the files again and rewrites sw.js, the browser notices the new worker, and the runtime shows a "Refresh to update" toast. Unchanged files are copied from the old cache, not downloaded again.',
   ],
-  [
-    'Does it work on GitHub Pages and Netlify?',
-    'Yes. installkite detects a GitHub Pages project site from your git remote and writes the <code>/repo/</code> base path into every URL, or use <code>--relative</code> to work under any folder. Both hosts serve HTTPS, which installs need.',
-  ],
-  ['Is installkite free?', 'Yes, it is free and open source under the MIT license, with no account, no tracking and no runtime dependencies. The runtime script is about 4.4 kB gzipped.'],
+  ['Is installkite free?', 'Yes, it is free and open source under the MIT license, with no account, no tracking and no runtime dependencies.'],
 ];
 
-const FOLD_STEPS = [
-  ['Fold', 'The manifest and the icons turn the page into an app: a name, colors and a square icon.'],
-  ['Fly', 'installkite.js catches the install prompt. One press and the app takes off.'],
-  ['Land', 'The app lands on the home screen with its own icon, window and splash screen.'],
-];
-
-/** The Acme Bakery page, drawn small. Each fold quadrant shows a quarter of it. */
+/** The Acme Bakery page, drawn small: the page inside the browser and the app. */
 function miniSite() {
   return `<div class="mini"><div class="mini-bar"><span class="mini-logo"></span><b>Acme Bakery</b><span class="mini-nav"><i></i><i></i><i></i></span></div><div class="mini-hero"><b>Fresh bread daily</b><i></i><i class="short"></i><span class="mini-btn">Order now</span></div><div class="mini-cards"><span style="--b:#e9b872"><em>Sourdough</em></span><span style="--b:#f2c36b"><em>Croissant</em></span><span style="--b:#b9845a"><em>Rye loaf</em></span></div></div>`;
 }
 
-function foldStage() {
-  const face = `<div class="face">${miniSite()}</div>`;
-  const back = '<div class="face back"></div>';
+/**
+ * The before and after: one paper phone, five screens. site.js moves
+ * data-phase through site, prompt, home, splash and app on a loop.
+ */
+function beforeAfter() {
   const tiles = ['#c5dcc0', '#d9c9ea', '#a9cff7', '#f2a3a8', '#e8d3b0', '#c5dcc0', '#d9c9ea', '#e8d3b0', '#a9cff7', '#f2a3a8', '#c5dcc0', '#d9c9ea']
-    .map((c, i) => (i === 4 ? '<span class="ph-tile ph-slot" id="fold-slot"><b class="ph-label">Acme</b></span>' : `<span class="ph-tile" style="--t:${c}"></span>`))
+    .map((c, i) => (i === 5 ? '<span class="ba-tile ba-slot"><span class="acme-ic"></span><b>Acme</b><i class="ba-tap"></i></span>' : `<span class="ba-tile" style="--t:${c}"></span>`))
     .join('');
-  return `<div class="fold-stage" id="fold-stage" style="--f:0">
-  <svg class="fold-path" aria-hidden="true" focusable="false"><path id="fold-path" d="M0 0"/></svg>
-  <div class="fold-page-wrap">
-    <p class="hand fold-note">acme-bakery.example</p>
-    <div class="fold-page" id="fold-page" aria-hidden="true">
-      <div class="fq fq-tl">${face}</div>
-      <div class="fq fq-bl">${face}${back}</div>
-      <div class="fold-right"><div class="fq fq-tr">${face}${back}</div><div class="fq fq-br">${face}${back}</div></div>
+  const status = (cls = '') => `<div class="ba-status ${cls}"><span>9:41</span><span class="ba-sig">${icon('signal')}${icon('battery')}</span></div>`;
+  return `<div class="ba" id="ba" data-phase="site">
+  <div class="ba-stage">
+    <span class="ba-skye" aria-hidden="true"><img class="art-light" src="assets/mascot.svg" width="240" height="240" alt="" data-season-art="skye"><img class="art-dark" src="assets/mascot-dark.svg" width="240" height="240" alt="" loading="lazy" data-season-art="skye-dark"></span>
+    <div class="ba-phone" role="img" aria-label="A phone that shows the Acme Bakery website in a browser tab, then installs it as an app with its own icon and window">
+      <div class="ba-screen" aria-hidden="true">
+        <div class="ba-browser">
+          ${status()}
+          <div class="ba-url"><span class="ba-lock"></span><span>acme-bakery.example</span>${icon('refresh')}</div>
+          <div class="ba-page">${miniSite()}</div>
+          <div class="ba-tools"><i></i><i></i>${icon('upload')}<i class="sq"></i><i class="dots"></i></div>
+          <div class="ba-sheet"><span class="acme-ic"></span><b>Install Acme Bakery?</b><small>acme-bakery.example</small><span class="ba-sheet-btns"><span>Cancel</span><span class="ba-go">Install<i class="ba-tap"></i></span></span></div>
+        </div>
+        <div class="ba-home">
+          ${status('ba-status-dark')}
+          <div class="ba-grid">${tiles}</div>
+          <div class="ba-dock"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="ba-splash"><span class="acme-ic"></span><b>Acme Bakery</b></div>
+        <div class="ba-app">
+          ${status('ba-status-app')}
+          <div class="ba-appbar"><span class="acme-ic sm"></span><b>Acme Bakery</b></div>
+          <div class="ba-page">${miniSite()}</div>
+          <div class="ba-pill">${icon('check')}Opens offline</div>
+          <div class="ba-tabs"><span class="on">Home</span><span>Menu</span><span>Order</span></div>
+        </div>
+      </div>
     </div>
-    <span class="fold-home" id="fold-home" aria-hidden="true"></span>
   </div>
-  <div class="fold-icon" id="fold-icon" aria-hidden="true"><span class="acme-ic"></span><span class="fold-tail"><i></i><i></i><i></i></span></div>
-  <div class="paper-phone" role="img" aria-label="A paper phone home screen with an empty slot for the Acme Bakery app">
-    <div class="ph-screen"><div class="ph-status"><span>9:41</span><span class="ph-dots"><i></i><i></i><i></i></span></div><div class="ph-grid">${tiles}</div><div class="ph-dock"><i></i><i></i><i></i><i></i></div></div>
+  <div class="ba-side">
+    <button type="button" class="ba-note ba-before" @click="baShow('before')" :aria-pressed="H.ba === 'before' ? 'true' : 'false'" aria-pressed="true">
+      <span class="ba-label">Before</span>
+      <b>A tab in the browser</b>
+      <small>An address bar and browser buttons around your page. Gone when the tab closes.</small>
+    </button>
+    <button type="button" class="ba-note ba-after" @click="baShow('after')" :aria-pressed="H.ba === 'after' ? 'true' : 'false'" aria-pressed="false">
+      <span class="ba-label">After</span>
+      <b>An app on the home screen</b>
+      <small>Its own icon, splash screen and window. It opens even with no network.</small>
+    </button>
+    <button type="button" class="btn btn-ghost btn-sm ba-play" @click="baToggle()" :aria-label="H.baPlay ? 'Pause the animation' : 'Play the animation'" aria-label="Pause the animation"><span class="ba-pause" v-show="H.baPlay">${icon('pause')}</span><span class="ba-resume" v-show="!H.baPlay" style="display:none">${icon('play')}</span><span v-text="H.baPlay ? 'Pause' : 'Play'">Pause</span></button>
   </div>
-  <div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </div>`;
 }
 
@@ -165,7 +184,6 @@ function cutScene() {
 }
 
 export function homeBody(ctx) {
-  const steps = FOLD_STEPS.map(([t, d], i) => `<li :class="{ 'is-done': H.stage > ${i}, 'is-now': H.stage === ${i} }"><span class="step-no">${i + 1}</span><span><b>${t}</b><small>${d}</small></span></li>`).join('');
   const strategies = [
     ['Precached files', 'cache first', 'Built pages, CSS, JS and icons are saved on install, each with a content hash. A new version only fetches what changed.', ['install', 'cache', 'serve']],
     ['Page navigations', 'network first, 3 s', 'Fresh HTML when the network answers in time. On a slow or cut string: the cached page, then the offline page.', ['network', 'timeout', 'cache', 'offline']],
@@ -182,6 +200,13 @@ export function homeBody(ctx) {
   const recipes = ['Plain HTML', 'Vite', 'Next.js', 'Astro', 'WordPress', 'Laravel', 'GitHub Pages', 'Netlify']
     .map((n, i) => `<li style="--r:${[-4, 3, -2, 5, -5, 2, -3, 4][i]}deg;--y:${Math.round(2 * ((i + 0.5) / 8) * (1 - (i + 0.5) / 8) * 52)}px"><a class="peg-tag" href="docs.html#recipe-${n.toLowerCase().replace(/[^a-z]+/g, '-').replace(/-$/, '')}"><span class="peg" aria-hidden="true"></span>${n}</a></li>`)
     .join('');
+  const tools = [
+    ['doctor', 'Check a site', 'Paste a URL and see what it still needs to install, rule by rule, with a fix for each one. Or run <code>npx installkite doctor</code> on the files.', 'app/', 'Open the checker'],
+    ['icons', 'Make the icons', 'Drop a logo, see it under every Android mask and on an iPhone home screen, then download every size, the manifest and the head tags.', 'generator.html', 'Open the generator'],
+    ['install', 'Add your own button', 'One script tag adds the install button, the iPhone steps, the update toast and the offline badge. Each part is optional.', 'docs.html#runtime', 'Read the runtime docs'],
+  ]
+    .map(([ic, t, d, href, cta]) => `<a class="tool-card" href="${href}">${artTile(ic, 'art-ic tool-ic')}<span><b>${t}</b><small>${d}</small><em>${cta}${icon('arrow')}</em></span></a>`)
+    .join('');
   return `<section class="hero" id="demo" v-data>
   <div class="hero-sky" aria-hidden="true">
     <span class="sun"></span>
@@ -192,22 +217,15 @@ export function homeBody(ctx) {
   </div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="tag-kicker"><span class="tag-hole"></span>Free and open source, one command</p>
-      <h1>Make any website <em>installable</em> and offline capable</h1>
-      <p class="lead">installkite writes the web app manifest, every icon size from one image, a service worker with an offline page and the head tags. Your site folds into an app that installs on Android, iPhone, Windows and macOS.</p>
+      <p class="tag-kicker"><span class="tag-hole"></span>Free and open source</p>
+      <h1>Turn your website into an <em>app</em></h1>
+      <p class="lead">Run one command in your site folder. installkite adds what a browser needs to install your site on a phone or a computer and open it with no network. Nothing changes for visitors who just browse.</p>
       <div class="ticket"><span class="ticket-dollar" aria-hidden="true">$</span><code id="hero-cmd">npx installkite init</code><button type="button" class="ticket-copy" v-copy-from="#hero-cmd" aria-label="Copy the command">${icon('copy')}<span>Copy</span></button></div>
-      <div class="hero-cta"><a href="#what" class="btn btn-primary">See what it writes${icon('arrow')}</a><a href="generator.html" class="btn btn-outline">${icon('image')}Icon and manifest generator</a></div>
+      <div class="hero-cta"><a href="#what" class="btn btn-primary">See what it writes${icon('arrow')}</a><a href="app/" class="btn btn-outline">${icon('search')}Check a site</a></div>
       <ul class="hero-facts hand"><li><b>${esc(ctx.sizes.runtime)}</b> runtime, gzipped</li><li><b>0</b> runtime dependencies</li><li><b>${ctx.tests}</b> tests</li></ul>
     </div>
     <div class="hero-demo">
-      ${foldStage()}
-      <div class="fold-controls">
-        <button type="button" class="btn btn-primary" @click="foldGo()" :disabled="H.stage > 2">${icon('download')}<span v-text="H.stage > 2 ? 'Installed' : 'Install Acme Bakery'">Install Acme Bakery</span></button>
-        <label class="fold-range"><span class="hand">or fold it by hand</span><input type="range" id="fold-range" class="range range-sm" min="0" max="100" step="1" value="0" aria-label="Fold the page into an app" @input="foldTo($event.target.value / 100)"></label>
-        <button type="button" class="btn btn-ghost btn-sm" @click="foldReset()" aria-label="Unfold the page">${icon('reset')}<span class="reset-label">Unfold</span></button>
-      </div>
-      <ol class="fold-steps">${steps}</ol>
-      <p class="sr-only" aria-live="polite" v-text="H.say"></p>
+      ${beforeAfter()}
     </div>
   </div>
   ${hills('hills hero-hills')}
@@ -219,7 +237,7 @@ export function homeBody(ctx) {
       <div>
         <p class="tag-kicker"><span class="tag-hole"></span>The kit, part by part</p>
         <h2>One command writes all of it</h2>
-        <p class="lead">Run it in any static site folder, or in a Vite, Next.js or Astro project. It scans your pages, takes the name and colors from your home page, finds your logo and asks a few questions (or none with <code>--yes</code>). Run it twice and nothing changes. Pick a part to see the real file it wrote for a three page bakery site.</p>
+        <p class="lead">It reads your pages for the name, colors and logo, asks a few questions (or none with <code>--yes</code>) and writes the files. Run it again and nothing is duplicated. Pick a part to see the real file it wrote for a small bakery site.</p>
       </div>
       ${scene('workbench', { cls: 'scene scene-head' })}
     </div>
@@ -255,58 +273,13 @@ export function homeBody(ctx) {
   </div>
 </section>
 
-<section class="band" id="doctor">
-  <div class="wrap two">
-    <div>
-      <p class="tag-kicker"><span class="tag-hole"></span>installkite doctor</p>
-      <h2>A pre flight inspection, with fixes</h2>
-      <p class="lead">Doctor checks the rules browsers use to decide whether a site can be installed, then the parts that make it work offline. Every failure comes with the fix. Point it at the files on disk or at a live URL with <code>--url</code>.</p>
-      ${scene('inspection', { cls: 'scene scene-side' })}
+<section class="band" id="tools">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="tag-kicker"><span class="tag-hole"></span>Also in the kit</p>
+      <h2>Check, draw and fine tune</h2>
     </div>
-    <div class="term-col">
-      <div class="tabs tabs-boxed doctor-tabs" role="tablist">
-        <input type="radio" name="doctor-tabs" class="tab" aria-label="Before init" checked>
-        <div class="tab-content" role="tabpanel">${ctx.frames.doctorBefore}</div>
-        <input type="radio" name="doctor-tabs" class="tab" aria-label="After init">
-        <div class="tab-content" role="tabpanel">${ctx.frames.doctorAfter}</div>
-      </div>
-      <ul class="checks">
-        <li>${icon('check')}<span>Manifest fields, icon files and their real pixel sizes</span></li>
-        <li>${icon('check')}<span>HTTPS, scope, start_url reachable and inside scope</span></li>
-        <li>${icon('check')}<span>Service worker registered, scope, fetch handler, stale precache</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="band band-kraft" id="runtime">
-  <div class="wrap two">
-    <div>
-      <p class="tag-kicker"><span class="tag-hole"></span>installkite.js</p>
-      <h2>A runtime the size of a small image</h2>
-      <p class="lead">One script tag registers the service worker and adds the install button, the iOS sheet, the update toast and the offline badge. Each part is optional, styled from your theme color and translatable. Listen to its events to build your own install flow.</p>
-      ${ctx.frames.runtime}
-    </div>
-    <div class="cutouts" aria-label="Runtime interface previews">
-      <div class="cutout co-fab"><span class="tape" aria-hidden="true"></span><span class="uip-go">${icon('download')}Install app</span><span class="uip-x">${icon('x')}</span></div>
-      <div class="cutout co-toast"><span class="tape" aria-hidden="true"></span><span>A new version is available</span><span class="uip-go">Refresh</span></div>
-      <div class="cutout co-badge"><span class="tape" aria-hidden="true"></span><i></i>You are offline</div>
-      <div class="cutout co-sheet"><span class="tape" aria-hidden="true"></span><b>Add to your Home Screen</b><span>${icon('upload')}Tap the Share button in the toolbar</span><span>${icon('sparkle')}Tap "Add to Home Screen"</span><span>${icon('check')}Tap "Add" in the top corner</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="generator-teaser">
-  <div class="wrap mat-teaser">
-    <div class="mat-mini" aria-hidden="true">
-      <img class="mask m-circle" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-squircle" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-rounded" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy"><img class="mask m-drop" src="icons/maskable-192.png" width="192" height="192" alt="" loading="lazy">
-    </div>
-    <div>
-      <p class="tag-kicker"><span class="tag-hole"></span>In your browser, nothing uploaded</p>
-      <h2>Free PWA manifest and icon generator</h2>
-      <p class="lead">Lay your logo on the cutting mat, type a name, pick colors. Preview the icon under every Android mask, on the iOS home screen and the splash screen, then download a zip with the manifest, all icon sizes, favicon.ico and the head tags.</p>
-      <a href="generator.html" class="btn btn-primary">${icon('scissors')}Open the cutting mat</a>
-    </div>
+    <div class="tools">${tools}</div>
   </div>
 </section>
 
@@ -326,11 +299,11 @@ export function homeBody(ctx) {
       <div>
         <p class="tag-kicker"><span class="tag-hole"></span>Guides</p>
         <h2>Booklets from the workshop shelf</h2>
-        <p class="lead">Each guide explains one rule of installable websites, shows the code and how installkite handles it.</p>
+        <p class="lead">Short reads on how installing works, with the code and what installkite does for you.</p>
       </div>
       ${scene('shelf', { cls: 'scene scene-head' })}
     </div>
-    <div class="booklets">${guides}</div>
+    <div class="booklets two-col">${guides}</div>
   </div>
 </section>
 
@@ -338,7 +311,7 @@ export function homeBody(ctx) {
   <div class="wrap narrow-wrap">
     <div class="section-head center">
       <p class="tag-kicker"><span class="tag-hole"></span>FAQ</p>
-      <h2>Questions people search for</h2>
+      <h2>Questions</h2>
     </div>
     <div class="accordion notes collapse-plus">${faq}</div>
   </div>
@@ -371,7 +344,7 @@ export function homeJsonLd() {
       {
         '@type': 'SoftwareApplication',
         name: 'installkite',
-        description: 'Make any website installable and offline capable with one line: web app manifest, every PWA icon size, a service worker with an offline page, head tags and a tiny install runtime.',
+        description: 'Makes a website installable and offline capable with one command.',
         url: SITE,
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Windows, macOS, Linux',

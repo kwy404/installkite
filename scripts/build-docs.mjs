@@ -2,7 +2,8 @@
 //   site/*.mjs          layout, home, generator, docs, guide templates, UI icons
 //   assets/art/         workshop scenes from scripts/build-art.mjs (npm run art)
 //   site/guides/*.html  guide sources: a meta comment, then prose sections
-//   site/static/*       site.css, site.js and generator.js, copied as is
+//   site/static/*       site.css, site.js, seasons.js and generator.js, copied as is
+//   assets/seasons/     the seasonal art from scripts/season-art.mjs
 // Terminal output on the pages is real: the build runs the installkite CLI
 // (dist/cli.js) on scripts/fixture/acme-bakery. Code samples are highlighted
 // at build time with Shiki (light-plus and dark-plus). The site installs
@@ -326,7 +327,7 @@ out['index.html'] = page(
     path: '',
     nav: '',
     title: 'installkite: make any website installable and offline (PWA in one line)',
-    description: 'Make any website installable and offline capable with one command: web app manifest, every PWA icon size, service worker, offline page and an install button.',
+    description: 'installkite makes a website installable and offline capable with one command.',
     jsonld: homeJsonLd(),
   },
   homeBody({
@@ -354,7 +355,7 @@ out['generator.html'] = page(
     path: 'generator.html',
     nav: 'generator',
     title: 'Free PWA manifest and icon generator (maskable, favicon, iOS)',
-    description: 'Generate a web app manifest and every PWA icon size in your browser: maskable icons with safe zone preview, apple-touch-icon, favicon.ico, zip download.',
+    description: 'Make a web app manifest and app icons from one image, in your browser. Nothing is uploaded.',
     jsonld: generatorJsonLd(),
     scripts: ['generator.js'],
   },
@@ -368,7 +369,7 @@ out['docs.html'] = page(
     path: 'docs.html',
     nav: 'docs',
     title: 'installkite docs: CLI, runtime, service worker and recipes',
-    description: 'Every installkite command and flag, the config file, the install runtime API, service worker strategies, doctor rules and recipes for Vite, Next.js, Astro and more.',
+    description: 'The installkite commands, options, config file, runtime and service worker.',
     jsonld: docsJsonLd(),
   },
   docsBody({ frame, dryRun, doctorJson: doctorExcerpt, configSample, swSample, runtimeApi, nodeApi }),
@@ -388,7 +389,7 @@ out['guides.html'] = page(
     path: 'guides.html',
     nav: 'guides',
     title: 'PWA guides: installable websites, offline pages and icons',
-    description: 'Guides to make a website installable: manifest fields, PWA icon sizes, service worker offline pages, iOS Add to Home Screen and GitHub Pages.',
+    description: 'Four short guides: the install checklist, iPhone and iPad, offline pages and icons.',
     jsonld: indexJsonLd(guides),
   },
   indexBody(guides),
@@ -437,7 +438,8 @@ for (const [name, html] of Object.entries(out)) files[name] = ik.injectHead(html
 // ---------- Search index, sitemap, schema ----------
 
 const search = [];
-search.push({ kind: 'Page', title: 'Live demo', sub: 'Install a site and go offline', url: './#demo' });
+search.push({ kind: 'Page', title: 'Before and after', sub: 'A website becoming an app', url: './#demo' });
+search.push({ kind: 'Page', title: 'Site checker', sub: 'Paste a URL and see what it is missing', url: 'app/' });
 search.push({ kind: 'Page', title: 'Manifest and icon generator', sub: 'Drop a logo, download a zip', url: 'generator.html' });
 search.push({ kind: 'Page', title: 'Docs', sub: 'CLI, config, runtime, service worker', url: 'docs.html' });
 search.push({ kind: 'Page', title: 'Guides', sub: 'Every guide', url: 'guides.html' });
@@ -451,7 +453,8 @@ for (const g of GUIDES) {
 }
 for (const [q] of FAQ) search.push({ kind: 'Question', title: q, sub: 'Home FAQ', url: './#faq' });
 
-const urls = ['', 'generator.html', 'docs.html', 'guides.html', ...GUIDES.map((g) => `${g.slug}.html`)];
+// The site checker in docs/app/ is written by hand, not by this build.
+const urls = ['', ...(existsSync(join(docs, 'app', 'index.html')) ? ['app/'] : []), 'generator.html', 'docs.html', 'guides.html', ...GUIDES.map((g) => `${g.slug}.html`)];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${UPDATED}</lastmod><changefreq>${u ? 'monthly' : 'weekly'}</changefreq><priority>${u === '' ? '1.0' : u.endsWith('generator.html') || u === 'docs.html' ? '0.9' : '0.8'}</priority></url>`).join('\n')}
@@ -532,20 +535,24 @@ Object.assign(files, {
   '.nojekyll': '',
   'site.css': readFileSync(join(root, 'site', 'static', 'site.css'), 'utf8'),
   'site.js': readFileSync(join(root, 'site', 'static', 'site.js'), 'utf8'),
+  'seasons.js': readFileSync(join(root, 'site', 'static', 'seasons.js'), 'utf8'),
   'generator.js': readFileSync(join(root, 'site', 'static', 'generator.js'), 'utf8'),
   'assets/mascot.svg': readFileSync(join(root, 'assets', 'mascot.svg'), 'utf8'),
   'assets/mascot-dark.svg': readFileSync(join(root, 'assets', 'mascot-dark.svg'), 'utf8'),
   'assets/mascot-head.svg': readFileSync(join(root, 'assets', 'mascot-head.svg'), 'utf8'),
 });
-// The workshop scenes, light and dark (written by npm run art).
+// The workshop scenes, light and dark, and the seasonal art (written by npm run art).
 for (const mode of ['light', 'dark']) {
   for (const f of readdirSync(join(root, 'assets', 'art', mode))) files[`assets/art/${mode}/${f}`] = readFileSync(join(root, 'assets', 'art', mode, f), 'utf8');
+}
+for (const id of readdirSync(join(root, 'assets', 'seasons'))) {
+  for (const f of readdirSync(join(root, 'assets', 'seasons', id))) files[`assets/seasons/${id}/${f}`] = readFileSync(join(root, 'assets', 'seasons', id, f), 'utf8');
 }
 
 // The service worker, over the final files.
 const PRECACHE = /\.(html|css|js|webmanifest|svg)$|^icons\/icon-(192|512)\.png$|^favicon|^apple-touch-icon|^search\.json$/;
 const entries = Object.entries(files)
-  .filter(([name]) => PRECACHE.test(name) && name !== 'sw.js' && name !== '404.html')
+  .filter(([name]) => PRECACHE.test(name) && !name.startsWith('assets/seasons/') && name !== 'sw.js' && name !== '404.html')
   .map(([name, content]) => ({ url: name, revision: ik.revisionOf(content) }))
   .sort((a, b) => (a.url < b.url ? -1 : 1));
 files['sw.js'] = ik.generateServiceWorker(entries, { navigationTimeout: 2500 }, { version: ik.VERSION });

@@ -16,14 +16,10 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
 /** The guides, in reading order. `icon` names an icon from the art set, `art` a workshop scene. */
 export const GUIDES = [
-  { slug: 'make-website-installable', short: 'Make a website installable', icon: 'install', art: 'meadow', topic: 'install' },
-  { slug: 'convert-website-to-app', short: 'Convert a website to an app', icon: 'kite', art: 'fold', topic: 'install' },
-  { slug: 'pwa-tutorial', short: 'PWA tutorial', icon: 'cli', art: 'workbench', topic: 'basics' },
-  { slug: 'service-worker-offline-page', short: 'Offline page with a service worker', icon: 'offline', art: 'cut-string', topic: 'offline' },
-  { slug: 'add-to-home-screen-ios', short: 'Add to Home Screen on iOS', icon: 'ios-share', art: 'meadow', topic: 'install' },
-  { slug: 'pwa-manifest-generator', short: 'PWA manifest generator', icon: 'manifest', art: 'pattern-envelope', topic: 'basics' },
-  { slug: 'pwa-icon-sizes', short: 'PWA icon sizes', icon: 'icons', art: 'cutting-mat', topic: 'basics' },
-  { slug: 'github-pages-pwa', short: 'GitHub Pages PWA', icon: 'github-pages', art: 'takeoff', topic: 'hosting' },
+  { slug: 'make-website-installable', short: 'Making a site installable', icon: 'install', art: 'meadow', topic: 'install' },
+  { slug: 'add-to-home-screen-ios', short: 'iPhone and iPad', icon: 'ios-share', art: 'fold', topic: 'install' },
+  { slug: 'service-worker-offline-page', short: 'Offline page', icon: 'offline', art: 'cut-string', topic: 'offline' },
+  { slug: 'pwa-icon-sizes', short: 'Icon sizes', icon: 'icons', art: 'cutting-mat', topic: 'basics' },
 ];
 
 export const MORE = [
@@ -55,6 +51,7 @@ export function head(p) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 ${THEME_SNIPPET}
+<script src="seasons.js"></script>
 <title>${esc(p.title)}</title>
 <meta name="description" content="${esc(p.description)}">
 ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${url}">`}
@@ -86,6 +83,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" 
 
 const NAV = [
   ['demo', 'Demo', './#demo'],
+  ['app', 'Check a site', 'app/'],
   ['generator', 'Generator', 'generator.html'],
   ['docs', 'Docs', 'docs.html'],
   ['guides', 'Guides', 'guides.html'],
@@ -150,11 +148,11 @@ export function footer() {
     <div class="foot-grid">
       <div class="foot-about">
         <a href="./" class="brand"><img src="assets/mascot-head.svg" width="40" height="40" alt="" loading="lazy"><span class="brand-name">install<b>kite</b></span></a>
-        <p>One command folds any website into an installable, offline capable app: manifest, every icon size, a service worker, an offline page and the head tags. Free and open source.</p>
+        <p>One command turns your website into an app people can install and open offline. Free and open source.</p>
         <p class="foot-links"><a href="${GITHUB}">${icon('github')}GitHub</a><a href="${NPM}">${icon('npm')}npm</a><a href="${GITHUB}/blob/main/CHANGELOG.md">${icon('book')}Changelog</a></p>
       </div>
       <nav aria-labelledby="f-tool"><h2 id="f-tool" class="foot-title">installkite</h2><ul>
-        <li><a href="./#demo">Live demo</a></li><li><a href="./#what">What it writes</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
+        <li><a href="./#demo">Before and after</a></li><li><a href="app/">Site checker</a></li><li><a href="./#what">What it writes</a></li><li><a href="generator.html">Manifest and icon generator</a></li><li><a href="docs.html">CLI and API docs</a></li><li><a href="docs.html#recipes">Framework recipes</a></li><li><a href="docs.html#doctor">installkite doctor</a></li><li><a href="./#faq">FAQ</a></li>
       </ul></nav>
       <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul>${guides}</ul></nav>
       <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more">${more}</ul></nav>

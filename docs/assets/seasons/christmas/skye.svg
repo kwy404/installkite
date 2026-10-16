@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Skye, the installkite kite: with a snow cap and a striped scarf, in falling snow">
+  <title>Skye, the installkite kite: with a snow cap and a striped scarf, in falling snow</title>
+  
+  <path d="M22 70 Q40 62 56 70 M14 98 Q30 92 44 98 M28 126 Q42 120 54 126" fill="none" stroke="#8cc8ff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M141 116 Q190 168 236 236" fill="none" stroke="#3b5579" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+  <path d="M120 154 C112 170 134 180 120 198 C108 213 92 214 82 230" fill="none" stroke="#3b5579" stroke-width="2.6" stroke-linecap="round"/>
+  <g transform="translate(124 172) rotate(-12)">
+    <defs><linearGradient id="ab291" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-9.5" y="-9.5" width="19" height="19" rx="5.32" fill="url(#ab291)"/>
+    <path d="M0 -4.855555555555555 V3.588888888888889 M-3.8000000000000003 0.21111111111111114 L0 4.011111111111111 L3.8000000000000003 0.21111111111111114" fill="none" stroke="#fff" stroke-width="2.216666666666667" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(110 205) rotate(14)">
+    <defs><linearGradient id="ab292" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-8" y="-8" width="16" height="16" rx="4.48" fill="url(#ab292)"/>
+    <path d="M0 -4.088888888888889 V3.022222222222222 M-3.1999999999999997 0.17777777777777778 L0 3.3777777777777773 L3.1999999999999997 0.17777777777777778" fill="none" stroke="#fff" stroke-width="1.8666666666666667" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(84 228) rotate(-8)">
+    <defs><linearGradient id="ab293" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-6.5" y="-6.5" width="13" height="13" rx="3.6400000000000006" fill="url(#ab293)"/>
+    <path d="M0 -3.322222222222222 V2.4555555555555553 M-2.6 0.14444444444444446 L0 2.7444444444444445 L2.6 0.14444444444444446" fill="none" stroke="#fff" stroke-width="1.5166666666666666" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <linearGradient id="kb294" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks295" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb294)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks295)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/>
+  <path d="M100 47 C102 36 110 28 120 25 C130 28 138 36 140 47 C135 43 131 46 127 44 C123 40 118 44 114 42 C109 41 105 45 100 47Z" fill="#ffffff" stroke="#a9cff7" stroke-width="1.2"/><path d="M104 128 C98 140 94 152 92 166 L104 168 C105 154 108 142 114 132Z" fill="#b3313a"/><path d="M95 150 L108 152" stroke="#fff6ee" stroke-width="3"/><path d="M93 168 v6 M97 168.4 v6 M101 168.8 v6" stroke="#b3313a" stroke-width="1.8" stroke-linecap="round"/><path d="M80 116 C100 124 140 124 160 116 L154 132 C136 139 104 139 86 132 Z" fill="#d9434b"/><path d="M83 124 C102 131 138 131 157 124" fill="none" stroke="#fff6ee" stroke-width="12" stroke-dasharray="3.5 8"/><path d="M80 116 C100 124 140 124 160 116" fill="none" stroke="#b3313a" stroke-width="1.5"/><g transform="translate(34 44)" fill="none" stroke="#7fb7f0" stroke-width="2" stroke-linecap="round"><path d="M0 -9 V9 M-7.8 -4.5 L7.8 4.5 M-7.8 4.5 L7.8 -4.5"/><path d="M-2.7 -6.8 L0 -4.5 L2.7 -6.8 M-2.7 6.8 L0 4.5 L2.7 6.8"/></g><g transform="translate(206 54)" fill="none" stroke="#7fb7f0" stroke-width="2" stroke-linecap="round"><path d="M0 -7 V7 M-6.1 -3.5 L6.1 3.5 M-6.1 3.5 L6.1 -3.5"/><path d="M-2.1 -5.3 L0 -3.5 L2.1 -5.3 M-2.1 5.3 L0 3.5 L2.1 5.3"/></g><g transform="translate(214 138)" fill="none" stroke="#7fb7f0" stroke-width="1.6" stroke-linecap="round"><path d="M0 -6 V6 M-5.2 -3 L5.2 3.0 M-5.2 3.0 L5.2 -3"/><path d="M-1.8 -4.5 L0 -3 L1.8 -4.5 M-1.8 4.5 L0 3.0 L1.8 4.5"/></g><g transform="translate(30 172)" fill="none" stroke="#7fb7f0" stroke-width="2" stroke-linecap="round"><path d="M0 -7 V7 M-6.1 -3.5 L6.1 3.5 M-6.1 3.5 L6.1 -3.5"/><path d="M-2.1 -5.3 L0 -3.5 L2.1 -5.3 M-2.1 5.3 L0 3.5 L2.1 5.3"/></g><g transform="translate(190 196)" fill="none" stroke="#7fb7f0" stroke-width="1.5" stroke-linecap="round"><path d="M0 -5 V5 M-4.3 -2.5 L4.3 2.5 M-4.3 2.5 L4.3 -2.5"/><path d="M-1.5 -3.8 L0 -2.5 L1.5 -3.8 M-1.5 3.8 L0 2.5 L1.5 3.8"/></g>
+</svg>

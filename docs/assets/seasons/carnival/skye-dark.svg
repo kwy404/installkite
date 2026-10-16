@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Skye, the installkite kite: in a feathered carnival mask, with confetti">
+  <title>Skye, the installkite kite: in a feathered carnival mask, with confetti</title>
+  <path d="M16 30 c10 6 4 14 14 18 s4 14 14 16" fill="none" stroke="#ff7fb3" stroke-width="3" stroke-linecap="round"/><path d="M226 30 c-9 7 -2 15 -12 20 s-3 14 -13 17" fill="none" stroke="#4fd1c0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M22 70 Q40 62 56 70 M14 98 Q30 92 44 98 M28 126 Q42 120 54 126" fill="none" stroke="#9fd0ff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M141 116 Q190 168 236 236" fill="none" stroke="#cfe3ff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+  <path d="M120 154 C112 170 134 180 120 198 C108 213 92 214 82 230" fill="none" stroke="#cfe3ff" stroke-width="2.6" stroke-linecap="round"/>
+  <g transform="translate(124 172) rotate(-12)">
+    <defs><linearGradient id="ab156" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-9.5" y="-9.5" width="19" height="19" rx="5.32" fill="url(#ab156)"/>
+    <path d="M0 -4.855555555555555 V3.588888888888889 M-3.8000000000000003 0.21111111111111114 L0 4.011111111111111 L3.8000000000000003 0.21111111111111114" fill="none" stroke="#fff" stroke-width="2.216666666666667" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(110 205) rotate(14)">
+    <defs><linearGradient id="ab157" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-8" y="-8" width="16" height="16" rx="4.48" fill="url(#ab157)"/>
+    <path d="M0 -4.088888888888889 V3.022222222222222 M-3.1999999999999997 0.17777777777777778 L0 3.3777777777777773 L3.1999999999999997 0.17777777777777778" fill="none" stroke="#fff" stroke-width="1.8666666666666667" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(84 228) rotate(-8)">
+    <defs><linearGradient id="ab158" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#f25f2a"/></linearGradient></defs>
+    <rect x="-6.5" y="-6.5" width="13" height="13" rx="3.6400000000000006" fill="url(#ab158)"/>
+    <path d="M0 -3.322222222222222 V2.4555555555555553 M-2.6 0.14444444444444446 L0 2.7444444444444445 L2.6 0.14444444444444446" fill="none" stroke="#fff" stroke-width="1.5166666666666666" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <linearGradient id="kb159" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc3ff"/><stop offset=".55" stop-color="#2b8ff0"/><stop offset="1" stop-color="#1667d6"/></linearGradient>
+    <linearGradient id="ks160" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect x="-58" y="-58" width="116" height="116" rx="31" transform="translate(120 92) rotate(45)" fill="#eaf4ff"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="url(#kb159)"/>
+  <rect x="-52" y="-52" width="104" height="104" rx="26" transform="translate(120 92) rotate(45)" fill="none" stroke="#1667d6" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M120 33 L120 151 M61 92 L179 92" stroke="#fff" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 36 C103 52 84 71 66 88 C78 79 98 70 120 66 C126 56 125 45 120 36Z" fill="url(#ks160)"/>
+  <ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/>
+  <circle cx="104.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="140.5" cy="88" r="3" fill="#fff"/>
+  <circle cx="100" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <circle cx="136" cy="96" r="1.4" fill="#fff" fill-opacity=".8"/>
+  <ellipse cx="88" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <ellipse cx="152" cy="105" rx="8.5" ry="5.2" fill="#ffb3a1" fill-opacity=".85"/>
+  <path d="M104 104 Q120 124 136 104 Q120 111 104 104Z" fill="#12233f"/><path d="M111 111 Q120 119 129 111 Q120 114 111 111Z" fill="#ff8f8f"/>
+  <defs><linearGradient id="smask4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff7fb3"/><stop offset="1" stop-color="#9d83ff"/></linearGradient></defs><path d="M157 84 C167 70 169 52 163 34 C176 47 178 70 159 88Z" fill="#4fd1c0"/><path d="M158 86 C162 70 164 54 163 37" fill="none" stroke="#ffcd5e" stroke-width="1.6"/><path d="M160 86 C172 78 182 66 184 52 C190 64 184 80 162 89Z" fill="#ff7fb3"/><path d="M82 86 Q90 76 102 80 Q112 84 120 86 Q128 84 138 80 Q150 76 158 86 Q158 100 146 104 Q134 108 124 98 Q120 95 116 98 Q106 108 94 104 Q82 100 82 86Z" fill="url(#smask4)" stroke="#ffcd5e" stroke-width="2.2"/><ellipse cx="102" cy="92" rx="7.5" ry="9.5" fill="#12233f"/><ellipse cx="138" cy="92" rx="7.5" ry="9.5" fill="#12233f"/><circle cx="104.5" cy="88" r="3" fill="#fff"/><circle cx="140.5" cy="88" r="3" fill="#fff"/><circle cx="88" cy="84" r="1.6" fill="#ffcd5e"/><circle cx="152" cy="84" r="1.6" fill="#ffcd5e"/><circle cx="120" cy="90" r="1.8" fill="#ffcd5e"/><rect x="30" y="50" width="8" height="4" rx="1" fill="#ff7fb3" transform="rotate(20 34 52)"/><rect x="48" y="148" width="8" height="4" rx="1" fill="#ffcd5e" transform="rotate(-30 52 150)"/><circle cx="26" cy="180" r="2.6" fill="#4fd1c0"/><rect x="196" y="28" width="8" height="4" rx="1" fill="#4aa3ff" transform="rotate(40 200 30)"/><rect x="210" y="116" width="8" height="4" rx="1" fill="#9d83ff" transform="rotate(-15 214 118)"/><circle cx="196" cy="196" r="2.6" fill="#ff7fb3"/><rect x="40" y="212" width="8" height="4" rx="1" fill="#ffcd5e" transform="rotate(60 44 214)"/><rect x="178" y="146" width="8" height="4" rx="1" fill="#4fd1c0" transform="rotate(10 182 148)"/><circle cx="30" cy="98" r="2.6" fill="#4aa3ff"/><rect x="212" y="72" width="8" height="4" rx="1" fill="#9d83ff" transform="rotate(0 216 74)"/><rect x="62" y="24" width="8" height="4" rx="1" fill="#ffcd5e" transform="rotate(15 66 26)"/><circle cx="176" cy="12" r="2.6" fill="#4fd1c0"/>
+</svg>
