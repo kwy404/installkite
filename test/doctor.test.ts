@@ -208,7 +208,7 @@ describe('doctor with files it may not read', () => {
 describe('doctor helpers', () => {
   it('finds the service worker a page registers', () => {
     expect(findServiceWorker('<script src="/ik/installkite.js" defer></script>', 'https://a.b/x/')).toEqual({ url: 'https://a.b/ik/sw.js', via: 'installkite.js' });
-    expect(findServiceWorker('<script src="https://cdn.jsdelivr.net/npm/installkite@0.1.0/dist/installkite.min.js" data-sw="/sw.js"></script>', 'https://a.b/x/')!.url).toBe('https://a.b/sw.js');
+    expect(findServiceWorker('<script src="https://cdn.jsdelivr.net/npm/installkite@0.2.0/dist/installkite.min.js" data-sw="/sw.js"></script>', 'https://a.b/x/')!.url).toBe('https://a.b/sw.js');
     expect(findServiceWorker("<script>navigator.serviceWorker.register('worker.js')</script>", 'https://a.b/app/')).toEqual({ url: 'https://a.b/app/worker.js', via: 'navigator.serviceWorker.register' });
     expect(findServiceWorker('<p>none</p>', 'https://a.b/')).toBeNull();
   });

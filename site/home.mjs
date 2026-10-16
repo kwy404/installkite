@@ -348,7 +348,7 @@ export function homeJsonLd() {
         url: SITE,
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Windows, macOS, Linux',
-        softwareVersion: '0.1.0',
+        softwareVersion: '0.2.0',
         license: 'https://opensource.org/licenses/MIT',
         downloadUrl: 'https://www.npmjs.com/package/installkite',
         codeRepository: GITHUB,

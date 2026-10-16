@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-16
+
 ### Added
 
 - The site checker at `/app/` on the docs site: paste a URL and see what the site still needs to be installed and to work offline, grouped into the page, the manifest, the icons and offline, with a fix for each problem. It runs the same rules as `installkite doctor` in the browser. When a site does not allow other pages to read its files (CORS), the checker says so in plain words and offers three ways forward: the one line `npx installkite doctor` command, pasting the page source and manifest, or the header that allows reading. Results can be shared by link and copied as text.
@@ -34,5 +36,6 @@ All notable changes to this project are documented in this file. The format is b
 - A typed Node API for every step.
 - The docs site with a live install demo, an in browser manifest and icon generator, docs and eight guides.
 
-[Unreleased]: https://github.com/kwy404/installkite/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kwy404/installkite/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/kwy404/installkite/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kwy404/installkite/releases/tag/v0.1.0

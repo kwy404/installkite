@@ -50,7 +50,7 @@ export function docsBody(ctx) {
 <p>Nothing to install for a one off run: <code>npx</code> downloads the CLI. For CI and repeat builds add it as a dev dependency. Node 18 or newer.</p>
 ${f('npx installkite init\n\n# or keep it in the project for CI builds\nnpm install --save-dev installkite', { kind: 'terminal', lang: 'bash' })}
 <p>The runtime script also ships on the CDN, pinned to a version:</p>
-${f('<script src="https://cdn.jsdelivr.net/npm/installkite@0.1.0/dist/installkite.min.js" data-sw="/sw.js" data-install="auto" defer></script>', { lang: 'html', title: 'index.html' })}
+${f('<script src="https://cdn.jsdelivr.net/npm/installkite@0.2.0/dist/installkite.min.js" data-sw="/sw.js" data-install="auto" defer></script>', { lang: 'html', title: 'index.html' })}
 </section>
 
 <section id="quick-start"><h2><a href="#quick-start" class="anchor" aria-hidden="true" tabindex="-1">#</a>Quick start</h2>
