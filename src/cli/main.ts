@@ -2,13 +2,13 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { CONFIG_FILE, readConfig } from '../core/config.js';
-import { doctorLocal, doctorRemote, type DoctorReport } from '../core/doctor.js';
+import { doctorLocal, doctorRemote, normalizeSiteUrl, type DoctorReport } from '../core/doctor.js';
 import { removeHead } from '../core/inject.js';
 import { DISPLAY_MODES, type Display } from '../core/manifest.js';
 import { applyPlan, expandHtml, planBuild, planIcons, planInit, type InitAnswers, type PlannedFile } from '../core/project.js';
 import { scanSite, type ScanResult } from '../core/scan.js';
 import { VERSION } from '../version.js';
-import { ArgError, parseArgs, type ArgSpec, type ParsedArgs } from './args.js';
+import { ArgError, closest, parseArgs, type ArgSpec, type ParsedArgs } from './args.js';
 import { colors, createAsker, formatBytes, type Colors } from './ui.js';
 
 export interface Io {
@@ -51,7 +51,7 @@ const HELP = `installkite ${VERSION}: make any website installable and offline c
 Usage
   npx installkite init [options]      manifest, icons, service worker, offline page and head tags
   npx installkite build [options]     refresh the precache list after each site build (CI)
-  npx installkite doctor [options]    audit installability and offline readiness
+  npx installkite doctor [url]        audit installability and offline readiness
   npx installkite icons <image>       only the icon set from one PNG or SVG
   npx installkite remove              take the installkite tags out of the HTML files
 
@@ -89,7 +89,10 @@ build
   -n, --dry-run             show what would change
 
 doctor
-  --url <url>               audit a live site instead of the files on disk
+  [url]                     audit a live site instead of the files on disk
+                            (example.com works too: https:// is added)
+  --url <url>               the same, as an option
+  --timeout <seconds>       how long to wait for each file of a live site (default 15)
   --json                    machine readable report
   --strict                  warnings also fail (exit code 1)
 
@@ -106,7 +109,10 @@ general
   -v, --version             print the version
 
 Docs: https://kwy404.github.io/installkite/
+Check a live site in your browser: https://kwy404.github.io/installkite/app/
 `;
+
+const COMMANDS = ['init', 'build', 'doctor', 'icons', 'remove', 'help'];
 
 const FRAMEWORK_LABEL: Record<ScanResult['framework'], string> = {
   plain: 'static HTML',
@@ -141,7 +147,7 @@ function colorDiff(diff: string, c: Colors): string {
 }
 
 function printReport(out: (s: string) => void, c: Colors, r: DoctorReport, quiet: boolean): void {
-  const mark = { pass: c.green('pass'), error: c.red('fail'), warn: c.yellow('warn'), info: c.blue('info') };
+  const mark = { pass: c.green('pass'), error: c.red('fail'), warn: c.yellow('warn'), info: c.blue('info'), skip: c.gray('skip') };
   out(`\n${c.bold('installkite doctor')} ${c.gray(r.mode === 'remote' ? r.url : `${r.url.replace('https://site.installkite.local', '')} (files on disk)`)}\n\n`);
   for (const ch of r.checks) {
     if (quiet && ch.status !== 'error') continue;
@@ -205,9 +211,11 @@ export async function run(argv: readonly string[], io: Io): Promise<number> {
         return icons();
       case 'remove':
         return remove();
-      default:
-        err(`installkite: unknown command "${args.command}"\nRun "npx installkite --help" for the commands.\n`);
+      default: {
+        const near = closest(args.command, COMMANDS);
+        err(`installkite: unknown command "${args.command}"${near ? `. Did you mean "${near}"?` : ''}\nRun "npx installkite --help" for the commands.\n`);
         return 2;
+      }
     }
   } catch (e) {
     err(`${c.red('installkite:')} ${(e as Error).message}\n`);
@@ -317,11 +325,15 @@ export async function run(argv: readonly string[], io: Io): Promise<number> {
   }
 
   async function doctor(): Promise<number> {
-    const url = str('url');
+    const given = str('url') ?? args.positionals[0];
+    if (args.positionals.length > (str('url') ? 0 : 1)) throw new Error('doctor takes one URL');
     let report: DoctorReport;
-    if (url) {
-      if (!/^https?:\/\//i.test(url)) throw new Error('--url must start with https:// or http://');
-      report = await doctorRemote(url, { config: readConfig(cwd) });
+    if (given) {
+      const url = normalizeSiteUrl(given);
+      const timeout = str('timeout');
+      const seconds = timeout === undefined ? 15 : Number(timeout);
+      if (!(seconds > 0) || seconds > 600) throw new Error('--timeout must be a number of seconds, more than 0 and at most 600');
+      report = await doctorRemote(url, { config: readConfig(cwd), timeoutMs: Math.round(seconds * 1000) });
     } else {
       report = await doctorLocal(cwd, { root: str('root'), base: str('base') });
     }

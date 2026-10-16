@@ -207,7 +207,7 @@ describe('doctor, icons and remove', () => {
     const json = JSON.parse(cli(dir, ['doctor', '--json']).out);
     expect(json.installable).toBe(true);
     expect(Array.isArray(json.checks)).toBe(true);
-    expect(cli(dir, ['doctor', '--url', 'ftp://x']).err).toMatch(/must start with https/);
+    expect(cli(dir, ['doctor', '--url', 'ftp://x']).err).toMatch(/starts with https/);
   });
 
   it('icons writes only the icon set', () => {

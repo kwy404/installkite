@@ -1,7 +1,8 @@
 // The CLI in process, through run(), with captured streams. The spawned
 // CLI tests in cli.test.ts cover the built binary end to end.
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { createServer } from 'node:http';
+import { extname, join } from 'node:path';
 import { PassThrough, Readable } from 'node:stream';
 import { afterEach, describe, expect, it } from 'vitest';
 import { run } from '../src/cli/main.js';
@@ -67,7 +68,7 @@ describe('run()', () => {
     const dir = site();
     expect((await cli(dir, ['build'])).err).toMatch(/init" first/);
     expect((await cli(dir, ['init', '--yes', '--theme-color', 'nope'])).err).toMatch(/not a valid CSS color/);
-    expect((await cli(dir, ['doctor', '--url', 'example.com'])).code).toBe(1);
+    expect((await cli(dir, ['doctor', '--url', 'mailto:me@example.com'])).err).toMatch(/not a website address/);
     expect((await cli(dir, ['icons'])).code).toBe(1);
   });
 
@@ -79,6 +80,50 @@ describe('run()', () => {
     const m = JSON.parse(readFileSync(join(dir, 'manifest.webmanifest'), 'utf8'));
     expect(m).toMatchObject({ name: 'Acme', short_name: 'Acme', display: 'fullscreen', background_color: '#fafafa' });
     expect(readFileSync(join(dir, 'index.html'), 'utf8')).toContain('href="/shop/manifest.webmanifest"');
+  });
+});
+
+describe('doctor on a live URL from the command line', () => {
+  it('takes the URL as a plain argument, adds the scheme and honors --timeout', async () => {
+    const dir = site();
+    expect((await cli(dir, ['init', '--yes', '--quiet'])).code).toBe(0);
+    const types: Record<string, string> = { '.html': 'text/html', '.js': 'text/javascript', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
+    const server = createServer((req, res) => {
+      const path = new URL(req.url!, 'http://x').pathname;
+      const file = join(dir, path.endsWith('/') ? `${path}index.html` : path);
+      if (!existsSync(file)) {
+        res.writeHead(404).end('not found');
+        return;
+      }
+      res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' }).end(readFileSync(file));
+    });
+    await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
+    const port = (server.address() as { port: number }).port;
+    try {
+      const r = await cli(dir, ['doctor', `127.0.0.1:${port}`]);
+      expect(r.code, r.out + r.err).toBe(0);
+      expect(r.out).toContain(`http://127.0.0.1:${port}/`);
+      expect(r.out).toMatch(/installable and offline ready/);
+      const json = JSON.parse((await cli(dir, ['doctor', `http://127.0.0.1:${port}/`, '--json', '--timeout', '5'])).out);
+      expect(json).toMatchObject({ mode: 'remote', errors: 0, skipped: 0, installable: true });
+      expect((await cli(dir, ['doctor', `127.0.0.1:${port}`, '--timeout', '0'])).err).toMatch(/--timeout must be a number of seconds/);
+      expect((await cli(dir, ['doctor', 'a.example', 'b.example'])).err).toMatch(/one URL/);
+    } finally {
+      server.close();
+    }
+  });
+});
+
+describe('typo hints', () => {
+  it('suggests the command or option that was meant', async () => {
+    const dir = tempSite();
+    const cmd = await cli(dir, ['doctr']);
+    expect(cmd.code).toBe(2);
+    expect(cmd.err).toMatch(/unknown command "doctr"\. Did you mean "doctor"\?/);
+    expect((await cli(dir, ['launch'])).err).not.toMatch(/Did you mean/);
+    expect((await cli(dir, ['init', '--dryrun'])).err).toMatch(/unknown option --dryrun\. Did you mean --dry-run\?/);
+    expect((await cli(dir, ['init', '--theme-colour', '#000'])).err).toMatch(/Did you mean --theme-color\?/);
+    expect((await cli(dir, ['init', '--zzz'])).err).not.toMatch(/Did you mean/);
   });
 });
 
