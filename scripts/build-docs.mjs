@@ -553,8 +553,12 @@ for (const id of readdirSync(join(root, 'assets', 'seasons'))) {
 const PRECACHE = /\.(html|css|js|webmanifest|svg)$|^icons\/icon-(192|512)\.png$|^favicon|^apple-touch-icon|^search\.json$/;
 const entries = Object.entries(files)
   .filter(([name]) => PRECACHE.test(name) && !name.startsWith('assets/seasons/') && name !== 'sw.js' && name !== '404.html')
-  .map(([name, content]) => ({ url: name, revision: ik.revisionOf(content) }))
-  .sort((a, b) => (a.url < b.url ? -1 : 1));
+  .map(([name, content]) => ({ url: name, revision: ik.revisionOf(content) }));
+// The site checker (docs/app/, written by hand and by npm run build) opens offline too.
+for (const f of readdirSync(join(docs, 'app')).filter((f) => /\.(html|css|js)$/.test(f))) {
+  entries.push({ url: `app/${f}`, revision: ik.revisionOf(readFileSync(join(docs, 'app', f))) });
+}
+entries.sort((a, b) => (a.url < b.url ? -1 : 1));
 files['sw.js'] = ik.generateServiceWorker(entries, { navigationTimeout: 2500 }, { version: ik.VERSION });
 
 // ---------- House rules ----------
